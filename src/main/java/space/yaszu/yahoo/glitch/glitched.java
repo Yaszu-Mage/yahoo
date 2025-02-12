@@ -3,9 +3,6 @@ package space.yaszu.yahoo.glitch;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Collection;
 import java.util.Random;
@@ -23,8 +19,7 @@ public class glitched implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Random random = new Random();
         Player player = event.getPlayer();
-        Block block = event.getBlock();
-        Material blockType = block.getType(); // Get the type of block broken
+        Block block = event.getBlock();// Get the type of block broken
         int random_int = random.nextInt(101);
 
 

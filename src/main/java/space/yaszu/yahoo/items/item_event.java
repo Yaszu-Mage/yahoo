@@ -1,7 +1,6 @@
 package space.yaszu.yahoo.items;
 
 import de.tr7zw.nbtapi.NBT;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -10,7 +9,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import space.yaszu.yahoo.Yahoo;
 
 public class item_event implements Listener {
     public void right_click(PlayerInteractEvent event) {
