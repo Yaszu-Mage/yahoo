@@ -35,7 +35,13 @@ public class item_register {
         cokedict.put("M", Material.SUGAR);
         cokedict.put("E", Material.STICK);
         cokedict.put("T", Material.CARROT);
-        itemregister("MET","   ","   ","Coke",coke,cokedict,"coke");
+        itemregister("MET",
+                    "   ",
+                    "   ",
+                    "Coke",
+                            coke,
+                            cokedict,
+                        "coke");
         Collection<String> spawn_crystal = new ArrayList<>();
         spawn_crystal.add("E");
         spawn_crystal.add("A");
@@ -50,7 +56,12 @@ public class item_register {
         spawndict.put("E",Material.ENDER_PEARL);
         spawndict.put("A",Material.AMETHYST_SHARD);
         spawndict.put("D",Material.DIAMOND);
-        itemregister("EAE","ADA","EAE","Spawn_Crystal",spawn_crystal,spawndict,"spawn_cry");
+        itemregister("EAE",
+                    "ADA",
+                    "EAE",
+                "Spawn_Crystal",
+                        spawn_crystal,spawndict,
+                    "spawn_cry");
 
 
     }

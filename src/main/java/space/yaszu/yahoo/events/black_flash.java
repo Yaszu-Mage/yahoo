@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 public class black_flash implements Listener {
     Random random = new Random();
-    public void black_flash(EntityDamageByEntityEvent event) {
+    public void black_flash_event(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
         Entity attacked = event.getEntity();
         if (attacker instanceof Player) {
