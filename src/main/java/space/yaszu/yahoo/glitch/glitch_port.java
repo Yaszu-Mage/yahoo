@@ -11,26 +11,27 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import java.util.Random;
 
 public class glitch_port implements Listener {
+    public boolean is_running = true;
     public Random random = new Random();
     @EventHandler
     public void sneak_port(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         Location playerLoc = player.getLocation();
-
         double TELEPORT_RADIUS = 10.0;
         int random_chance = random.nextInt(101);
-        if (random_chance >= 99 && player.getName().equals("1nZ4ne")) {
+        if (random_chance >= 99 && player.getName().equals("1nZ4ne") && is_running) {
+            event.setCancelled(true);
+            is_running = false;
             Location teleportlocation = playerLoc;
             player.spawnParticle(Particle.PORTAL,player.getLocation(),32);
-
-            while (!isSafeLocation(teleport(playerLoc))){
+            teleportlocation = teleport(playerLoc);
+            while (!isSafeLocation(teleportlocation)){
                 //waiting for a safe location
                 teleportlocation = teleport(playerLoc);
-                player.playSound(playerLoc, Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
-                player.teleport(teleport(playerLoc));
             }
-            player.playSound(playerLoc, Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
+            player.getWorld().playSound(playerLoc, Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
             player.teleport(teleportlocation);
+            is_running = true;
 
         }
     }
@@ -46,7 +47,7 @@ public class glitch_port implements Listener {
         double TELEPORT_RADIUS = 10.0;
         double x = playerLoc.getX() + (random.nextDouble() * 2 * TELEPORT_RADIUS - TELEPORT_RADIUS);
         double z = playerLoc.getZ() + (random.nextDouble() * 2 * TELEPORT_RADIUS - TELEPORT_RADIUS);
-        double y = playerLoc.getY();
+        double y = playerLoc.getY() + (random.nextDouble() * 2 * TELEPORT_RADIUS - TELEPORT_RADIUS);
         Location teleportLoc = new Location(playerLoc.getWorld(), x, y, z);
         return teleportLoc;
     }

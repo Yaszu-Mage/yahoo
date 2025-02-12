@@ -3,6 +3,7 @@ package space.yaszu.yahoo.glitch;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
@@ -11,7 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collection;
 import java.util.Random;
 
 public class glitched implements Listener {
@@ -26,21 +30,23 @@ public class glitched implements Listener {
 
         // Example using player name (less reliable):
         if (player.getName().equals("1nZ4ne") && random_int >= 95) {  // Replace with the actual name
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 1.0f,1.0f);
-            int random_int2 = random.nextInt(5);
+            player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_TENDRIL_CLICKS, 1.0f,1.0f);
+            int random_int2 = random.nextInt(3);
             switch (random_int2) {
                 case 0:
-                    block.setType(Material.DIRT);
+                    event.setDropItems(false);
                 case 1:
                     block.setType(Material.AIR);
-                case 2:
-                    block.setType(Material.SOUL_SAND);
-                case 3:
-                    block.setType(Material.AIR);
-                    player.getWorld().spawnEntity(block.getLocation(),EntityType.CHICKEN);
-                case 4:
-                    block.setType(Material.AIR);
+                    event.setDropItems(false);
                     player.getWorld().spawnEntity(block.getLocation(), EntityType.EGG);
+                case 2:
+                    Collection<ItemStack> item = block.getDrops();
+                    for (ItemStack itemStack : item) {
+                        ItemStack duplicate = itemStack.clone();
+                        block.getWorld().dropItemNaturally(block.getLocation(), duplicate);
+                        block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
+                    }
+                    event.setDropItems(false);
             }
 
         } else if (random_int >= 99){

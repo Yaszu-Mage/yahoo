@@ -16,6 +16,7 @@ public class item_registry implements Listener {
     public void interact(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getActiveItem();
+        assert item != null;
         String custom = NBT.get(item,nbt -> {
              return nbt.getString("custom");
         });
@@ -28,7 +29,6 @@ public class item_registry implements Listener {
                 player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_DRINK_POTION,1.0f,1.0f);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,200,1));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,200,1));
-
             }
         }
 
