@@ -2,6 +2,8 @@ package space.yaszu.yahoo.items;
 
 import de.tr7zw.nbtapi.NBT;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,11 +24,18 @@ public class item_event implements Listener {
             id = NBT.get(item,nbt ->{
               return nbt.getString("Yah_ID");
             });
-            if (id.equals("coke")){
-                item.subtract(1);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,500,1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,500,1));
+            switch (id) {
+                case "coke":
+                    item.subtract(1);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,500,1));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,500,1));
+                case "spawn_cry":
+                    item.subtract(1);
+                    player.spawnParticle(Particle.PORTAL,player.getLocation(),64);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,1000,1));
+                    player.teleport(new Location(player.getWorld(),0, 100,0));
             }
+
         }
 
     }
