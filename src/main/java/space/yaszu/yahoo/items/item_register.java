@@ -1,11 +1,14 @@
 package space.yaszu.yahoo.items;
 
 import de.tr7zw.nbtapi.NBT;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -13,6 +16,11 @@ public class item_register {
     public void itemregister(String shapea, String shapeb, String shapec, String name, Collection<String> values, Dictionary<String, Material> dict, String tag) {
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), name);
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
+        ItemMeta meta = item.getItemMeta();
+        NamespacedKey key2 = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
+        meta.displayName(Component.text(name));
+        meta.getPersistentDataContainer().set(key2, PersistentDataType.STRING, tag);
+        item.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(key,item);
         recipe.shape(shapea,shapeb,shapec);
         for (String s : values) {
@@ -21,6 +29,9 @@ public class item_register {
         }
         NBT.modify(item, nbt -> {
             nbt.setString("Yah_ID", tag);
+        });
+        NBT.get(item, nbt ->{
+            Bukkit.getPluginManager().getPlugin("Yahoo").getLogger().info("Tag " + nbt.getString("Yah_ID"));
         });
         Bukkit.getPluginManager().getPlugin("Yahoo").getLogger().info("Registered " + name);
         Bukkit.getServer().addRecipe(recipe);
