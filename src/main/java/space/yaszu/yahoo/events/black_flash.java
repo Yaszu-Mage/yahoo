@@ -1,5 +1,6 @@
 package space.yaszu.yahoo.events;
 
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -17,17 +18,18 @@ import java.util.logging.Logger;
 public class black_flash implements Listener {
     Random random = new Random();
     @EventHandler
-    public void blackflash(EntityDamageByEntityEvent event) {
-        Entity attacker = event.getDamager();
-        Entity attacked = event.getEntity();
-        if (attacker instanceof Player && (!attacker.equals(attacked))) {
+    public void blackflash(PrePlayerAttackEntityEvent event) {
+        Player attacker = event.getPlayer();
+        Entity attacked = event.getAttacked();
+        if (!attacker.equals(attacked)) {
+
             int value = random.nextInt(101);
             if (value >= 99) {
-                ((Player) attacker).getDisplayName();
-                space.yaszu.yahoo.Yahoo.getPlugin(Yahoo.class).getLogger().info(((Player) attacker).getDisplayName() + " hit a black flash");
+                attacker.displayName();
+                space.yaszu.yahoo.Yahoo.getPlugin(Yahoo.class).getLogger().info(attacker.displayName() + " hit a black flash");
                 attacker.getWorld().playSound(attacker.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE,1.0f,1.0f);
-                ((Player) attacker).addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,10,19));
-                ((Player) attacker).addPotionEffect(new PotionEffect(PotionEffectType.HASTE,10,19));
+                attacker.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,10,19));
+                attacker.addPotionEffect(new PotionEffect(PotionEffectType.HASTE,10,19));
             }
         }
     }

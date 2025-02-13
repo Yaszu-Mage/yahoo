@@ -2,6 +2,7 @@ package space.yaszu.yahoo;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import space.yaszu.yahoo.events.black_flash;
+import space.yaszu.yahoo.events.parry;
 import space.yaszu.yahoo.glitch.glitch_port;
 import space.yaszu.yahoo.glitch.glitched;
 import space.yaszu.yahoo.items.item_event;
@@ -20,6 +21,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new glitch_port(),this);
         getServer().getPluginManager().registerEvents(new black_flash(),this);
         getServer().getPluginManager().registerEvents(new item_event(), this);
+        getServer().getPluginManager().registerEvents(new parry(),this);
     }
     public void register_items() {
         item_register register = new item_register();
