@@ -2,3 +2,5 @@ name: Yahoo
 version: '1.0-SNAPSHOT'
 main: space.yaszu.yahoo.Yahoo
 api-version: '1.21'
+author: Yaszu, 1nZ4ne
+
