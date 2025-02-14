@@ -12,6 +12,7 @@ import space.yaszu.yahoo.events.black_flash;
 import space.yaszu.yahoo.events.determination;
 import space.yaszu.yahoo.events.parry;
 import space.yaszu.yahoo.events.pet;
+import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.glitch.buff;
 import space.yaszu.yahoo.glitch.glitch_port;
 import space.yaszu.yahoo.glitch.glitched;
@@ -37,7 +38,7 @@ public final class Yahoo extends JavaPlugin{
         BukkitScheduler schedule = this.getServer().getScheduler();
         Random random = new Random();
         int time = random.nextInt(72000);
-        schedule.runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(this),time);
+        schedule.runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(this),time + 1);
     }
 
 
@@ -49,6 +50,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new parry(),this);
         getServer().getPluginManager().registerEvents(new determination(), this);
         getServer().getPluginManager().registerEvents(new pet(), this);
+        getServer().getPluginManager().registerEvents(new snap(), this);
     }
     public void register_items() {
         item_register register = new item_register();

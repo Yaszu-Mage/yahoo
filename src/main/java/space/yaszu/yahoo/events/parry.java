@@ -14,7 +14,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class parry implements Listener {
-    @EventHandler
     public void parry_action(PrePlayerAttackEntityEvent Attack, PlayerSwapHandItemsEvent Swap) {
         if (!Attack.equals(null) && !Swap.equals(null)){
             Player attacker = Attack.getPlayer();

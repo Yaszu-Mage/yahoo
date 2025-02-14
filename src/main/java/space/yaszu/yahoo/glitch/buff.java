@@ -160,7 +160,10 @@ public class buff implements Runnable{
 
             }
             int time = random.nextInt(72000);
-            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time);
+            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);
+        } else {
+            int time = random.nextInt(72000);
+            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);
         }
     }
 }

@@ -14,18 +14,17 @@ import java.util.Random;
 
 public class determination implements Listener {
     Random random = new Random();
-    @EventHandler
     public void determination(PlayerDeathEvent event) {
         int chance = random.nextInt(1001);
-        if (chance >= 980) {
+        if (chance >= 0) {
             event.setShouldPlayDeathSound(false);
             List<ItemStack> drops = event.getDrops();
             Player player = event.getPlayer();
             player.getWorld().setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-            event.deathMessage(Component.text("But " + player.displayName() + " refused."));
+            event.deathMessage(Component.text("But " + player.getDisplayName() + " refused."));
             player.teleport(event.getEntity().getLocation());
             player.getWorld().playSound(player.getLocation(), Sound.ITEM_TOTEM_USE,1f,1f);
-            event.getDrops().clear();
+            player.give(drops);
         }
 
     }
