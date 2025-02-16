@@ -3,4 +3,10 @@ version: '1.0-SNAPSHOT'
 main: space.yaszu.yahoo.Yahoo
 api-version: '1.21'
 author: Yaszu, 1nZ4ne
-
+commands:
+  give_glove:
+    description: "This is a command"
+    usage: "/give_glove"
+  pocket_time:
+      description: "This is a command"
+      usage: "/pocket_time"

@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import space.yaszu.yahoo.Yahoo;
 
 import java.util.*;
 
@@ -36,7 +37,10 @@ public class item_register {
         Bukkit.getPluginManager().getPlugin("Yahoo").getLogger().info("Registered " + name);
         Bukkit.getServer().addRecipe(recipe);
     }
-
+    private final Yahoo yahoo;
+    public item_register(Yahoo yahoo) {
+        this.yahoo = yahoo;
+    }
     public void register(){
         Collection<String> coke = new ArrayList<>();
         coke.add("M");
@@ -70,10 +74,49 @@ public class item_register {
         itemregister("EAE",
                     "ADA",
                     "EAE",
-                "Spawn_Crystal",
+                    "Spawn_Crystal",
                         spawn_crystal,spawndict,
                     "spawn_cry");
-
-
+        Collection<String> gun = new ArrayList<>();
+        gun.add("N");
+        gun.add("I");
+        gun.add("D");
+        gun.add("C");
+        gun.add("B");
+        Dictionary<String, Material> gundict = new Hashtable<>();
+        gundict.put("N",Material.IRON_NUGGET);
+        gundict.put("I",Material.IRON_INGOT);
+        gundict.put("D",Material.DIAMOND);
+        gundict.put("C",Material.CROSSBOW);
+        gundict.put("B",Material.IRON_BLOCK);
+        itemregister(" N ",
+                "IDC",
+                "B  ",
+                "Piercer",
+                gun,gundict,
+                "gun");
+        Collection<String> glitch = new ArrayList<>();
+        glitch.add("A");
+        glitch.add("N");
+        glitch.add("S");
+        glitch.add("N");
+        glitch.add("C");
+        glitch.add("N");
+        glitch.add("D");
+        glitch.add("N");
+        glitch.add("A");
+        Dictionary<String, Material> glitchdict = new Hashtable<>();
+        glitchdict.put("A",Material.AMETHYST_BLOCK);
+        glitchdict.put("N",Material.NETHERITE_INGOT);
+        glitchdict.put("D",Material.DIAMOND_BLOCK);
+        glitchdict.put("C",Material.END_CRYSTAL);
+        glitchdict.put("S",Material.NETHER_STAR);
+        itemregister("ANS",
+                "NCN",
+                "DNA",
+                "Glitch_Infused_Gem",
+                glitch,glitchdict,
+                "glitch_cry");
     }
 }
+//GUN//

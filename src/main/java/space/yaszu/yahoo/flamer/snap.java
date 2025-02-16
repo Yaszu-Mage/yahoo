@@ -1,54 +1,71 @@
 package space.yaszu.yahoo.flamer;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+import org.joml.Vector3d;
+import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.events.off;
+import space.yaszu.yahoo.events.set_who;
+import space.yaszu.yahoo.glitch.buff;
 
+import javax.xml.stream.events.Namespace;
 import java.util.ArrayList;
 
+import static org.bukkit.Bukkit.getPluginManager;
+
 public class snap implements Listener {
+    private final Yahoo yahoo;
+    public snap(Yahoo yahoo) {
+        this.yahoo = yahoo;
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent interact) {
         Player player = interact.getPlayer();
-        if (interact.getAction().isRightClick() && player.isSneaking() && player.getDisplayName().equals("Yaszu")) {
-            Location start = interact.getClickedBlock().getLocation();
-
-            if (!start.getWorld().getBlockAt(start).isSolid()) { // Check if clicked block is solid.
-
-                BlockFace direction = interact.getBlockFace(); // Get the direction of the click.
-
-                // Calculate the start location offset by one block in the clicked direction
-                Location fireStart = start.getBlock().getRelative(direction).getLocation();
-
-                // Create the 5x3 fire area
-                for (int x = -2; x <= 2; x++) {
-                    for (int z = -1; z <= 1; z++) {
-                        Location fireLocation = fireStart.clone().add(direction.getDirection().multiply(x)).add(direction.getDirection().getCrossProduct(getPerpendicularVector(direction.getDirection())).multiply(z));
+        NamespacedKey cooldown = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("Yahoo"), "cooldown");
+        ItemStack held = player.getInventory().getItemInOffHand();
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "glove");
+        if (held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm()) {
 
 
-                        if (fireLocation.getWorld().getBlockAt(fireLocation).getType() != Material.AIR) continue; // Skip if a block is already there
+        if (player.getPersistentDataContainer().get(cooldown, PersistentDataType.STRING) == null) {
+            player.getPersistentDataContainer().set(cooldown, PersistentDataType.STRING, "off");
+        }
+        if (player.getPersistentDataContainer().get(cooldown, PersistentDataType.STRING).equals("off") && player.isSneaking()) {
+            World world = player.getWorld();
+            Location playerLoc = player.getLocation();
 
-                        fireLocation.getWorld().getBlockAt(fireLocation).setType(Material.FIRE);
-                    }
-                }
+            // 1. Get the player's eye location:
+            Location eyeLoc = player.getEyeLocation();
+
+            // 2. Calculate the fireball's spawn location (slightly in front of the eyes):
+            Vector direction = player.getEyeLocation().getDirection(); // Direction vector
+            double fireballSpawnDistance = 1.5; // Adjust this value (e.g., 0.5, 1.0, 1.5)
+            Location fireballLoc = eyeLoc.clone().add(direction.getX() * fireballSpawnDistance, direction.getY() * fireballSpawnDistance, direction.getZ() * fireballSpawnDistance);
+
+
+            // 3. Spawn the fireball at the calculated location:
+            Entity fireball = world.spawnEntity(fireballLoc, EntityType.FIREBALL);
+            player.setInvulnerable(true);
+
+            // 4. (Optional but Recommended) Set the fireball's direction
+            if (fireball instanceof Fireball) {
+                ((Fireball) fireball).setDirection(direction);
+                player.setInvulnerable(false);// Launch the fireball in the player's looking direction
             }
-        }
-    }
+            player.getPersistentDataContainer().set(cooldown, PersistentDataType.STRING, "on");
+            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new off(yahoo,player,cooldown,"cooldown"),20);
 
-    // Helper function to get a perpendicular vector
-    private Vector getPerpendicularVector(Vector vector) {
-        if (vector.getX() != 0) {
-            return new Vector(0, 1, 0); // Up
-        } else if (vector.getY() != 0) {
-            return new Vector(0, 0, 1); // Towards positive Z
-        } else {
-            return new Vector(1, 0, 0); // Towards positive X
-        }
+        }}
     }
 }
