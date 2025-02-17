@@ -20,6 +20,7 @@ public class item_register {
         ItemMeta meta = item.getItemMeta();
         NamespacedKey key2 = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
         meta.displayName(Component.text(name));
+        meta.setItemModel(NamespacedKey.minecraft(tag));
         meta.getPersistentDataContainer().set(key2, PersistentDataType.STRING, tag);
         item.setItemMeta(meta);
         ShapedRecipe recipe = new ShapedRecipe(key,item);
@@ -117,6 +118,21 @@ public class item_register {
                 "Glitch_Infused_Gem",
                 glitch,glitchdict,
                 "glitch_cry");
+        Collection<String> alchemic = new ArrayList<>();
+        alchemic.add("L");
+        alchemic.add("L");
+        alchemic.add("D");
+        alchemic.add("L");
+        alchemic.add("L");
+        Dictionary<String, Material> alchemicdict = new Hashtable<>();
+        alchemicdict.put("L",Material.LEATHER);
+        alchemicdict.put("D",Material.DIAMOND);
+        itemregister(" L ",
+                "LDL",
+                " L ",
+                "Alchemic_Bag",
+                alchemic,alchemicdict,
+                "alchemic_bag");
     }
 }
 //GUN//

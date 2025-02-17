@@ -10,3 +10,9 @@ commands:
   pocket_time:
       description: "This is a command"
       usage: "/pocket_time"
+  reset_cooldowns:
+      description: "This is a command"
+      usage: "/reset_cooldowns"
+  give_grenade:
+      description: "kaboom"
+      usage: "kaboom"

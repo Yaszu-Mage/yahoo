@@ -27,6 +27,7 @@ public class time_dialator implements CommandExecutor {
         ItemStack recoveryCompass = new ItemStack(Material.RECOVERY_COMPASS);
         ItemMeta meta = recoveryCompass.getItemMeta();
         meta.getPersistentDataContainer().set(glove, PersistentDataType.STRING, "time");
+        meta.setItemModel(NamespacedKey.minecraft("pocket_watch"));
         meta.setDisplayName(ChatColor.GOLD + "Pocket Watch");
         recoveryCompass.setItemMeta(meta);
         player.getInventory().addItem(recoveryCompass);

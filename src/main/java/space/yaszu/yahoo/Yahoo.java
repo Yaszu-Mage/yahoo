@@ -3,10 +3,13 @@ package space.yaszu.yahoo;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import space.yaszu.yahoo.alchemy.alchemic_bag;
+import space.yaszu.yahoo.alchemy.events.drops;
 import space.yaszu.yahoo.commands.give_glove;
+import space.yaszu.yahoo.commands.grenade;
+import space.yaszu.yahoo.commands.reset_cooldowns;
 import space.yaszu.yahoo.commands.time_dialator;
 import space.yaszu.yahoo.events.*;
-import space.yaszu.yahoo.events.new_runnables.speed;
 import space.yaszu.yahoo.events.new_runnables.teleport;
 import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.glitch.buff;
@@ -29,7 +32,16 @@ public final class Yahoo extends JavaPlugin{
         schedule_zane();
         getCommand("give_glove").setExecutor(new give_glove());
         getCommand("pocket_time").setExecutor(new time_dialator());
+        getCommand("reset_cooldowns").setExecutor(new reset_cooldowns());
+        getCommand("give_grenade").setExecutor(new grenade());
+        check_glitch();
         getLogger().info("Plugin has been enabled");
+    }
+
+
+
+    public void check_glitch() {
+        // bank
     }
 
     public void schedule_zane() {
@@ -37,7 +49,6 @@ public final class Yahoo extends JavaPlugin{
         Random random = new Random();
         int time = random.nextInt(72000);
         int time2 = random.nextInt(18000);
-        int time3 = random.nextInt(1);
         schedule.runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(this),time + 1);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new set_who(this),12000);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new teleport(this),time2);
@@ -61,6 +72,9 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new snap(this), this);
         getServer().getPluginManager().registerEvents(new local_teleportation(), this);
         getServer().getPluginManager().registerEvents(new dialation(),this);
+        getServer().getPluginManager().registerEvents(new alchemic_bag(this),this);
+        getServer().getPluginManager().registerEvents(new drops(),this);
+        getServer().getPluginManager().registerEvents(new air_step(this),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

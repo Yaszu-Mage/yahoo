@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -60,39 +61,43 @@ public class item_event implements Listener {
                 if (id.equals("gun")) {
                     double gunspeed = 3;
                     NamespacedKey cooldown = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("Yahoo"), "gun_cooldown");
-                    if (player.getDisplayName() == "GhostboyGamer") {
+
+                    if (player.getDisplayName().equals("GhostboyGamer")) { // Use .equals() instead of ==
                         gunspeed = 4;
                     }
-                    if (player.getPersistentDataContainer().get(cooldown,PersistentDataType.STRING).equals("off")) {}
 
-                    World world = player.getWorld();
-                    Location playerLoc = player.getLocation();
+                    if (player.getPersistentDataContainer().get(cooldown, PersistentDataType.STRING).equals("off")) {
+                        // Check if the player has an arrow
+                        PlayerInventory inventory = player.getInventory();
+                        if (inventory.contains(Material.ARROW)) { // Check if player has at least one arrow
+                            inventory.removeItem(new ItemStack(Material.ARROW, 1)); // Remove one arrow
 
-// 1. Get the player's eye location:
-                    Location eyeLoc = player.getEyeLocation();
+                            World world = player.getWorld();
+                            Location playerLoc = player.getLocation();
 
-// 2. Calculate the arrow's spawn location (slightly in front of the eyes):
-                    Vector direction = player.getEyeLocation().getDirection(); // Direction vector
-                    double arrowSpawnDistance = 1.5; // Adjust this value (e.g., 0.5, 1.0, 1.5)
-                    Location arrowLoc = eyeLoc.clone().add(direction.getX() * arrowSpawnDistance, direction.getY() * arrowSpawnDistance, direction.getZ() * arrowSpawnDistance);
+                            // 1. Get the player's eye location:
+                            Location eyeLoc = player.getEyeLocation();
 
-// 3. Spawn the arrow at the calculated location:
-                    Arrow arrow = world.spawn(arrowLoc, Arrow.class);
+                            // 2. Calculate the arrow's spawn location (slightly in front of the eyes):
+                            Vector direction = eyeLoc.getDirection(); // Direction vector
+                            double arrowSpawnDistance = 1.5; // Adjust this value
+                            Location arrowLoc = eyeLoc.clone().add(direction.clone().multiply(arrowSpawnDistance));
 
-// 4. Set the arrow's velocity and make it faster (Increase the multiplier to make it faster)
-                    arrow.setVelocity(direction.multiply(3.0)); // Change multiplier to make the arrow faster, e.g., 3.0 for faster speed
+                            // 3. Spawn the arrow at the calculated location:
+                            Arrow arrow = world.spawn(arrowLoc, Arrow.class);
 
-// 5. Ensure the player is invulnerable for a short time (if needed)
+                            // 4. Set the arrow's velocity
+                            arrow.setVelocity(direction.multiply(gunspeed)); // Use the correct gun speed
 
-// 6. Optionally, make the arrow face the direction of the player
-                    arrow.setRotation(player.getEyeLocation().getYaw(), player.getEyeLocation().getPitch());
+                            // 5. Make the arrow face the direction of the player
+                            arrow.setRotation(player.getEyeLocation().getYaw(), player.getEyeLocation().getPitch());
 
-// 7. Set the invulnerability to false after the arrow is launched
-
-// 8. Handle cooldown state or other operations if necessary
-
-// 9. Run the task later (optional cooldown task)
-                    Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"), new gun_off(yahoo), 20);
+                            // 6. Run cooldown task
+                            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Yahoo"), new gun_off(yahoo), 20);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You need arrows to shoot!");
+                        }
+                    }
 
                 }
             }
