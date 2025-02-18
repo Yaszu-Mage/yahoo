@@ -3,6 +3,7 @@ package space.yaszu.yahoo.events;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +42,11 @@ public class black_flash implements Listener {
 
                 // Apply effects
                 attacker.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 10, 6));
-                attacker.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 10, 19));
+                PotionEffect fx = new PotionEffect(PotionEffectType.SLOWNESS,120,0);
+                PotionEffect fx2 = new PotionEffect(PotionEffectType.SLOWNESS,120,0);
+                ((LivingEntity) attacked).addPotionEffect(fx);
+                ((LivingEntity) attacked).addPotionEffect(fx2);
+
 
                 // Reset counter
                 attacker.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 0);

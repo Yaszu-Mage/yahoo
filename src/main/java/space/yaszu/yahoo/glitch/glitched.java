@@ -1,6 +1,7 @@
 package space.yaszu.yahoo.glitch;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -26,17 +27,20 @@ public class glitched implements Listener {
         // Example using player name (less reliable):
         if (player.getName().equals("1nZ4ne") && random_int >= 95) {  // Replace with the actual name
             player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_TENDRIL_CLICKS, 1.0f,1.0f);
-            int random_int2 = random.nextInt(4);
+            int random_int2 = random.nextInt(3);
             if (random_int2 == 0) {
                 player.sendRawMessage("It's Gone.");
+                player.getWorld().spawnParticle(Particle.POOF,block.getLocation(),16);
                 event.setDropItems(false);
             } else if (random_int2 == 1) {
                 player.sendRawMessage("An egg?");
+                player.getWorld().playSound(block.getLocation(),Sound.ENTITY_CHICKEN_AMBIENT,1.0f,1.0f);
                 block.setType(Material.AIR);
                 event.setDropItems(false);
                 player.getWorld().spawnEntity(block.getLocation(), EntityType.EGG);
             } else if (random_int2 == 2) {
                 player.sendRawMessage("But there was only one before?");
+                player.getWorld().spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR,block.getLocation(),16);
                 Collection<ItemStack> item = block.getDrops();
                 for (ItemStack itemStack : item) {
                     ItemStack duplicate = itemStack.clone();
@@ -44,16 +48,25 @@ public class glitched implements Listener {
                     block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
                 }
                 event.setDropItems(false);
-            } else if (random_int2 == 3) {
-                event.setDropItems(false);
-                block.setType(Material.AIR);
-                player.getWorld().spawnEntity(block.getLocation(), EntityType.MINECART);
             }
 
 
         } else if (random_int >= 99){
-            player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1.0f,1.0f);
-            player.sendRawMessage("Something is off...");
+            int random_reroll = random.nextInt(1001);
+            if (random_reroll >= 980) {
+                int random_msg = random.nextInt(3);
+                if (random_msg == 0) {
+                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1.0f,1.0f);
+                    player.sendRawMessage("Something is off...");
+                } else if (random_msg == 1) {
+                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1.0f,1.0f);
+                    player.sendRawMessage("You feel eyes watching you.");
+                } else if (random_msg == 2) {
+                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1.0f,1.0f);
+                    player.sendRawMessage("We can hear you.");
+                }
+            }
+
         }
     }
 }
