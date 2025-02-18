@@ -12,7 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.checkerframework.checker.units.qual.N;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.alchemy.items.soul;
 
 public class alchemic_bag implements Listener {
     private final Yahoo yahoo;
@@ -28,6 +32,7 @@ public class alchemic_bag implements Listener {
 
 
             ItemMeta meta = item.getItemMeta();
+            NamespacedKey sin = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"sin");
             NamespacedKey key2 = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
             id = meta.getPersistentDataContainer().get(key2, PersistentDataType.STRING);
             if (id != null) {
@@ -55,6 +60,20 @@ public class alchemic_bag implements Listener {
                             playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, false);
                         }, /* End of the lambda */ 6000);
                     }
+                    if (main_hand.getItemMeta().equals(soul.soul_item().getItemMeta())) {
+                        // Human transmutation. Using Human souls as a power source
+                        playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, true);
+                        if (!playercont.has(sin)) {
+                            player.sendRawMessage("You have commited a grave sin.");
+                            playercont.set(sin,PersistentDataType.INTEGER,1);
+                        } else {
+                            player.sendRawMessage("You have sinned again.");
+                            playercont.set(sin, PersistentDataType.INTEGER, playercont.get(sin, PersistentDataType.INTEGER) + 1);
+                        }
+                        main_hand.subtract(1);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,600,1));
+                    }
+                    
                 }
              }
         }
