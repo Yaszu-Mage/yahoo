@@ -37,6 +37,7 @@ public class reset_cooldowns implements CommandExecutor {
             player_date.set(gun_cooldown, PersistentDataType.STRING, "off");
             player_date.set(cooldown, PersistentDataType.STRING, "off");
             player_date.set(alchemic_cooldown, PersistentDataType.BOOLEAN, false);
+            ((Player) sender).sendRawMessage("Cooldowns Cleared!");
             return true;
         } else {
             return false;
