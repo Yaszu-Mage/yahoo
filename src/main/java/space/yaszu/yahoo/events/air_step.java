@@ -48,7 +48,7 @@ public class air_step implements Listener {
         }
 
         // Check if the player is sneaking while jumping
-        if (player.isSneaking()) {
+        if (player.isSneaking() && player.getDisplayName().equals("Yaszu")) {
             Vector direction = player.getLocation().getDirection();
             direction.setY(0); // Keep movement horizontal
             direction.normalize().multiply(5); // Move 5 blocks forward

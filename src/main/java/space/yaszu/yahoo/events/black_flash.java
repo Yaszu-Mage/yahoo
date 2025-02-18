@@ -30,7 +30,7 @@ public class black_flash implements Listener {
 
         if (!attacker.equals(attacked)) {
             int value = random.nextInt(201);
-            if (value <= 195) {
+            if (value >= 195) {
                 Yahoo.getPlugin(Yahoo.class).getLogger().info(attacker.getDisplayName() + " hit a black flash");
 
                 attacker.getWorld().playSound(attacker.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 0.7f);
