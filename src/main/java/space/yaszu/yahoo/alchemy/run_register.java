@@ -8,8 +8,9 @@ import space.yaszu.yahoo.alchemy.items.home_pearl;
 public class run_register {
     public static void register(){
         ItemStack homepearl = home_pearl.home_pearl_item();
+        NamespacedKey key2 = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "homepearl");
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_ID");
-        ShapedRecipe recipe = new ShapedRecipe(homepearl);
+        ShapedRecipe recipe = new ShapedRecipe(key2,homepearl);
         recipe.shape(" E ","EDE"," E ");
         recipe.setIngredient('E', Material.ENDER_PEARL);
         recipe.setIngredient('D', Material.DIAMOND);
