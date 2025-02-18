@@ -1,8 +1,6 @@
 package space.yaszu.yahoo.glitch;
 
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Collection;
 import java.util.Random;
@@ -20,12 +20,17 @@ public class glitched implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Random random = new Random();
         Player player = event.getPlayer();
+        String type = "";
+        PersistentDataContainer cont = player.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
         Block block = event.getBlock();// Get the type of block broken
-        int random_int = random.nextInt(101);
-
+        int random_int = random.nextInt(1001);
+        if (cont.has(key)) {
+            type = cont.get(key, PersistentDataType.STRING);
+        }
 
         // Example using player name (less reliable):
-        if (player.getName().equals("1nZ4ne") && random_int >= 95) {  // Replace with the actual name
+        if (type.equals("glitch") && random_int >= 950) {  // Replace with the actual name
             player.playSound(player.getLocation(), Sound.ENTITY_WARDEN_TENDRIL_CLICKS, 1.0f,1.0f);
             int random_int2 = random.nextInt(3);
             if (random_int2 == 0) {

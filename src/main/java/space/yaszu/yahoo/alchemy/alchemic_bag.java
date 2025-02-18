@@ -1,5 +1,6 @@
 package space.yaszu.yahoo.alchemy;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -16,24 +17,45 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.N;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.alchemy.items.home_pearl;
 import space.yaszu.yahoo.alchemy.items.soul;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class alchemic_bag implements Listener {
     private final Yahoo yahoo;
     public alchemic_bag(Yahoo yahoo) {
         this.yahoo = yahoo;
     }
+    private final HashMap<UUID, Long> cooldowns = new HashMap<>(); // Cooldown storage
+    private long cooldownTime = 5000;
+
     @EventHandler
-    public void right_click(PlayerInteractEvent event) {
+    public void right_click(PlayerInteractEvent event) throws InterruptedException {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInOffHand();
         String id;
-        if (item.getAmount() != 0) {
+        UUID playerUUID = player.getUniqueId();
 
+        long currentTime = System.currentTimeMillis();
+        if (cooldowns.containsKey(playerUUID)) {
+            long lastUsed = cooldowns.get(playerUUID);
+            long timeLeft = cooldownTime - (currentTime - lastUsed);
+
+            if (timeLeft > 0) {
+                // Convert milliseconds to seconds and display in action bar
+                double secondsLeft = timeLeft / 1000.0;
+                player.sendActionBar(Component.text("§cCooldown: " + String.format("%.1f", secondsLeft) + "s"));
+                return;
+            }
+        }
+        if (item.getAmount() != 0) {
 
             ItemMeta meta = item.getItemMeta();
             NamespacedKey sin = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"sin");
             NamespacedKey key2 = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
+
             id = meta.getPersistentDataContainer().get(key2, PersistentDataType.STRING);
             if (id != null) {
                 space.yaszu.yahoo.Yahoo.getPlugin(Yahoo.class).getLogger().info(id + " was used");
@@ -44,6 +66,7 @@ public class alchemic_bag implements Listener {
                     if (playercont.get(alchemic_cooldown,PersistentDataType.BOOLEAN) == null) {
                         playercont.set(alchemic_cooldown,PersistentDataType.BOOLEAN,false);
                     }
+                    boolean cooldown = playercont.get(alchemic_cooldown,PersistentDataType.BOOLEAN);
                     if (main_hand.getType().equals(Material.LEATHER) && main_hand.getAmount() >= 5 && playercont.get(alchemic_cooldown,PersistentDataType.BOOLEAN) == false) {
                         playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, true);
                         player.sendRawMessage("Petah... The Horse is here");
@@ -60,7 +83,7 @@ public class alchemic_bag implements Listener {
                             playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, false);
                         }, /* End of the lambda */ 6000);
                     }
-                    if (main_hand.getItemMeta().equals(soul.soul_item().getItemMeta())) {
+                    if (main_hand.getItemMeta().equals(soul.soul_item().getItemMeta()) && !cooldown) {
                         // Human transmutation. Using Human souls as a power source
                         playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, true);
                         if (!playercont.has(sin)) {
@@ -72,6 +95,23 @@ public class alchemic_bag implements Listener {
                         }
                         main_hand.subtract(1);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,600,1));
+                        cooldownTime = 30000;
+                        cooldowns.put(playerUUID, currentTime);
+                    }
+                    if (main_hand.getItemMeta().equals(home_pearl.home_pearl_item()) && !cooldown) {
+                        main_hand.subtract(1);
+                        cooldownTime = 3000;
+                        cooldowns.put(playerUUID, currentTime);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),20);
+                        player.getWorld().spawnParticle(Particle.POOF,player.getLocation(),120);
+                        player.playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getRespawnLocation(),20);
+                        wait(3000);
+                        player.teleport(player.getRespawnLocation());
+                        player.getWorld().spawnParticle(Particle.POOF,player.getLocation(),120);
+                        player.playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),20);
+
                     }
                     
                 }

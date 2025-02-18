@@ -1,12 +1,12 @@
 package space.yaszu.yahoo.glitch;
 
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Random;
 
@@ -16,10 +16,17 @@ public class glitch_port implements Listener {
     @EventHandler
     public void sneak_port(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
+        String type = "";
+        PersistentDataContainer cont = player.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
         Location playerLoc = player.getLocation();
+
+        if (cont.has(key)) {
+            type = cont.get(key, PersistentDataType.STRING);
+        }
         double TELEPORT_RADIUS = 10.0;
         int random_chance = random.nextInt(101);
-        if (random_chance >= 99 && player.getName().equals("1nZ4ne") && is_running) {
+        if (random_chance >= 99 && type.equals("glitch") && is_running) {
             event.setCancelled(true);
             is_running = false;
             Location teleportlocation = playerLoc;

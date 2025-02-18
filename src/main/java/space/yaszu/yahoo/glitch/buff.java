@@ -1,8 +1,11 @@
 package space.yaszu.yahoo.glitch;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import space.yaszu.yahoo.Yahoo;
@@ -20,8 +23,14 @@ public class buff implements Runnable{
 
     @Override
     public void run() {
-        if (Bukkit.getPlayerExact("1nZ4ne") != null) {
-            Player zane = Bukkit.getPlayer("1nZ4ne");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            String type = "";
+            PersistentDataContainer cont = p.getPersistentDataContainer();
+            NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+            if (cont.has(key)) {
+                type = cont.get(key, PersistentDataType.STRING);
+            }
+            Player zane = p;
             int zane_fx = random.nextInt(33);
             if (zane_fx == 0) {
                 zane.sendRawMessage("You feel... faster");
@@ -156,12 +165,12 @@ public class buff implements Runnable{
                 zane.getWorld().playSound(zane.getLocation(), Sound.ENTITY_WANDERING_TRADER_DRINK_POTION, 1f, 1f);
                 zane.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 1000, 1));
             }
-
-            int time = random.nextInt(72000);
-            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);
-        } else {
-            int time = random.nextInt(72000);
-            Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);
         }
+        int time = random.nextInt(72000);
+        Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);
+
+
+
+
     }
 }

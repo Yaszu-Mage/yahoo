@@ -3,11 +3,13 @@ package space.yaszu.yahoo.events;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -46,12 +48,17 @@ public class air_step implements Listener {
                 return;
             }
         }
-
+        String type = "";
+        PersistentDataContainer cont = player.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+        if (cont.has(key)) {
+            type = cont.get(key, PersistentDataType.STRING);
+        }
         // Check if the player is sneaking while jumping
-        if (player.isSneaking() && player.getDisplayName().equals("Yaszu")) {
+        if (player.isSneaking() && type.equals("porter")) {
             Vector direction = player.getLocation().getDirection();
             direction.setY(0); // Keep movement horizontal
-            direction.normalize().multiply(5); // Move 5 blocks forward
+            direction.normalize().multiply(2.2); // Move 5 blocks forward
 
             player.setVelocity(direction);
             cooldowns.put(playerUUID, currentTime); // Set new cooldown time

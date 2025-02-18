@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
+import space.yaszu.yahoo.alchemy.run_register;
 import space.yaszu.yahoo.commands.give_glove;
 import space.yaszu.yahoo.commands.grenade;
 import space.yaszu.yahoo.commands.reset_cooldowns;
@@ -66,7 +67,6 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new glitch_port(),this);
         getServer().getPluginManager().registerEvents(new black_flash(),this);
         getServer().getPluginManager().registerEvents(new item_event(this), this);
-        getServer().getPluginManager().registerEvents(new parry(),this);
         getServer().getPluginManager().registerEvents(new determination(), this);
         getServer().getPluginManager().registerEvents(new pet(), this);
         getServer().getPluginManager().registerEvents(new snap(this), this);
@@ -79,6 +79,7 @@ public final class Yahoo extends JavaPlugin{
     public void register_items() {
         item_register register = new item_register(this);
         register.register();
+        run_register.register();
         getLogger().info("Registered Items!");
     }
     @Override
