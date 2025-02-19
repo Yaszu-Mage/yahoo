@@ -56,7 +56,7 @@ public class glitched implements Listener {
             }
 
 
-        } else if (random_int >= 99){
+        } else if (random_int >= 950){
             int random_reroll = random.nextInt(1001);
             if (random_reroll >= 980) {
                 int random_msg = random.nextInt(3);

@@ -10,6 +10,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.glitch.glitched_gem_item;
 
 import java.util.*;
 
@@ -96,28 +97,6 @@ public class item_register {
                 "Piercer",
                 gun,gundict,
                 "gun");
-        Collection<String> glitch = new ArrayList<>();
-        glitch.add("A");
-        glitch.add("N");
-        glitch.add("S");
-        glitch.add("N");
-        glitch.add("C");
-        glitch.add("N");
-        glitch.add("D");
-        glitch.add("N");
-        glitch.add("A");
-        Dictionary<String, Material> glitchdict = new Hashtable<>();
-        glitchdict.put("A",Material.AMETHYST_BLOCK);
-        glitchdict.put("N",Material.NETHERITE_INGOT);
-        glitchdict.put("D",Material.DIAMOND_BLOCK);
-        glitchdict.put("C",Material.END_CRYSTAL);
-        glitchdict.put("S",Material.NETHER_STAR);
-        itemregister("ANS",
-                "NCN",
-                "DNA",
-                "Glitch_Infused_Gem",
-                glitch,glitchdict,
-                "glitch_cry");
         Collection<String> alchemic = new ArrayList<>();
         alchemic.add("L");
         alchemic.add("L");
@@ -133,6 +112,17 @@ public class item_register {
                 "Alchemic_Bag",
                 alchemic,alchemicdict,
                 "alchemic_bag");
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"gem");
+        ItemStack gem = glitched_gem_item.gem();
+        ShapedRecipe recipe = new ShapedRecipe(key, gem);
+        recipe.shape("ANS","NCN","DNA");
+        recipe.setIngredient('A', Material.AMETHYST_BLOCK);
+        recipe.setIngredient('N', Material.NETHERITE_INGOT);
+        recipe.setIngredient('D', Material.DIAMOND_BLOCK);
+        recipe.setIngredient('C', Material.END_CRYSTAL);
+        recipe.setIngredient('S', Material.NETHER_STAR);
+        Bukkit.getServer().addRecipe(recipe);
     }
+
 }
 //GUN//

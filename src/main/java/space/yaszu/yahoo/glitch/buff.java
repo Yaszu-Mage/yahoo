@@ -29,9 +29,12 @@ public class buff implements Runnable{
             NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
             if (cont.has(key)) {
                 type = cont.get(key, PersistentDataType.STRING);
+            } else {
+                return;
             }
             Player zane = p;
             int zane_fx = random.nextInt(33);
+            if (type.equals("glitch")) {
             if (zane_fx == 0) {
                 zane.sendRawMessage("You feel... faster");
                 zane.getWorld().playSound(zane.getLocation(), Sound.ENTITY_WANDERING_TRADER_DRINK_POTION, 1f, 1f);
@@ -164,7 +167,7 @@ public class buff implements Runnable{
                 zane.sendRawMessage("You really can't see it?");
                 zane.getWorld().playSound(zane.getLocation(), Sound.ENTITY_WANDERING_TRADER_DRINK_POTION, 1f, 1f);
                 zane.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 1000, 1));
-            }
+            }}
         }
         int time = random.nextInt(72000);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(yahoo),time + 1);

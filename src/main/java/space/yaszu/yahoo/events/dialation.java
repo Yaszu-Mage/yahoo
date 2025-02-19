@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class dialation implements Listener {
     private final HashMap<UUID, Long> cooldowns = new HashMap<>(); // Cooldown storage
-    private final long cooldownTime = 60000;
+    private final long dialationcooldownTime = 60000;
     @EventHandler
     public void time(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -40,7 +40,7 @@ public class dialation implements Listener {
         }
         if (cooldowns.containsKey(playerUUID)) {
             long lastUsed = cooldowns.get(playerUUID);
-            long timeLeft = cooldownTime - (currentTime - lastUsed);
+            long timeLeft = dialationcooldownTime - (currentTime - lastUsed);
 
             if (timeLeft > 0) {
                 // Convert milliseconds to seconds and display in action bar

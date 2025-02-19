@@ -16,6 +16,7 @@ import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.glitch.buff;
 import space.yaszu.yahoo.glitch.glitch_port;
 import space.yaszu.yahoo.glitch.glitched;
+import space.yaszu.yahoo.glitch.glitched_gem;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
 import space.yaszu.yahoo.porter.local_teleportation;
@@ -35,6 +36,7 @@ public final class Yahoo extends JavaPlugin{
         getCommand("pocket_time").setExecutor(new time_dialator());
         getCommand("reset_cooldowns").setExecutor(new reset_cooldowns());
         getCommand("give_grenade").setExecutor(new grenade());
+        getCommand("set_who").setExecutor(new space.yaszu.yahoo.commands.set_who());
         check_glitch();
         getLogger().info("Plugin has been enabled");
     }
@@ -75,11 +77,13 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new alchemic_bag(this),this);
         getServer().getPluginManager().registerEvents(new drops(),this);
         getServer().getPluginManager().registerEvents(new air_step(this),this);
+        getServer().getPluginManager().registerEvents(new glitched_gem(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
         register.register();
         run_register.register();
+
         getLogger().info("Registered Items!");
     }
     @Override

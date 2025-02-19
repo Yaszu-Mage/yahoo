@@ -14,7 +14,7 @@ public class home_pearl {
         ItemMeta essence_meta = essence.getItemMeta();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
         essence_meta.getPersistentDataContainer().set(key, PersistentDataType.STRING,"homepearl");
-        essence_meta.setDisplayName(ChatColor.RED + "Human-like Soul");
+        essence_meta.setDisplayName(ChatColor.GREEN + "Home Pearl");
         essence.setItemMeta(essence_meta);
         return essence;
     }

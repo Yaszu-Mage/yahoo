@@ -16,3 +16,5 @@ commands:
   give_grenade:
       description: "kaboom"
       usage: "kaboom"
+  set_who:
+      description: "set who"

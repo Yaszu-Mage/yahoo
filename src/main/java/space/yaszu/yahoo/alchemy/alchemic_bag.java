@@ -67,8 +67,10 @@ public class alchemic_bag implements Listener {
                         playercont.set(alchemic_cooldown,PersistentDataType.BOOLEAN,false);
                     }
                     boolean cooldown = playercont.get(alchemic_cooldown,PersistentDataType.BOOLEAN);
-                    if (main_hand.getType().equals(Material.LEATHER) && main_hand.getAmount() >= 5 && playercont.get(alchemic_cooldown,PersistentDataType.BOOLEAN) == false) {
+                    if (main_hand.getType().equals(Material.LEATHER) && main_hand.getAmount() >= 5) {
                         playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, true);
+                        cooldownTime = 60000;
+                        cooldowns.put(playerUUID, currentTime);
                         player.sendRawMessage("Petah... The Horse is here");
                         main_hand.subtract(5);
                         Horse h = (Horse) player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.HORSE);
@@ -77,13 +79,14 @@ public class alchemic_bag implements Listener {
                         h.setTamed(true);
                         h.setOwner(player);
                         h.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
+
                         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Yahoo"), /* Lambda: */ () -> {
                             h.getWorld().spawnParticle(Particle.POOF,h.getEyeLocation(),128);
                             h.remove();
                             playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, false);
                         }, /* End of the lambda */ 6000);
                     }
-                    if (main_hand.getItemMeta().equals(soul.soul_item().getItemMeta()) && !cooldown) {
+                    if (main_hand.getItemMeta().equals(soul.soul_item().getItemMeta())) {
                         // Human transmutation. Using Human souls as a power source
                         playercont.set(alchemic_cooldown, PersistentDataType.BOOLEAN, true);
                         if (!playercont.has(sin)) {
@@ -98,7 +101,7 @@ public class alchemic_bag implements Listener {
                         cooldownTime = 30000;
                         cooldowns.put(playerUUID, currentTime);
                     }
-                    if (main_hand.getItemMeta().equals(home_pearl.home_pearl_item()) && !cooldown) {
+                    if (main_hand.getItemMeta().equals(home_pearl.home_pearl_item().getItemMeta())) {
                         main_hand.subtract(1);
                         cooldownTime = 3000;
                         cooldowns.put(playerUUID, currentTime);
@@ -106,8 +109,7 @@ public class alchemic_bag implements Listener {
                         player.getWorld().spawnParticle(Particle.POOF,player.getLocation(),120);
                         player.playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
                         player.getWorld().spawnParticle(Particle.PORTAL,player.getRespawnLocation(),20);
-                        wait(3000);
-                        player.teleport(player.getRespawnLocation());
+                        player.teleport(player.getWorld().getSpawnLocation());
                         player.getWorld().spawnParticle(Particle.POOF,player.getLocation(),120);
                         player.playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
                         player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),20);
