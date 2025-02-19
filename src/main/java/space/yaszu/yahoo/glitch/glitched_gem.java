@@ -83,6 +83,9 @@ public class glitched_gem implements Listener {
                     @Override
                     public void run() {
                         player.getWorld().setBlockData(player.getLocation(),originals.get(player.getLocation()));
+                        openers.remove(playerUUID);
+                        opened_portal.remove(player.getLocation());
+                        originals.remove(player.getLocation());
                     }
                 },600);
             }
