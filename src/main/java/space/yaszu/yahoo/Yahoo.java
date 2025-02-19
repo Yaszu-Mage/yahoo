@@ -19,6 +19,7 @@ import space.yaszu.yahoo.commands.grenade;
 import space.yaszu.yahoo.commands.reset_cooldowns;
 import space.yaszu.yahoo.commands.time_dialator;
 import space.yaszu.yahoo.events.*;
+import space.yaszu.yahoo.events.new_runnables.insanity;
 import space.yaszu.yahoo.events.new_runnables.teleport;
 import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.glitch.buff;
@@ -66,6 +67,8 @@ public final class Yahoo extends JavaPlugin{
         schedule.runTaskLater(getPluginManager().getPlugin("Yahoo"),new buff(this),time + 1);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new set_who(this),12000);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new teleport(this),time2);
+        Bukkit.getScheduler().runTaskLater(get_plugin(),new insanity(),time2);
+
     }
     public static Yahoo getInstance() {
         return instance;

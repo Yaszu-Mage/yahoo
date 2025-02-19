@@ -113,7 +113,11 @@ public class glitched_gem implements Listener {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
         if (openers.get(playerUUID) != null || opened_portal.get(event.getPlayer().getLocation()) != null) {
-            event.setTo(new Location(Yahoo.get_glitched(),0,100,0));
+            if (player.getWorld().equals(Yahoo.get_glitched())) {
+                event.setTo(new Location(Bukkit.getWorld("world"),0,100,0));
+            } else {
+                event.setTo(new Location(Yahoo.get_glitched(),0,100,0));
+            }
         }
     }
 
