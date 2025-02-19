@@ -27,7 +27,7 @@ public class drops implements Listener {
         } else {
             //pass
         }
-        if (entity.getType().equals(EntityType.VILLAGER)) {
+        if (entity.getType().equals(EntityType.VILLAGER) || entity.getType().equals(EntityType.PLAYER)) {
             Random random = new Random();
             int value = random.nextInt(1001);
             if (value >= 850) {

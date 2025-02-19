@@ -13,7 +13,7 @@ public class pet implements Listener {
     @EventHandler
     public void pot(PlayerInteractEntityEvent event){
         Player player = event.getPlayer();
-        if (!player.getInventory().getItemInOffHand().equals(ItemStack.of(Material.SHIELD)) && player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+        if (!player.getInventory().getItemInOffHand().equals(ItemStack.of(Material.SHIELD)) && player.isSneaking() && player.getInventory().getItemInMainHand().getType().equals(Material.AIR )) {
             Entity pat = event.getRightClicked();
             player.spawnParticle(Particle.HEART,pat.getLocation(),64);
             player.sendRawMessage("You pet " + pat.getName());

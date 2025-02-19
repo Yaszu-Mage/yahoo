@@ -3,6 +3,7 @@ package space.yaszu.yahoo.glitch;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,7 +25,9 @@ public class glitched_gem implements Listener {
     private final long cooldownTimeGem = 300000;
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
+
         Player player = event.getPlayer();
+        player.getWorld().getBlockAt(player.getLocation()).setType(Material.END_GATEWAY);
         PersistentDataContainer cont = player.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
         UUID playerUUID = player.getUniqueId();

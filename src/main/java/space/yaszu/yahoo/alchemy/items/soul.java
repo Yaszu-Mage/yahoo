@@ -16,7 +16,7 @@ public class soul {
         ItemMeta essence_meta = essence.getItemMeta();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
         essence_meta.getPersistentDataContainer().set(key, PersistentDataType.STRING,"Soul");
-        essence_meta.setDisplayName(ChatColor.RED + "Human-like Soul");
+        essence_meta.setDisplayName(ChatColor.RED + "Human-Like Soul");
         essence.setItemMeta(essence_meta);
         return essence;
     }

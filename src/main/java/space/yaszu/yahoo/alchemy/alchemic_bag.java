@@ -97,7 +97,7 @@ public class alchemic_bag implements Listener {
                             playercont.set(sin, PersistentDataType.INTEGER, playercont.get(sin, PersistentDataType.INTEGER) + 1);
                         }
                         main_hand.subtract(1);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,600,1));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,600,4));
                         cooldownTime = 30000;
                         cooldowns.put(playerUUID, currentTime);
                     }
