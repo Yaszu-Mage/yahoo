@@ -7,6 +7,7 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
@@ -106,8 +107,16 @@ public final class Yahoo extends JavaPlugin{
         c.biomeProvider(glitch_provide());
         c.generateStructures(true);
         world = c.createWorld();
-
     }
+
+    public static Plugin get_plugin(){
+        return Bukkit.getPluginManager().getPlugin("Yahoo");
+    }
+
+    public static World get_glitched() {
+        return Bukkit.getWorld("Glitch");
+    }
+
     public BiomeProvider glitch_provide() {
         BiomeProvider provide = new BiomeProvider() {
             @Override

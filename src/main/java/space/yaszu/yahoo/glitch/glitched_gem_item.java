@@ -16,6 +16,8 @@ public class glitched_gem_item {
         ItemStack gem = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = gem.getItemMeta();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"gem");
+        NamespacedKey state = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"state");
+        meta.getPersistentDataContainer().set(state,PersistentDataType.INTEGER,0);
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING,"glitched_gem");
         meta.setDisplayName("Glitch Infused Gem");
         meta.setItemModel(NamespacedKey.minecraft("glitched_gem"));
