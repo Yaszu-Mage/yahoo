@@ -1,5 +1,6 @@
 package space.yaszu.yahoo.flamer;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -12,21 +13,54 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class snapv2 implements Listener {
+    private final HashMap<UUID, Long> cooldowns = new HashMap<>(); // Cooldown storage
+    private final long firecooldownTime = 60000;
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent interact) {
         Player player = interact.getPlayer();
         NamespacedKey cooldown = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("Yahoo"), "cooldown");
         ItemStack held = player.getInventory().getItemInOffHand();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "glove");
-        if (held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm()) {
+
+        UUID playerUUID = player.getUniqueId();
+
+        long currentTime = System.currentTimeMillis();
+
+        // Check cooldown
+        if (cooldowns.containsKey(playerUUID)) {
+            long lastUsed = cooldowns.get(playerUUID);
+            long timeLeft = firecooldownTime - (currentTime - lastUsed);
+
+            if (timeLeft > 0) {
+                // Convert milliseconds to seconds and display in action bar
+                double secondsLeft = timeLeft / 1000.0;
+                player.sendActionBar(Component.text("§cCooldown: " + String.format("%.1f", secondsLeft) + "s"));
+                return;
+            }
+        }
+        if (held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm() && !player.isSneaking()) {
             Location Spewpoint = player.getEyeLocation();
             spawnParticlesAndDamage(player);
+            cooldowns.put(playerUUID,currentTime);
 
+        } else if(held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm() && player.isSneaking() ) {
+            Vector direction = player.getLocation().getDirection();
+            direction.setX(0);
+            direction.setZ(0);// Keep movement vert
+            direction.normalize().multiply(5.2);// Move 5 blocks forward
+
+            player.setVelocity(direction);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,600,1));
         }
     }
     private void spawnParticlesAndDamage(final Player player) {
