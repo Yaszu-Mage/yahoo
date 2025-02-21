@@ -6,6 +6,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,11 +22,10 @@ import space.yaszu.yahoo.commands.time_dialator;
 import space.yaszu.yahoo.events.*;
 import space.yaszu.yahoo.events.new_runnables.insanity;
 import space.yaszu.yahoo.events.new_runnables.teleport;
+import space.yaszu.yahoo.flamer.jump;
 import space.yaszu.yahoo.flamer.snap;
-import space.yaszu.yahoo.glitch.buff;
-import space.yaszu.yahoo.glitch.glitch_port;
-import space.yaszu.yahoo.glitch.glitched;
-import space.yaszu.yahoo.glitch.glitched_gem;
+import space.yaszu.yahoo.flamer.snapv2;
+import space.yaszu.yahoo.glitch.*;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
 import space.yaszu.yahoo.porter.local_teleportation;
@@ -85,13 +85,15 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new item_event(this), this);
         getServer().getPluginManager().registerEvents(new determination(), this);
         getServer().getPluginManager().registerEvents(new pet(), this);
-        getServer().getPluginManager().registerEvents(new snap(this), this);
+        getServer().getPluginManager().registerEvents(new snapv2(), this);
         getServer().getPluginManager().registerEvents(new local_teleportation(), this);
         getServer().getPluginManager().registerEvents(new dialation(),this);
         getServer().getPluginManager().registerEvents(new alchemic_bag(this),this);
         getServer().getPluginManager().registerEvents(new drops(),this);
         getServer().getPluginManager().registerEvents(new air_step(this),this);
         getServer().getPluginManager().registerEvents(new glitched_gem(),this);
+        getServer().getPluginManager().registerEvents(new jump(),this);
+        getServer().getPluginManager().registerEvents(new gem_port(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
@@ -110,6 +112,7 @@ public final class Yahoo extends JavaPlugin{
         c.biomeProvider(glitch_provide());
         c.generateStructures(true);
         world = c.createWorld();
+
     }
 
     public static Plugin get_plugin(){
@@ -119,6 +122,8 @@ public final class Yahoo extends JavaPlugin{
     public static World get_glitched() {
         return Bukkit.getWorld("Glitch");
     }
+
+
 
     public BiomeProvider glitch_provide() {
         BiomeProvider provide = new BiomeProvider() {

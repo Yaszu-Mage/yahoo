@@ -31,7 +31,6 @@ public class snapv2 implements Listener {
         NamespacedKey cooldown = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("Yahoo"), "cooldown");
         ItemStack held = player.getInventory().getItemInOffHand();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "glove");
-
         UUID playerUUID = player.getUniqueId();
 
         long currentTime = System.currentTimeMillis();
@@ -51,27 +50,19 @@ public class snapv2 implements Listener {
         if (held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm() && !player.isSneaking()) {
             Location Spewpoint = player.getEyeLocation();
             spawnParticlesAndDamage(player);
-            cooldowns.put(playerUUID,currentTime);
+            cooldowns.put(playerUUID, currentTime);
 
-        } else if(held.getPersistentDataContainer().has(key, PersistentDataType.STRING) && !player.getWorld().hasStorm() && player.isSneaking() ) {
-            Vector direction = player.getLocation().getDirection();
-            direction.setX(0);
-            direction.setZ(0);// Keep movement vert
-            direction.normalize().multiply(5.2);// Move 5 blocks forward
-
-            player.setVelocity(direction);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,600,1));
         }
     }
     private void spawnParticlesAndDamage(final Player player) {
         // This task will run repeatedly to keep spawning particles and damaging entities
         new BukkitRunnable() {
             private int ticks = 0;
-            private final double damagePerSecond = 0.5;
+            private final double damagePerSecond = 5;
 
             @Override
             public void run() {
-                if (ticks >= 200) { // After 10 seconds, stop the task
+                if (ticks >= 100) { // After 10 seconds, stop the task
                     cancel();
                     return;
                 }
