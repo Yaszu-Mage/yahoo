@@ -63,7 +63,8 @@ public class swor implements Listener {
         if (cont.has(key)) {
             type = cont.get(key, PersistentDataType.STRING);
         }
-        if (type.equals("demon") && event.getHand() == EquipmentSlot.HAND) {
+        if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+        if (type.equals("demon") && event.getHand() == EquipmentSlot.HAND && player.getInventory().getItemInMainHand().getItemMeta().equals(sword_item().getItemMeta()) && player.isSneaking()) {
             piercecooldowns.put(playerUUID, System.currentTimeMillis());
             Location startLocation = player.getLocation();
             Vector direction = startLocation.getDirection().normalize().multiply(5);
@@ -88,7 +89,7 @@ public class swor implements Listener {
                     break; // Stop after hitting the first target
                 }
             }
-        }
+        }}
     }
 
     @EventHandler
@@ -113,13 +114,14 @@ public class swor implements Listener {
         if (cont.has(key)) {
             type = cont.get(key, PersistentDataType.STRING);
         }
-        if (type.equals("demon") && event.getHand() == EquipmentSlot.OFF_HAND) {
+        if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+        if (type.equals("demon") && event.getHand() == EquipmentSlot.OFF_HAND && !player.isSneaking()) {
             cooldowns.put(playerUUID, currentTime);
             ItemStack mainhand = player.getInventory().getItemInMainHand();
             if (mainhand.getType() != Material.AIR && mainhand.getItemMeta().equals(sword_item().getItemMeta())) {
                 createSlashCloud(player,5,40,4);
             }
-        }
+        }}
     }
     public static void createSlashCloud(Player caster, double maxRadius, int duration, double maxDamage) {
         new BukkitRunnable() {

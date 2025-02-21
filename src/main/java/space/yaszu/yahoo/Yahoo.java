@@ -1,9 +1,6 @@
 package space.yaszu.yahoo;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.ChunkGenerator;
@@ -117,6 +114,11 @@ public final class Yahoo extends JavaPlugin{
         c.biomeProvider(glitch_provide());
         c.generateStructures(true);
         world = c.createWorld();
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world.setTime(236927);
+        world.setThundering(true);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setStorm(true);
 
     }
 

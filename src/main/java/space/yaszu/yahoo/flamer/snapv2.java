@@ -81,7 +81,7 @@ public class snapv2 implements Listener {
                     for (Entity entity : player.getWorld().getNearbyEntities(particleLocation, 0.5, 0.5, 0.5)) {
                         if (entity instanceof LivingEntity && entity != player) {
                             // Apply damage to entities that are not the player
-                            ((LivingEntity) entity).damage(damagePerSecond);
+                            ((LivingEntity) entity).damage(damagePerSecond,player);
                         }
                     }
                 }
