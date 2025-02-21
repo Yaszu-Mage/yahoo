@@ -18,3 +18,5 @@ commands:
       usage: "kaboom"
   set_who:
       description: "set who"
+  give_sword:
+      description: "give_sword"

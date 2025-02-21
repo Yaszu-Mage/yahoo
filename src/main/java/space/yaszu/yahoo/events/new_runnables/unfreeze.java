@@ -16,7 +16,5 @@ public class unfreeze implements Runnable {
     @Override
     public void run() {
         Bukkit.getServerTickManager().setFrozen(false);
-        yaszu.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,600,1));
-        yaszu.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,600,1));
     }
 }

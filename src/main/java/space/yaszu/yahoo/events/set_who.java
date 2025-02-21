@@ -17,6 +17,7 @@ public class set_who implements Runnable {
         check_player("Yaszu","porter");
         check_player("1nZ4ne","glitch");
         check_player("GhostboyGamer", "flamer");
+        check_player("OvaAlpha3", "demon");
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new set_who(yahoo),12000);
     }
     public void check_player(String player, String tag){

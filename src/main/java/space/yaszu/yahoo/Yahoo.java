@@ -15,13 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
 import space.yaszu.yahoo.alchemy.run_register;
-import space.yaszu.yahoo.commands.give_glove;
-import space.yaszu.yahoo.commands.grenade;
-import space.yaszu.yahoo.commands.reset_cooldowns;
-import space.yaszu.yahoo.commands.time_dialator;
+import space.yaszu.yahoo.commands.*;
+import space.yaszu.yahoo.demon.hunger;
+import space.yaszu.yahoo.demon.hunger_runnables;
+import space.yaszu.yahoo.demon.swor;
 import space.yaszu.yahoo.events.*;
 import space.yaszu.yahoo.events.new_runnables.insanity;
 import space.yaszu.yahoo.events.new_runnables.teleport;
+import space.yaszu.yahoo.events.set_who;
 import space.yaszu.yahoo.flamer.jump;
 import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.flamer.snapv2;
@@ -48,6 +49,7 @@ public final class Yahoo extends JavaPlugin{
         getCommand("reset_cooldowns").setExecutor(new reset_cooldowns());
         getCommand("give_grenade").setExecutor(new grenade());
         getCommand("set_who").setExecutor(new space.yaszu.yahoo.commands.set_who());
+        getCommand("give_sword").setExecutor(new give_sword());
         createWorld();
         check_glitch();
         getLogger().info("Plugin has been enabled");
@@ -68,6 +70,7 @@ public final class Yahoo extends JavaPlugin{
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new set_who(this),12000);
         Bukkit.getScheduler().runTaskLater(getPluginManager().getPlugin("Yahoo"),new teleport(this),time2);
         Bukkit.getScheduler().runTaskLater(get_plugin(),new insanity(),time2);
+        Bukkit.getScheduler().runTaskLater(get_plugin(),new hunger_runnables(),600);
 
     }
     public static Yahoo getInstance() {
@@ -94,6 +97,8 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new glitched_gem(),this);
         getServer().getPluginManager().registerEvents(new jump(),this);
         getServer().getPluginManager().registerEvents(new gem_port(),this);
+        getServer().getPluginManager().registerEvents(new hunger(),this);
+        getServer().getPluginManager().registerEvents(new swor(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

@@ -56,8 +56,7 @@ public class air_step implements Listener {
         }
         // Check if the player is sneaking while jumping
         if (player.isSneaking() && type.equals("porter")) {
-            Vector direction = player.getLocation().getDirection();
-            direction.setY(0); // Keep movement horizontal
+            Vector direction = player.getLocation().getDirection();// Keep movement horizontal
             direction.normalize().multiply(2.2); // Move 5 blocks forward
 
             player.setVelocity(direction);
@@ -68,9 +67,6 @@ public class air_step implements Listener {
 
             // Start particle effect
             spawnStarTrail(player);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,40,1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,40,1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,40,1));
         }
     }
 
