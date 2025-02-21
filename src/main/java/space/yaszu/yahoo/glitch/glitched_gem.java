@@ -33,7 +33,7 @@ public class glitched_gem implements Listener {
     private final HashMap<Location,BlockData> originals= new HashMap<>();
     private final HashMap<UUID,Long> openers = new HashMap<>();
     private final HashMap<Location,Long> opened_portal = new HashMap<>();
-    private final long cooldownTimeGem = 300000;
+    private final long cooldownTimeGem = 60000;
     private final long opened = 30000;
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
