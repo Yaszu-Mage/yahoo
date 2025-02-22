@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class dialation implements Listener {
     private final HashMap<UUID, Long> cooldowns = new HashMap<>(); // Cooldown storage
-    private final long dialationcooldownTime = 60000;
+    private final long dialationcooldownTime = 600000;
     @EventHandler
     public void time(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -49,7 +49,6 @@ public class dialation implements Listener {
                 return;
             }
         }
-        if (player.getPersistentDataContainer().get(time_cooldown, PersistentDataType.STRING).equals("off")) {
             if (off.getPersistentDataContainer().has(glove, PersistentDataType.STRING) && player.isSneaking()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 6000, 3));
                 PotionEffect fx = new PotionEffect(PotionEffectType.SLOWNESS, 600, 3);
@@ -71,4 +70,4 @@ public class dialation implements Listener {
             }
         }
     }
-}
+

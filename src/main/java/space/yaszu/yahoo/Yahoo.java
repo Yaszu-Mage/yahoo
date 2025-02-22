@@ -96,12 +96,13 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new gem_port(),this);
         getServer().getPluginManager().registerEvents(new hunger(),this);
         getServer().getPluginManager().registerEvents(new swor(),this);
+        getServer().getPluginManager().registerEvents(new fall_drop(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
         register.register();
         run_register.register();
-
+        swor.register_recipe();
         getLogger().info("Registered Items!");
     }
     @Override

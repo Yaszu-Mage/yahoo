@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import space.yaszu.yahoo.Yahoo;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -60,7 +61,14 @@ public class gem_port implements Listener {
                     if (p.getWorld().equals(player.getWorld())) {
                         if (start_loc.distance(p.getLocation()) < 3) {
                             p.teleport(start_loc_loc);
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 220, 1));
+                            NamespacedKey nofall = new NamespacedKey(Yahoo.get_plugin(),"nofall");
+                            p.getPersistentDataContainer().set(nofall,PersistentDataType.BOOLEAN,true);
+                            Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    p.getPersistentDataContainer().remove(nofall);
+                                }
+                            },220);
                         }
                     }}
                 player.teleport(start_loc_loc);
@@ -74,7 +82,15 @@ public class gem_port implements Listener {
                     if (p.getWorld().equals(player.getWorld())) {
                         if (start_loc.distance(p.getLocation()) < 3) {
                             p.teleport(start_loc_loc);
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 1));
+                            // My MANS this shit is such a pain in the ass
+                            NamespacedKey nofall = new NamespacedKey(Yahoo.get_plugin(),"nofall");
+                            p.getPersistentDataContainer().set(nofall,PersistentDataType.BOOLEAN,true);
+                            Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    p.getPersistentDataContainer().remove(nofall);
+                                }
+                            },220);
                         }}
                 }
                 player.teleport(start_loc_loc);

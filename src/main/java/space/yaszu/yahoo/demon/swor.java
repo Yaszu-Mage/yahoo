@@ -8,9 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -18,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.eclipse.sisu.launch.Main;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.alchemy.items.soul;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +36,7 @@ public class swor implements Listener {
         PersistentDataContainer cont = swordItemMeta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"demonic_sword");
         cont.set(key, PersistentDataType.BOOLEAN, true);
+        swordItemMeta.setUnbreakable(true);
         sword.setItemMeta(swordItemMeta);
         return sword;
     }
@@ -123,6 +123,16 @@ public class swor implements Listener {
             }
         }}
     }
+
+    public static void register_recipe() {
+        NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"Demonic_Sword");
+        ShapedRecipe recipe = new ShapedRecipe(key,sword_item());
+        recipe.shape("SW ","   ","   ");
+        recipe.setIngredient('S', soul.soul_item());
+        recipe.setIngredient('W', Material.DIAMOND_SWORD);
+        Bukkit.addRecipe(recipe);
+    }
+
     public static void createSlashCloud(Player caster, double maxRadius, int duration, double maxDamage) {
         new BukkitRunnable() {
             int ticks = 0;
