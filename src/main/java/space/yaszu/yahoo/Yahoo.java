@@ -3,7 +3,6 @@ package space.yaszu.yahoo;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
-import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,6 +10,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
+import space.yaszu.yahoo.alchemy.items.blessing_of_life;
 import space.yaszu.yahoo.alchemy.run_register;
 import space.yaszu.yahoo.commands.*;
 import space.yaszu.yahoo.demon.hunger;
@@ -19,14 +19,13 @@ import space.yaszu.yahoo.demon.swor;
 import space.yaszu.yahoo.events.*;
 import space.yaszu.yahoo.events.new_runnables.insanity;
 import space.yaszu.yahoo.events.new_runnables.teleport;
-import space.yaszu.yahoo.events.set_who;
+import space.yaszu.yahoo.events.new_runnables.set_who;
 import space.yaszu.yahoo.flamer.jump;
-import space.yaszu.yahoo.flamer.snap;
 import space.yaszu.yahoo.flamer.snapv2;
 import space.yaszu.yahoo.glitch.*;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
-import space.yaszu.yahoo.porter.local_teleportation;
+import space.yaszu.yahoo.porter.star;
 
 import java.util.List;
 import java.util.Random;
@@ -86,23 +85,23 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new determination(), this);
         getServer().getPluginManager().registerEvents(new pet(), this);
         getServer().getPluginManager().registerEvents(new snapv2(), this);
-        getServer().getPluginManager().registerEvents(new local_teleportation(), this);
-        getServer().getPluginManager().registerEvents(new dialation(),this);
         getServer().getPluginManager().registerEvents(new alchemic_bag(this),this);
         getServer().getPluginManager().registerEvents(new drops(),this);
-        getServer().getPluginManager().registerEvents(new air_step(this),this);
         getServer().getPluginManager().registerEvents(new glitched_gem(),this);
         getServer().getPluginManager().registerEvents(new jump(),this);
         getServer().getPluginManager().registerEvents(new gem_port(),this);
         getServer().getPluginManager().registerEvents(new hunger(),this);
         getServer().getPluginManager().registerEvents(new swor(),this);
         getServer().getPluginManager().registerEvents(new fall_drop(),this);
+        getServer().getPluginManager().registerEvents(new blessing_of_life(),this);
+        getServer().getPluginManager().registerEvents(new star(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
         register.register();
         run_register.register();
         swor.register_recipe();
+        blessing_of_life.register_recipe();
         getLogger().info("Registered Items!");
     }
     @Override

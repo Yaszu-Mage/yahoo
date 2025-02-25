@@ -27,7 +27,7 @@ public class blessing_of_life implements Listener {
     public static ItemStack item() {
         ItemStack life = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta metalife = life.getItemMeta();
-        metalife.displayName(Component.text(TextColor.color(96, 255, 34) + "Gift of Life"));
+        metalife.displayName(Component.text( "Gift of Life"));
         PersistentDataContainer cont = metalife.getPersistentDataContainer();
         cont.set(life_key, PersistentDataType.BOOLEAN,true);
         life.setItemMeta(metalife);
@@ -45,6 +45,7 @@ public class blessing_of_life implements Listener {
     @EventHandler
     public void event_listener(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+
         ItemStack main_hand = player.getInventory().getItemInMainHand();
         if (main_hand.getType() != Material.AIR) {
             PersistentDataContainer cont = player.getPersistentDataContainer();
@@ -53,10 +54,18 @@ public class blessing_of_life implements Listener {
                     return;
                 } else {
                     if (main_hand.getItemMeta().equals(item().getItemMeta())) {
+                        main_hand.subtract();
                         cont.set(life_key,PersistentDataType.BOOLEAN, true);
                         cont.set(sin, PersistentDataType.INTEGER, cont.get(sin, PersistentDataType.INTEGER) + 1);
                         player.sendRawMessage("You will now not die once, if you are struck down. You have sinned.");
                     }
+                }
+            } else {
+                if (main_hand.getItemMeta().equals(item().getItemMeta())) {
+                    main_hand.subtract();
+                    cont.set(life_key,PersistentDataType.BOOLEAN, true);
+                    cont.set(sin, PersistentDataType.INTEGER, cont.get(sin, PersistentDataType.INTEGER) + 1);
+                    player.sendRawMessage("You will now not die once, if you are struck down. You have sinned.");
                 }
             }
         }
@@ -76,8 +85,10 @@ public class blessing_of_life implements Listener {
                         player.getWorld().playSound(player, Sound.ITEM_TOTEM_USE,1f,1f);
                         player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation(),128);
                         player.getWorld().spawnParticle(Particle.END_ROD,player.getLocation(),12);
-                        player.playSound(player.getLocation(),Sound.ENTITY_GOAT_SCREAMING_AMBIENT,1f,1f);
-                        player.sendMessage(Component.text("You hear a scream as your wounds heal" + TextColor.color(255,1,1)));
+                        player.playSound(player.getLocation(),Sound.ENTITY_GOAT_SCREAMING_DEATH,1f,1f);
+                        player.sendMessage(Component.text("You hear a scream as your wounds heal"));
+                        cont.set(life_key,PersistentDataType.BOOLEAN,false);
+                        event.setCancelled(true);
                     }
                 }
             }

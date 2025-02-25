@@ -29,6 +29,7 @@ public class swor implements Listener {
     private final HashMap<UUID, Long> piercecooldowns = new HashMap<>();// Cooldown storage
     private final long cooldownTime = 40000;
     private final long piercecooldownTime = 40000;
+    NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"nofall");
     public static ItemStack sword_item() {
         ItemStack sword = ItemStack.of(Material.DIAMOND_SWORD);
         ItemMeta swordItemMeta = sword.getItemMeta();
@@ -89,7 +90,15 @@ public class swor implements Listener {
                     break; // Stop after hitting the first target
                 }
             }
-        }}
+            NamespacedKey fallkey = new NamespacedKey(Yahoo.get_plugin(),"nofall");
+            cont.set(fallkey,PersistentDataType.BOOLEAN,true);
+            Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(),new Runnable() {
+                public void run() {
+                    cont.remove(fallkey);
+                }
+            },1000);
+        }
+        }
     }
 
     @EventHandler
@@ -111,6 +120,7 @@ public class swor implements Listener {
         String type = "";
         PersistentDataContainer cont = player.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+
         if (cont.has(key)) {
             type = cont.get(key, PersistentDataType.STRING);
         }

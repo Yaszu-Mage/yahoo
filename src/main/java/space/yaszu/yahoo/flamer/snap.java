@@ -1,7 +1,6 @@
 package space.yaszu.yahoo.flamer;
 
 import org.bukkit.*;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
@@ -13,14 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.joml.Vector3d;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.events.off;
-import space.yaszu.yahoo.events.set_who;
-import space.yaszu.yahoo.glitch.buff;
-
-import javax.xml.stream.events.Namespace;
-import java.util.ArrayList;
 
 import static org.bukkit.Bukkit.getPluginManager;
 

@@ -1,6 +1,5 @@
 package space.yaszu.yahoo.items;
 
-import de.tr7zw.nbtapi.NBT;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,11 +13,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.events.gun_off;
-import space.yaszu.yahoo.events.off;
+import space.yaszu.yahoo.flamer.gun_off;
 
 import static org.bukkit.Bukkit.createProfile;
-import static org.bukkit.Bukkit.getPluginManager;
 
 public class item_event implements Listener {
     private final Yahoo yahoo;

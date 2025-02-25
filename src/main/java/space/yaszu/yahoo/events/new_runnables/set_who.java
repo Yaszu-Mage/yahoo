@@ -1,9 +1,8 @@
-package space.yaszu.yahoo.events;
+package space.yaszu.yahoo.events.new_runnables;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.glitch.buff;
 import space.yaszu.yahoo.player_info.player_info_register;
 
 import static org.bukkit.Bukkit.getPluginManager;

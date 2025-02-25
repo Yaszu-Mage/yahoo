@@ -28,7 +28,7 @@ public class gem_port implements Listener {
         PersistentDataContainer cont = player.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
         UUID playerUUID = player.getUniqueId();
-
+        NamespacedKey fallkey = new NamespacedKey(Yahoo.get_plugin(),"nofall");
         long currentTime = System.currentTimeMillis();
 
         // Check cooldown

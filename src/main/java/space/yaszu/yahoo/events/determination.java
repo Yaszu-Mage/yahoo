@@ -28,9 +28,11 @@ public class determination implements Listener {
             if (player.getHealth() - event.getFinalDamage() < 0.5) {
                 int chance = random.nextInt(1001);
                 if (chance >= 999) {
+                    player.setHealth(20);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 4));
                     player.getWorld().playSound(player.getLocation(),Sound.ITEM_TOTEM_USE,1f,1f);
                     player.getWorld().sendMessage(Component.text("But " + player.getDisplayName() + " refused.", TextColor.color(148, 0, 5)));
+                    event.setCancelled(true);
                 }
             }
         }
