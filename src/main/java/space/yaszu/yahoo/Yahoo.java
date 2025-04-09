@@ -12,6 +12,7 @@ import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
 import space.yaszu.yahoo.alchemy.items.blessing_of_life;
 import space.yaszu.yahoo.alchemy.items.senzu_bean;
+import space.yaszu.yahoo.alchemy.items.space_warper;
 import space.yaszu.yahoo.alchemy.run_register;
 import space.yaszu.yahoo.commands.*;
 import space.yaszu.yahoo.demon.hunger;
@@ -97,6 +98,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new blessing_of_life(),this);
         getServer().getPluginManager().registerEvents(new star(),this);
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
+        getServer().getPluginManager().registerEvents(new space_warper(), this);
     }
     public void register_items() {
         item_register register = new item_register(this);

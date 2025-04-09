@@ -125,7 +125,7 @@ public class item_register {
         Bukkit.getServer().addRecipe(recipe);
         key keygen = new key();
         ItemStack warper = space_warper.warper();
-        ShapedRecipe recipe2 = new ShapedRecipe(keygen.get_key("space_warper"),warper);
+        ShapedRecipe recipe2 = new ShapedRecipe(keygen.get_key("spacewarper"),warper);
         recipe2.shape("IAI","ADA","IAI");
         recipe2.setIngredient('I', Material.IRON_INGOT);
         recipe2.setIngredient('A', Material.AMETHYST_SHARD);

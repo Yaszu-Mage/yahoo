@@ -28,20 +28,92 @@ public class space_warper implements Listener {
     public static ItemStack warper() {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(new key().get_key("item_id"), PersistentDataType.STRING,"space_warper");
-        meta.displayName(Component.text("Space Warper"));
-        meta.setItemModel(new key().get_key("space_warper"));
+        meta.getPersistentDataContainer().set(new key().get_key("itemid"), PersistentDataType.STRING,"space_warper");
+        meta.displayName(Component.text("Space Warper"));;
         item.setItemMeta(meta);
         return item;
     }
-}
-class warper_actions implements Listener {
-    menu menu = new menu(Yahoo.getInstance());
+    public static warper_actions warper_actions() {
+        return new warper_actions();
+    }
+    static menu menu = new menu();
     @EventHandler
-    public void check_action(PlayerSwapHandItemsEvent event)  {
+    public static void check_action(PlayerSwapHandItemsEvent event)  {
         Player player = event.getPlayer();
         ItemStack offhand = event.getOffHandItem();
         ItemStack mainhand = event.getMainHandItem();
+        Yahoo.getlog().info("REGISTERED!");
+        if (!mainhand.equals(null)) {
+            if (mainhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
+                if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper")) {
+                    player.openInventory(menu.getInventory());
+                    player.setCooldown(space_warper.warper(),1200);
+                    event.setCancelled(true);
+                }
+            }
+
+        }
+    }
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        // Check if the holder is our MyInventory,
+        // if yes, use instanceof pattern matching to store it in a variable immediately.
+        if (!(inventory.getHolder(false) instanceof menu menu)) {
+            // It's not our inventory, ignore it.
+            return;
+        }
+        Yahoo.getlog().info("GOT HERE!");
+        @NotNull ItemStack clicked = event.getCurrentItem();
+        if (!clicked.equals(null)) {
+            if (clicked.getType().equals(Material.PLAYER_HEAD)) {
+                SkullMeta meta = (SkullMeta) clicked.getItemMeta();
+                OfflinePlayer offplayer = meta.getOwningPlayer();
+                if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
+                    if (menu.gettowards()) {
+                        HumanEntity humanplayer = event.getWhoClicked();
+                        Player player = (Player) humanplayer;
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                        event.getWhoClicked().teleport(offplayer.getLocation());
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    }else {
+                        HumanEntity humanplayer = event.getWhoClicked();
+                        Player player = (Player) humanplayer;
+                        player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
+                        offplayer.getPlayer().teleport(player.getLocation());
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    }
+                    inventory.close();
+                }
+            } else {
+                menu.swap();
+            }
+        }
+        event.setCancelled(true);
+
+    }
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent event){
+        Inventory inventory = event.getInventory();
+        if (!(inventory.getHolder(false) instanceof menu menu)){
+            return;
+        }
+        menu.set_inventory((Player) event.getPlayer());
+        menu.swap();
+    }
+}
+class warper_actions implements Listener {
+    static menu menu = new menu();
+    @EventHandler
+    public static void check_action(PlayerSwapHandItemsEvent event)  {
+        Player player = event.getPlayer();
+        ItemStack offhand = event.getOffHandItem();
+        ItemStack mainhand = event.getMainHandItem();
+        Yahoo.getlog().info("REGISTERED!");
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("item_id"))) {
                 if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper") && event.getPlayer().getCooldown(space_warper.warper()) < 0) {
@@ -93,6 +165,7 @@ class warper_actions implements Listener {
         event.setCancelled(true);
 
     }
+    @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event){
         Inventory inventory = event.getInventory();
         if (!(inventory.getHolder(false) instanceof menu menu)){
@@ -105,9 +178,10 @@ class warper_actions implements Listener {
 class menu implements InventoryHolder {
     private final Inventory inventory;
     private boolean towards = false;
-    public menu(Yahoo yahoo) {
-        this.inventory = yahoo.getServer().createInventory(this, 9);
-        this.getInventory().setItem(5,ItemStack.of(Material.REDSTONE_BLOCK));
+    public menu() {
+
+        this.inventory = Bukkit.createInventory(this, 9,"Space Warper");
+
     }
     @Override
     public @NotNull Inventory getInventory() {
@@ -120,10 +194,19 @@ class menu implements InventoryHolder {
     public void swap() {
         towards = !towards;
         if (towards) {
-            inventory.setItem(5,ItemStack.of(Material.EMERALD_BLOCK));
+            ItemStack good = ItemStack.of(Material.EMERALD_BLOCK);
+            ItemMeta meta = good.getItemMeta();
+            meta.setDisplayName("Teleport TO");
+            good.setItemMeta(meta);
+            inventory.setItem(4,good);
         }else {
-            inventory.setItem(5, ItemStack.of(Material.REDSTONE_BLOCK));
+            ItemStack good = ItemStack.of(Material.REDSTONE_BLOCK);
+            ItemMeta meta = good.getItemMeta();
+            meta.setDisplayName("Teleport HERE");
+            good.setItemMeta(meta);
+            inventory.setItem(4, good);
         }
+        Yahoo.getlog().info((String) (inventory.getItem(4).toString()));
     }
 
     public void set_inventory(Player player) {
@@ -144,7 +227,11 @@ class menu implements InventoryHolder {
         distance.sort(compare);
         int size = 6;
         if (distance.size() >= 6) {size = 6;} else {size = distance.size();}
-        for (int i = 0; i == size; i++) {
+        if (distance.size() == 0){
+            Yahoo.getlog().info("I am empty");
+        }else {
+
+        for (int i = 0; i > size; i++) {
             if (i >= 4) {
                 ItemStack head = getSkull(distance.get(i).player);
                 inventory.setItem(i + 2,head);
@@ -153,6 +240,31 @@ class menu implements InventoryHolder {
                 inventory.setItem(i,head);
             }
 
+        }}
+        Yahoo.getlog().info("GOT HERE");
+
+        if (!(inventory.getItem(1) == null)) {
+            inventory.setItem(0, ItemStack.of(Material.COAL));
+        }
+        for (int x = 0; x <= 5; x = x + 1){
+            ItemStack empty = ItemStack.of(Material.COAL);
+            ItemMeta meta = empty.getItemMeta();
+            meta.setDisplayName("EMPTY");
+            empty.setItemMeta(meta);
+            Yahoo.getlog().info(String.valueOf(x));
+            if (x>=3) {
+                if (x+3 == 9) {
+                    //pass
+                } else {
+                if (inventory.getItem(x + 3) == null) {
+
+                    inventory.setItem(x + 3, empty);
+                }}
+            } else {
+                if (inventory.getItem(x) == null) {
+                    inventory.setItem(x, empty);
+                }
+            }
         }
     }
     public ItemStack getSkull(Player player) {
