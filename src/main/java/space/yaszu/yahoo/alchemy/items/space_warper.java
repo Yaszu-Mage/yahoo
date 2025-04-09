@@ -67,13 +67,23 @@ class warper_actions implements Listener {
                 SkullMeta meta = (SkullMeta) clicked.getItemMeta();
                 OfflinePlayer offplayer = meta.getOwningPlayer();
                 if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
-                    HumanEntity humanplayer = event.getWhoClicked();
-                    Player player = (Player) humanplayer;
-                    player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                    player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
-                    event.getWhoClicked().teleport(offplayer.getLocation());
-                    player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                    player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    if (menu.gettowards()) {
+                        HumanEntity humanplayer = event.getWhoClicked();
+                        Player player = (Player) humanplayer;
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                        event.getWhoClicked().teleport(offplayer.getLocation());
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    }else {
+                        HumanEntity humanplayer = event.getWhoClicked();
+                        Player player = (Player) humanplayer;
+                        player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
+                        offplayer.getPlayer().teleport(player.getLocation());
+                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    }
                     inventory.close();
                 }
             }
@@ -104,9 +114,16 @@ class menu implements InventoryHolder {
         return inventory;
     }
     Sort compare = new Sort();
-
+    public @NotNull boolean gettowards(){
+        return towards;
+    }
     public void swap() {
         towards = !towards;
+        if (towards) {
+            inventory.setItem(5,ItemStack.of(Material.EMERALD_BLOCK));
+        }else {
+            inventory.setItem(5, ItemStack.of(Material.REDSTONE_BLOCK));
+        }
     }
 
     public void set_inventory(Player player) {
