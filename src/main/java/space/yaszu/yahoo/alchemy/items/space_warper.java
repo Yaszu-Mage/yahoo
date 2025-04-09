@@ -1,9 +1,9 @@
 package space.yaszu.yahoo.alchemy.items;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.block.Skull;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +25,7 @@ import space.yaszu.yahoo.key;
 import java.util.*;
 
 public class space_warper implements Listener {
-    public ItemStack warper() {
+    public static ItemStack warper() {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(new key().get_key("item_id"), PersistentDataType.STRING,"space_warper");
@@ -44,8 +44,9 @@ class warper_actions implements Listener {
         ItemStack mainhand = event.getMainHandItem();
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("item_id"))) {
-                if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper")) {
+                if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper") && event.getPlayer().getCooldown(space_warper.warper()) < 0) {
                     player.openInventory(menu.getInventory());
+                    player.setCooldown(space_warper.warper(),1200);
                 }
             }
         }
@@ -59,9 +60,27 @@ class warper_actions implements Listener {
             // It's not our inventory, ignore it.
             return;
         }
-        event.setCancelled(true);
 
         ItemStack clicked = event.getCurrentItem();
+        if (!clicked.equals(null)) {
+            if (clicked.getType().equals(Material.PLAYER_HEAD)) {
+                SkullMeta meta = (SkullMeta) clicked.getItemMeta();
+                OfflinePlayer offplayer = meta.getOwningPlayer();
+                if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
+                    HumanEntity humanplayer = event.getWhoClicked();
+                    Player player = (Player) humanplayer;
+                    player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                    player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    event.getWhoClicked().teleport(offplayer.getLocation());
+                    player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                    player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                    inventory.close();
+                }
+            }
+        } else {
+            menu.swap();
+        }
+        event.setCancelled(true);
 
     }
     public void onInventoryOpen(InventoryOpenEvent event){
@@ -75,6 +94,7 @@ class warper_actions implements Listener {
 }
 class menu implements InventoryHolder {
     private final Inventory inventory;
+    private boolean towards = false;
     public menu(Yahoo yahoo) {
         this.inventory = yahoo.getServer().createInventory(this, 9);
         this.getInventory().setItem(5,ItemStack.of(Material.REDSTONE_BLOCK));
@@ -84,20 +104,30 @@ class menu implements InventoryHolder {
         return inventory;
     }
     Sort compare = new Sort();
+
+    public void swap() {
+        towards = !towards;
+    }
+
     public void set_inventory(Player player) {
         Collection onlineplayers = Bukkit.getOnlinePlayers();
         List<player_location> distance = new ArrayList<>();
         for (Object instance : onlineplayers) {
             if (instance instanceof Player) {
-                Player checkinstance = (Player) instance;
-                player_location loc = new player_location();
-                loc.location = checkinstance.getLocation();
-                loc.player = checkinstance.getPlayer();
-                distance.add(loc);
+                if (instance != player) {
+                    Player checkinstance = (Player) instance;
+                    player_location loc = new player_location();
+                    loc.location = checkinstance.getLocation();
+                    loc.player = checkinstance.getPlayer();
+                    distance.add(loc);
+                }
+
             }
         }
         distance.sort(compare);
-        for (int i = 0; i == 6; i++) {
+        int size = 6;
+        if (distance.size() >= 6) {size = 6;} else {size = distance.size();}
+        for (int i = 0; i == size; i++) {
             if (i >= 4) {
                 ItemStack head = getSkull(distance.get(i).player);
                 inventory.setItem(i + 2,head);

@@ -11,8 +11,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.glitch.glitched_gem_item;
-
+import space.yaszu.yahoo.key;
 import java.util.*;
+import space.yaszu.yahoo.alchemy.items.space_warper;
 
 public class item_register {
     public void itemregister(String shapea, String shapeb, String shapec, String name, Collection<String> values, Dictionary<String, Material> dict, String tag) {
@@ -122,6 +123,14 @@ public class item_register {
         recipe.setIngredient('C', Material.END_CRYSTAL);
         recipe.setIngredient('S', Material.NETHER_STAR);
         Bukkit.getServer().addRecipe(recipe);
+        key keygen = new key();
+        ItemStack warper = space_warper.warper();
+        ShapedRecipe recipe2 = new ShapedRecipe(keygen.get_key("space_warper"),warper);
+        recipe2.shape("IAI","ADA","IAI");
+        recipe2.setIngredient('I', Material.IRON_INGOT);
+        recipe2.setIngredient('A', Material.AMETHYST_SHARD);
+        recipe2.setIngredient('D', Material.DIAMOND);
+        Bukkit.addRecipe(recipe2);
     }
 
 }
