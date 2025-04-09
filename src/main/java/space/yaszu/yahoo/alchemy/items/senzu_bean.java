@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockType;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,7 @@ import java.util.Random;
 
 public class senzu_bean implements Listener {
     public Random random = new Random();
+    @EventHandler
     public void drop(BlockBreakEvent blockBreakEvent) {
         Block eventblock = blockBreakEvent.getBlock();
         if (check_block.check_if_broke(blockBreakEvent, BlockType.POTATOES)) {

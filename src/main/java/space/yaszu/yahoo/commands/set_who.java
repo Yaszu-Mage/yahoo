@@ -15,6 +15,7 @@ public class set_who implements CommandExecutor {
         check_player("1nZ4ne","glitch");
         check_player("GhostboyGamer", "flamer");
         check_player("OvaAlpha3", "demon");
+        check_player("Jetbiopen", "demon");
         return true;
     }
 
