@@ -6,7 +6,9 @@ import org.bukkit.block.Skull;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -25,16 +27,17 @@ import space.yaszu.yahoo.key;
 import java.util.*;
 
 public class space_warper implements Listener {
+    public static Map<UUID, menu> player_inventory = new HashMap<>();
+    public static Map<UUID, accept_menu> accept = new HashMap<>();
+
     public static ItemStack warper() {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(new key().get_key("itemid"), PersistentDataType.STRING,"space_warper");
-        meta.displayName(Component.text("Space Warper"));;
+        meta.displayName(Component.text("Space Warper"));
         item.setItemMeta(meta);
         return item;
     }
-    static menu menu = new menu();
-    static accept_menu accept_menu = new accept_menu();
     @EventHandler
     public static void check_action(PlayerSwapHandItemsEvent event)  {
         Player player = event.getPlayer();
@@ -43,12 +46,43 @@ public class space_warper implements Listener {
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
                 if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper")) {
-                    player.openInventory(menu.getInventory());
+                    menu instance = new menu();
+                    player_inventory.putIfAbsent(player.getUniqueId(),instance);
+                    player.openInventory(player_inventory.get(player.getUniqueId()).getInventory());
                     player.setCooldown(space_warper.warper(),1200);
                     event.setCancelled(true);
                 }
             }
 
+        }
+    }
+    public void onClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!(inventory.getHolder(false) instanceof accept_menu)) {
+            return;
+        }
+        @NotNull ItemStack clicked = event.getCurrentItem();
+        if (!(clicked == null)) {
+            if (clicked.equals(inventory.getItem(0))) {
+                Player player = (Player) event.getWhoClicked();
+                player.closeInventory();
+                player.openInventory(player_inventory.get(player.getUniqueId()).getInventory());
+            }
+            if (clicked.equals(inventory.getItem(8))) {
+                // Maybe Waypoint Menu?
+                //TODO make waypoint menu
+            }
+        }
+    }
+    @EventHandler
+    public void ontparequest(TPARequestSendEvent event) {
+        Collection online_players = Bukkit.getOnlinePlayers();
+        for (Object player : online_players) {
+            if (player instanceof Player) {
+                player = (Player) player;
+                accept_menu menu = accept.get(((Player) player).getUniqueId());
+
+            }
         }
     }
     @EventHandler
@@ -77,11 +111,14 @@ public class space_warper implements Listener {
                     }else {
                         HumanEntity humanplayer = event.getWhoClicked();
                         Player player = (Player) humanplayer;
-                        player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        Player_Info info = new Player_Info(player,offplayer.getPlayer());
+                        TPARequestSendEvent instance_event = new TPARequestSendEvent(info);
+                        instance_event.callEvent();
+                        /*player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
                         player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
                         offplayer.getPlayer().teleport(player.getLocation());
                         player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);*/
                     }
                     inventory.close();
                 }
@@ -98,7 +135,10 @@ public class space_warper implements Listener {
                     inventory.close();
                     HumanEntity humanplayer = event.getWhoClicked();
                     Player player = (Player) humanplayer;
-                    player.openInventory(accept_menu.getInventory());
+                    accept_menu instance = new accept_menu(player);
+                    accept.putIfAbsent(player.getUniqueId(),instance);
+                    player.openInventory(accept.get(player.getUniqueId()).getInventory());
+                    accept_menu accept_menu = accept.get(player.getUniqueId());
                     accept_menu.set_items();
                 }
             }
@@ -112,14 +152,42 @@ public class space_warper implements Listener {
         if (!(inventory.getHolder(false) instanceof menu menu)){
             return;
         }
+        Player player = (Player) event.getPlayer();
+        menu = player_inventory.get(player.getUniqueId());
         menu.set_inventory((Player) event.getPlayer());
         menu.gettowards();
     }
 }
 class accept_menu implements InventoryHolder {
     private final Inventory inventory;
-    public accept_menu() {
+    public static List<UUID> active_requests = new ArrayList<>();
+    private final Player player;
+    public accept_menu(Player player) {
         this.inventory = Bukkit.createInventory(this,36,"Space Warper");
+        this.player = player;
+    }
+
+    public void add_request(Player sender){
+        active_requests.addFirst(sender.getUniqueId());
+    }
+    public void render_requests() {
+        for (int iteration = 0; iteration < active_requests.size(); iteration = iteration + 1) {
+            if (iteration == active_requests.size()){
+                return;
+            }
+            ItemStack skull = getSkull(Bukkit.getPlayer(active_requests.get(iteration)));
+            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+            meta.setDisplayName(meta.getOwningPlayer().getName());
+            skull.setItemMeta(meta);
+            inventory.setItem(iteration + 17,skull);
+        }
+    }
+    public ItemStack getSkull(Player player) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+        item.setItemMeta(meta);
+        return item;
     }
     @Override
     public @NotNull Inventory getInventory() {
@@ -297,4 +365,36 @@ class Sort implements Comparator {
         if (a.location.distance(b.location) > b.location.distance(a.location)) return 1;  // distance to a is greater than b
         return 0; // same distance
     }
+}
+class TPARequestSendEvent extends Event {
+    private static final HandlerList HANDLER_LIST = new HandlerList();
+    private Player_Info info;
+    public TPARequestSendEvent(Player_Info info){
+        this.info = info;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers() {
+        return HANDLER_LIST;
+    }
+    public static HandlerList getHandlerList(){
+        return HANDLER_LIST;
+    }
+    public Player_Info getInfo(){
+        return this.info;
+    }
+    public void setInfo(Player_Info info){
+        this.info = info;
+    }
+}
+class Player_Info {
+    public Player player1;
+    public Player player2;
+
+    public Player_Info(Player player1, Player player2) {
+        this.player1 = player1;
+        this.player1 = player2;
+    }
+
+
 }
