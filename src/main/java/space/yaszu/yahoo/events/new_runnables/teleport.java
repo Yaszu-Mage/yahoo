@@ -18,6 +18,7 @@ public class teleport implements Runnable {
     @Override
     public void run() {
         Player player = Bukkit.getPlayer("1nZ4ne");
+        if (player != null) {
         Location playerLoc = player.getLocation();
         double TELEPORT_RADIUS = 10.0;
         int random_chance = random.nextInt(101);
@@ -31,7 +32,10 @@ public class teleport implements Runnable {
             }
             player.getWorld().playSound(playerLoc, Sound.ENTITY_ENDERMAN_TELEPORT,1.0f,1.0f);
             player.teleport(teleportlocation);
-
+            Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(), this, 72000);
+        }
+        } else {
+            Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(), this, 72000);
         }
     }
     private static boolean isSafeLocation(Location loc) {

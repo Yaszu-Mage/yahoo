@@ -24,11 +24,12 @@ public class insanity implements Runnable{
             NamespacedKey sin = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"sin");
             if (cont.has(sin,PersistentDataType.INTEGER)) {
                 int sins = cont.get(sin, PersistentDataType.INTEGER);
+                if (sins > 0) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,600, (int) floor(sins / 2)));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,600, (int) floor(sins / 2)));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,600, (int) floor(sins / 2)));
                 // Love it when my phone thing freezes
-            }
+            }}
         }
         Random random = new Random();
         int next = random.nextInt(18000);

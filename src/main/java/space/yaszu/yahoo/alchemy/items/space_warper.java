@@ -42,7 +42,6 @@ public class space_warper implements Listener {
         Player player = event.getPlayer();
         ItemStack offhand = event.getOffHandItem();
         ItemStack mainhand = event.getMainHandItem();
-        Yahoo.getlog().info("REGISTERED!");
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
                 if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper")) {
@@ -63,9 +62,8 @@ public class space_warper implements Listener {
             // It's not our inventory, ignore it.
             return;
         }
-        Yahoo.getlog().info("GOT HERE!");
         @NotNull ItemStack clicked = event.getCurrentItem();
-        if (!clicked.equals(null)) {
+        if (!(clicked == null)) {
             if (clicked.getType().equals(Material.PLAYER_HEAD)) {
                 SkullMeta meta = (SkullMeta) clicked.getItemMeta();
                 OfflinePlayer offplayer = meta.getOwningPlayer();
@@ -90,7 +88,9 @@ public class space_warper implements Listener {
                     inventory.close();
                 }
             } else {
-                menu.swap();
+                if (clicked.getType().equals(Material.REDSTONE_BLOCK) || clicked.getType().equals(Material.EMERALD_BLOCK)) {
+                    menu.swap();
+                }
             }
         }
         event.setCancelled(true);
@@ -113,7 +113,6 @@ class warper_actions implements Listener {
         Player player = event.getPlayer();
         ItemStack offhand = event.getOffHandItem();
         ItemStack mainhand = event.getMainHandItem();
-        Yahoo.getlog().info("REGISTERED!");
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("item_id"))) {
                 if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper") && event.getPlayer().getCooldown(space_warper.warper()) < 0) {
@@ -206,7 +205,6 @@ class menu implements InventoryHolder {
             good.setItemMeta(meta);
             inventory.setItem(4, good);
         }
-        Yahoo.getlog().info((String) (inventory.getItem(4).toString()));
     }
 
     public void set_inventory(Player player) {
@@ -228,30 +226,26 @@ class menu implements InventoryHolder {
         int size = 6;
         if (distance.size() >= 6) {size = 6;} else {size = distance.size();}
         if (distance.size() == 0){
-            Yahoo.getlog().info("I am empty");
         }else {
 
-        for (int i = 0; i > size; i++) {
+
+        for (int i = 0; i < size; i = i + 1) {
+            Yahoo.getlog().info(String.valueOf(i));
+            ItemStack head = getSkull(distance.get(i).player);
             if (i >= 4) {
-                ItemStack head = getSkull(distance.get(i).player);
                 inventory.setItem(i + 2,head);
             } else {
-                ItemStack head = getSkull(distance.get(i).player);
                 inventory.setItem(i,head);
             }
 
-        }}
-        Yahoo.getlog().info("GOT HERE");
-
-        if (!(inventory.getItem(1) == null)) {
-            inventory.setItem(0, ItemStack.of(Material.COAL));
         }
+        }
+
         for (int x = 0; x <= 5; x = x + 1){
             ItemStack empty = ItemStack.of(Material.COAL);
             ItemMeta meta = empty.getItemMeta();
             meta.setDisplayName("EMPTY");
             empty.setItemMeta(meta);
-            Yahoo.getlog().info(String.valueOf(x));
             if (x>=3) {
                 if (x+3 == 9) {
                     //pass

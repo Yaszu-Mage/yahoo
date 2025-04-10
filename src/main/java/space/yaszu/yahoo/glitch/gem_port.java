@@ -8,10 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
 
 import java.util.HashMap;
@@ -49,7 +52,11 @@ public class gem_port implements Listener {
             type = cont.get(key, PersistentDataType.STRING);
         }
         if (type.equals("glitch")) {
-        if (player.getInventory().getItemInOffHand().getItemMeta().equals(glitched_gem_item.gem().getItemMeta())) {
+            @NotNull ItemStack offhand = player.getInventory().getItemInOffHand();
+            @NotNull ItemMeta meta = offhand.getItemMeta();
+            if (meta == null) {return;}
+            if (!(offhand == null)) {
+        if (meta.equals(glitched_gem_item.gem().getItemMeta())) {
             player.sendMessage("Running...");
             Location start_loc = player.getLocation();
             if (player.getWorld() == Bukkit.getWorld("world")) {
@@ -98,7 +105,7 @@ public class gem_port implements Listener {
             }
 
             cooldowns.put(playerUUID, System.currentTimeMillis());
-        }}
+        }}}
 
 
     }
