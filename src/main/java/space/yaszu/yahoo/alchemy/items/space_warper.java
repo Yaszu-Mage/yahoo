@@ -27,11 +27,21 @@ import space.yaszu.yahoo.key;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-
+/*
+  _______ _             _____                       __          __                        _     ____
+ |__   __| |           / ____|                      \ \        / /                       | |  _|___ \
+    | |  | |__   ___  | (___  _ __   __ _  ___ ___   \ \  /\  / /_ _ _ __ _ __   ___ _ __| | (_) __) |
+    | |  | '_ \ / _ \  \___ \| '_ \ / _` |/ __/ _ \   \ \/  \/ / _` | '__| '_ \ / _ \ '__| |    |__ <
+    | |  | | | |  __/  ____) | |_) | (_| | (_|  __/    \  /\  / (_| | |  | |_) |  __/ |  |_|  _ ___) |
+    |_|  |_| |_|\___| |_____/| .__/ \__,_|\___\___|     \/  \/ \__,_|_|  | .__/ \___|_|  (_) (_)____/
+                             | |                                         | |
+                             |_|                                         |_|
+*/
 public class space_warper implements Listener {
     public static Map<UUID, menu> player_inventory = new HashMap<>();
     public static Map<UUID, accept_menu> accept = new HashMap<>();
     public static Map<UUID, Map<UUID, Boolean>> active_requests = new HashMap<>();
+    public static Map<UUID, Map<String,Location>> player_waypoints = new HashMap<>();
     public static ItemStack warper() {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
@@ -189,6 +199,18 @@ public class space_warper implements Listener {
         menu = player_inventory.get(player.getUniqueId());
         menu.set_inventory((Player) event.getPlayer());
         menu.gettowards();
+    }
+}
+class waypoint_menu implements InventoryHolder {
+    private final Inventory inventory;
+    private final Player player;
+    public waypoint_menu(Player player) {
+        this.inventory = Bukkit.createInventory(this,9,"Space Warper");
+        this.player = player;
+    }
+    @Override
+    public @NotNull Inventory getInventory() {
+        return inventory;
     }
 }
 class accept_menu implements InventoryHolder {
@@ -486,6 +508,4 @@ class Player_Info {
         this.receiver = receiver;
         this.direction = direction;
     }
-
-
 }

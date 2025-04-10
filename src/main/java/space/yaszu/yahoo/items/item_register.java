@@ -131,6 +131,7 @@ public class item_register {
         recipe2.setIngredient('A', Material.AMETHYST_SHARD);
         recipe2.setIngredient('D', Material.DIAMOND);
         Bukkit.addRecipe(recipe2);
+
     }
 
 }
