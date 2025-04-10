@@ -2,9 +2,7 @@ package space.yaszu.yahoo.alchemy.items;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,7 +13,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -61,16 +58,20 @@ public class space_warper implements Listener {
         if (!(inventory.getHolder(false) instanceof accept_menu)) {
             return;
         }
+        Player player = (Player) event.getWhoClicked();
+        accept_menu accept_menu = accept.get(player.getUniqueId());
         @NotNull ItemStack clicked = event.getCurrentItem();
         if (!(clicked == null)) {
             if (clicked.equals(inventory.getItem(0))) {
-                Player player = (Player) event.getWhoClicked();
                 player.closeInventory();
                 player.openInventory(player_inventory.get(player.getUniqueId()).getInventory());
             }
             if (clicked.equals(inventory.getItem(8))) {
                 // Maybe Waypoint Menu?
                 //TODO make waypoint menu
+            }
+            if (clicked.getType().equals(Material.PLAYER_HEAD)) {
+                accept_menu.accept_request(event.getCurrentItem());
             }
         }
     }
@@ -80,8 +81,11 @@ public class space_warper implements Listener {
         for (Object player : online_players) {
             if (player instanceof Player) {
                 player = (Player) player;
+                //event goes sender, reciever
                 accept_menu menu = accept.get(((Player) player).getUniqueId());
-
+                if (player.equals(event.getInfo().receiver)){
+                    menu.add_request(event.getInfo().sender, event.getInfo().direction);
+                }
             }
         }
     }
@@ -95,25 +99,30 @@ public class space_warper implements Listener {
             return;
         }
         @NotNull ItemStack clicked = event.getCurrentItem();
+        HumanEntity humanplayer = event.getWhoClicked();
+        Player player = (Player) humanplayer;
+        menu = player_inventory.get(player.getUniqueId());
         if (!(clicked == null)) {
             if (clicked.getType().equals(Material.PLAYER_HEAD)) {
                 SkullMeta meta = (SkullMeta) clicked.getItemMeta();
                 OfflinePlayer offplayer = meta.getOwningPlayer();
                 if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
                     if (menu.gettowards()) {
-                        HumanEntity humanplayer = event.getWhoClicked();
-                        Player player = (Player) humanplayer;
-                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+                        Player_Info info = new Player_Info(player,offplayer.getPlayer(),menu.gettowards());
+                        TPARequestSendEvent instance_event = new TPARequestSendEvent(info);
+                        instance_event.callEvent();
+                        //Teleport TO someone
+                        /*player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
                         player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
                         event.getWhoClicked().teleport(offplayer.getLocation());
                         player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);*/
                     }else {
-                        HumanEntity humanplayer = event.getWhoClicked();
-                        Player player = (Player) humanplayer;
-                        Player_Info info = new Player_Info(player,offplayer.getPlayer());
+                        //true is to false is to here
+                        Player_Info info = new Player_Info(player,offplayer.getPlayer(),menu.gettowards());
                         TPARequestSendEvent instance_event = new TPARequestSendEvent(info);
                         instance_event.callEvent();
+                        //Teleport someone HERE
                         /*player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
                         player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
                         offplayer.getPlayer().teleport(player.getLocation());
@@ -133,8 +142,6 @@ public class space_warper implements Listener {
                 if (inventory.getItem(5).equals(clicked)) {
                     //forward
                     inventory.close();
-                    HumanEntity humanplayer = event.getWhoClicked();
-                    Player player = (Player) humanplayer;
                     accept_menu instance = new accept_menu(player);
                     accept.putIfAbsent(player.getUniqueId(),instance);
                     player.openInventory(accept.get(player.getUniqueId()).getInventory());
@@ -160,26 +167,53 @@ public class space_warper implements Listener {
 }
 class accept_menu implements InventoryHolder {
     private final Inventory inventory;
-    public static List<UUID> active_requests = new ArrayList<>();
+    public static Map<UUID,Boolean> active_requests = new HashMap<>();
     private final Player player;
     public accept_menu(Player player) {
         this.inventory = Bukkit.createInventory(this,36,"Space Warper");
         this.player = player;
     }
-
-    public void add_request(Player sender){
-        active_requests.addFirst(sender.getUniqueId());
+    public void accept_request(ItemStack clicked) {
+        SkullMeta meta = (SkullMeta) clicked.getItemMeta();
+        String display_name = meta.getDisplayName();
+        if (meta.getDisplayName().contains(" [TO]")) {
+            display_name = display_name.replace(" [TO]","");
+            Player offplayer = Bukkit.getPlayer(display_name);
+            player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+            player.teleport(offplayer.getLocation());
+            player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+        } else if (meta.getDisplayName().contains(" [HERE]")) {
+            display_name = display_name.replace(" [HERE]","");
+            Player offplayer = Bukkit.getPlayer(display_name);
+            player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
+            offplayer.getPlayer().teleport(player.getLocation());
+            player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+        }
+    }
+    public void add_request(Player sender, Boolean direction){
+        active_requests.put(player.getUniqueId(),direction);
+        render_requests();
     }
     public void render_requests() {
-        for (int iteration = 0; iteration < active_requests.size(); iteration = iteration + 1) {
-            if (iteration == active_requests.size()){
-                return;
-            }
-            ItemStack skull = getSkull(Bukkit.getPlayer(active_requests.get(iteration)));
+        int iteration = 0;
+        for (UUID uuid : active_requests.keySet()) {
+
+            ItemStack skull = getSkull(Bukkit.getPlayer(uuid));
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            meta.setDisplayName(meta.getOwningPlayer().getName());
+            String direction = "";
+            if (active_requests.get(uuid)) {
+                direction = " [TO]";
+            } else {
+                direction = " [HERE]";
+            }
+            meta.setDisplayName(meta.getOwningPlayer().getName() + direction);
             skull.setItemMeta(meta);
-            inventory.setItem(iteration + 17,skull);
+            inventory.setItem(iteration + 18,skull);
+            iteration = iteration + 1;
         }
     }
     public ItemStack getSkull(Player player) {
@@ -388,12 +422,13 @@ class TPARequestSendEvent extends Event {
     }
 }
 class Player_Info {
-    public Player player1;
-    public Player player2;
-
-    public Player_Info(Player player1, Player player2) {
-        this.player1 = player1;
-        this.player1 = player2;
+    public Player sender;
+    public Player receiver;
+    public boolean direction;
+    public Player_Info(Player sender, Player receiver,boolean direction) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.direction = direction;
     }
 
 
