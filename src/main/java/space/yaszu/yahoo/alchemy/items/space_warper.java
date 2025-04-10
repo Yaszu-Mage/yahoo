@@ -33,10 +33,8 @@ public class space_warper implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-    public static warper_actions warper_actions() {
-        return new warper_actions();
-    }
     static menu menu = new menu();
+    static accept_menu accept_menu = new accept_menu();
     @EventHandler
     public static void check_action(PlayerSwapHandItemsEvent event)  {
         Player player = event.getPlayer();
@@ -91,6 +89,18 @@ public class space_warper implements Listener {
                 if (clicked.getType().equals(Material.REDSTONE_BLOCK) || clicked.getType().equals(Material.EMERALD_BLOCK)) {
                     menu.swap();
                 }
+                if (inventory.getItem(3).equals(clicked)) {
+                    //back
+
+                }
+                if (inventory.getItem(5).equals(clicked)) {
+                    //forward
+                    inventory.close();
+                    HumanEntity humanplayer = event.getWhoClicked();
+                    Player player = (Player) humanplayer;
+                    player.openInventory(accept_menu.getInventory());
+                    accept_menu.set_items();
+                }
             }
         }
         event.setCancelled(true);
@@ -106,76 +116,44 @@ public class space_warper implements Listener {
         menu.gettowards();
     }
 }
-class warper_actions implements Listener {
-    static menu menu = new menu();
-    @EventHandler
-    public static void check_action(PlayerSwapHandItemsEvent event)  {
-        Player player = event.getPlayer();
-        ItemStack offhand = event.getOffHandItem();
-        ItemStack mainhand = event.getMainHandItem();
-        if (!mainhand.equals(null)) {
-            if (mainhand.getPersistentDataContainer().has(new key().get_key("item_id"))) {
-                if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper") && event.getPlayer().getCooldown(space_warper.warper()) < 0) {
-                    player.openInventory(menu.getInventory());
-                    player.setCooldown(space_warper.warper(),1200);
-                    if (player.getCooldown(space_warper.warper()) == 0){
-                        player.closeInventory();
-                    }
-                }
-            }
-        }
+class accept_menu implements InventoryHolder {
+    private final Inventory inventory;
+    public accept_menu() {
+        this.inventory = Bukkit.createInventory(this,36,"Space Warper");
     }
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        Inventory inventory = event.getInventory();
-        // Check if the holder is our MyInventory,
-        // if yes, use instanceof pattern matching to store it in a variable immediately.
-        if (!(inventory.getHolder(false) instanceof menu menu)) {
-            // It's not our inventory, ignore it.
-            return;
-        }
-
-        ItemStack clicked = event.getCurrentItem();
-        if (!clicked.equals(null)) {
-            if (clicked.getType().equals(Material.PLAYER_HEAD)) {
-                SkullMeta meta = (SkullMeta) clicked.getItemMeta();
-                OfflinePlayer offplayer = meta.getOwningPlayer();
-                if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
-                    if (menu.gettowards()) {
-                        HumanEntity humanplayer = event.getWhoClicked();
-                        Player player = (Player) humanplayer;
-                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
-                        event.getWhoClicked().teleport(offplayer.getLocation());
-                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
-                    }else {
-                        HumanEntity humanplayer = event.getWhoClicked();
-                        Player player = (Player) humanplayer;
-                        player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
-                        offplayer.getPlayer().teleport(player.getLocation());
-                        player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-                        player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
-                    }
-                    inventory.close();
-                }
-            }
-        } else {
-            menu.swap();
-        }
-        event.setCancelled(true);
-
+    @Override
+    public @NotNull Inventory getInventory() {
+        return inventory;
     }
-    @EventHandler
-    public void onInventoryOpen(InventoryOpenEvent event){
-        Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder(false) instanceof menu menu)){
-            return;
+    public void set_items() {
+        for (int iteration = 0; iteration < inventory.getSize(); iteration = iteration + 1) {
+            if (iteration != inventory.getSize()) {
+                if (inventory.getItem(iteration) == null){
+                    ItemStack line = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE);
+                    ItemMeta linemeta = line.getItemMeta();
+                    linemeta.setDisplayName("");
+                    line.setItemMeta(linemeta);
+                inventory.setItem(iteration, ItemStack.of(Material.GRAY_STAINED_GLASS_PANE));
+            }}
         }
-        menu.set_inventory((Player) event.getPlayer());
+        for (int iteration = 0; iteration < 9; iteration = iteration + 1) {
+            ItemStack line = ItemStack.of(Material.BLACK_STAINED_GLASS_PANE);
+            ItemMeta linemeta = line.getItemMeta();
+            linemeta.setDisplayName("");
+            line.setItemMeta(linemeta);
+            inventory.setItem(iteration + 9, line);
+        }
+        ItemStack right = ItemStack.of(Material.IRON_BARS);
+        ItemMeta meta = right.getItemMeta();
+        meta.setDisplayName("Next Menu");
+        right.setItemMeta(meta);
+        ItemStack left = ItemStack.of(Material.IRON_BARS);
+        ItemMeta leftmeta = right.getItemMeta();
+        leftmeta.setDisplayName("Back Menu");
+        left.setItemMeta(leftmeta);
+        inventory.setItem(0,left);
+        inventory.setItem(8,right);
     }
-
 }
 class menu implements InventoryHolder {
     private final Inventory inventory;
@@ -204,6 +182,16 @@ class menu implements InventoryHolder {
             good.setItemMeta(meta);
             inventory.setItem(4, good);
         }
+        ItemStack right = ItemStack.of(Material.IRON_BARS);
+        ItemMeta meta = right.getItemMeta();
+        meta.setDisplayName("Next Menu");
+        right.setItemMeta(meta);
+        ItemStack left = ItemStack.of(Material.IRON_BARS);
+        ItemMeta leftmeta = right.getItemMeta();
+        leftmeta.setDisplayName("Back Menu");
+        left.setItemMeta(leftmeta);
+        inventory.setItem(3,left);
+        inventory.setItem(5,right);
         return towards;
     }
     public void swap() {
