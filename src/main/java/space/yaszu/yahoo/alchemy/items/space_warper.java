@@ -103,7 +103,7 @@ public class space_warper implements Listener {
             return;
         }
         menu.set_inventory((Player) event.getPlayer());
-        menu.swap();
+        menu.gettowards();
     }
 }
 class warper_actions implements Listener {
@@ -118,6 +118,9 @@ class warper_actions implements Listener {
                 if (mainhand.getPersistentDataContainer().get(new key().get_key("item_id"),PersistentDataType.STRING).equals("space_warper") && event.getPlayer().getCooldown(space_warper.warper()) < 0) {
                     player.openInventory(menu.getInventory());
                     player.setCooldown(space_warper.warper(),1200);
+                    if (player.getCooldown(space_warper.warper()) == 0){
+                        player.closeInventory();
+                    }
                 }
             }
         }
@@ -188,6 +191,19 @@ class menu implements InventoryHolder {
     }
     Sort compare = new Sort();
     public @NotNull boolean gettowards(){
+        if (towards) {
+            ItemStack good = ItemStack.of(Material.EMERALD_BLOCK);
+            ItemMeta meta = good.getItemMeta();
+            meta.setDisplayName("Teleport TO");
+            good.setItemMeta(meta);
+            inventory.setItem(4,good);
+        }else {
+            ItemStack good = ItemStack.of(Material.REDSTONE_BLOCK);
+            ItemMeta meta = good.getItemMeta();
+            meta.setDisplayName("Teleport HERE");
+            good.setItemMeta(meta);
+            inventory.setItem(4, good);
+        }
         return towards;
     }
     public void swap() {
@@ -232,6 +248,9 @@ class menu implements InventoryHolder {
         for (int i = 0; i < size; i = i + 1) {
             Yahoo.getlog().info(String.valueOf(i));
             ItemStack head = getSkull(distance.get(i).player);
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
+            meta.setDisplayName(distance.get(i).player.getDisplayName());
+            head.setItemMeta(meta);
             if (i >= 4) {
                 inventory.setItem(i + 2,head);
             } else {
