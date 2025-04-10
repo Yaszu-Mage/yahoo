@@ -1,5 +1,7 @@
 package space.yaszu.yahoo.alchemy.items;
 
+import com.google.j2objc.annotations.Property;
+import de.tr7zw.nbtapi.utils.GameprofileUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
@@ -9,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import com.destroystokyo.paper.profile.*;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
@@ -21,12 +24,14 @@ import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.key;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class space_warper implements Listener {
     public static Map<UUID, menu> player_inventory = new HashMap<>();
     public static Map<UUID, accept_menu> accept = new HashMap<>();
-
+    public static Map<UUID, Map<UUID, Boolean>> active_requests = new HashMap<>();
     public static ItemStack warper() {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
@@ -53,13 +58,14 @@ public class space_warper implements Listener {
 
         }
     }
+    @EventHandler
     public void onClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
-        if (!(inventory.getHolder(false) instanceof accept_menu)) {
+        if (!(inventory.getHolder(false) instanceof accept_menu accept_menu)) {
             return;
         }
         Player player = (Player) event.getWhoClicked();
-        accept_menu accept_menu = accept.get(player.getUniqueId());
+        accept_menu = accept.get(player.getUniqueId());
         @NotNull ItemStack clicked = event.getCurrentItem();
         if (!(clicked == null)) {
             if (clicked.equals(inventory.getItem(0))) {
@@ -72,20 +78,38 @@ public class space_warper implements Listener {
             }
             if (clicked.getType().equals(Material.PLAYER_HEAD)) {
                 accept_menu.accept_request(event.getCurrentItem());
+                String display_name = "";
+                display_name = display_name.replace(" [TO]","");
+                display_name = display_name.replace(" [HERE]", "");
+                Player offplayer = Bukkit.getPlayer(display_name);
+                active_requests.remove(player.getUniqueId());
+                active_requests.remove(offplayer.getUniqueId());
+
+                player.closeInventory();
             }
         }
+        event.setCancelled(true);
     }
     @EventHandler
     public void ontparequest(TPARequestSendEvent event) {
+        Yahoo.getlog().info("EVENT HAS RAN");
         Collection online_players = Bukkit.getOnlinePlayers();
         for (Object player : online_players) {
             if (player instanceof Player) {
                 player = (Player) player;
                 //event goes sender, reciever
                 accept_menu menu = accept.get(((Player) player).getUniqueId());
-                if (player.equals(event.getInfo().receiver)){
-                    menu.add_request(event.getInfo().sender, event.getInfo().direction);
+                if (menu == null) {
+                    accept_menu instace = new accept_menu(event.getInfo().receiver);
+                    menu = instace;
                 }
+                if (player.equals(event.getInfo().receiver)){
+                    Yahoo.getlog().info("FOUND PLAYER");
+                    menu.add_request(event.getInfo().receiver, event.getInfo().direction);
+                    Map<UUID, Boolean> map = new HashMap<>(); map.put(event.getInfo().receiver.getUniqueId(),event.getInfo().direction);
+                    space_warper.active_requests.put(event.getInfo().sender.getUniqueId(),map);
+                }
+                menu.render_requests();
             }
         }
     }
@@ -108,7 +132,7 @@ public class space_warper implements Listener {
                 OfflinePlayer offplayer = meta.getOwningPlayer();
                 if (!Bukkit.getPlayer(offplayer.getName()).equals(null)) {
                     if (menu.gettowards()) {
-                        Player_Info info = new Player_Info(player,offplayer.getPlayer(),menu.gettowards());
+                        Player_Info info = new Player_Info(offplayer.getPlayer(),player,menu.gettowards());
                         TPARequestSendEvent instance_event = new TPARequestSendEvent(info);
                         instance_event.callEvent();
                         //Teleport TO someone
@@ -119,7 +143,7 @@ public class space_warper implements Listener {
                         player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);*/
                     }else {
                         //true is to false is to here
-                        Player_Info info = new Player_Info(player,offplayer.getPlayer(),menu.gettowards());
+                        Player_Info info = new Player_Info(offplayer.getPlayer(),player,menu.gettowards());
                         TPARequestSendEvent instance_event = new TPARequestSendEvent(info);
                         instance_event.callEvent();
                         //Teleport someone HERE
@@ -146,7 +170,9 @@ public class space_warper implements Listener {
                     accept.putIfAbsent(player.getUniqueId(),instance);
                     player.openInventory(accept.get(player.getUniqueId()).getInventory());
                     accept_menu accept_menu = accept.get(player.getUniqueId());
+                    accept_menu.render_requests();
                     accept_menu.set_items();
+                    accept_menu.render_requests();
                 }
             }
         }
@@ -179,6 +205,7 @@ class accept_menu implements InventoryHolder {
         if (meta.getDisplayName().contains(" [TO]")) {
             display_name = display_name.replace(" [TO]","");
             Player offplayer = Bukkit.getPlayer(display_name);
+            space_warper.active_requests.remove(player.getUniqueId());
             player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
             player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
             player.teleport(offplayer.getLocation());
@@ -187,6 +214,7 @@ class accept_menu implements InventoryHolder {
         } else if (meta.getDisplayName().contains(" [HERE]")) {
             display_name = display_name.replace(" [HERE]","");
             Player offplayer = Bukkit.getPlayer(display_name);
+            space_warper.active_requests.remove(player.getUniqueId());
             player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
             player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
             offplayer.getPlayer().teleport(player.getLocation());
@@ -195,25 +223,34 @@ class accept_menu implements InventoryHolder {
         }
     }
     public void add_request(Player sender, Boolean direction){
-        active_requests.put(player.getUniqueId(),direction);
         render_requests();
     }
     public void render_requests() {
         int iteration = 0;
-        for (UUID uuid : active_requests.keySet()) {
+        for (UUID uuid : space_warper.active_requests.keySet()) {
+            Yahoo.getlog().info("I have gone over " + uuid.toString());
+            Map<UUID,Boolean> ls = space_warper.active_requests.get(uuid);
+            Yahoo.getlog().info(Bukkit.getPlayer(uuid).getDisplayName());
+            if (uuid == player.getUniqueId()) {
 
-            ItemStack skull = getSkull(Bukkit.getPlayer(uuid));
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            String direction = "";
-            if (active_requests.get(uuid)) {
-                direction = " [TO]";
-            } else {
-                direction = " [HERE]";
+            for (UUID uuid2 : ls.keySet()) {
+                Yahoo.getlog().info("FOUND A PLAYER 2");
+                ItemStack skull = getSkull(Bukkit.getPlayer(uuid2));
+                SkullMeta meta = (SkullMeta) skull.getItemMeta();
+                String direction = "";
+                if (ls.get(uuid2)) {
+                    direction = " [TO]";
+                } else {
+                    direction = " [HERE]";
+                }
+                meta.setDisplayName(meta.getOwningPlayer().getName() + direction);
+                skull.setItemMeta(meta);
+                inventory.setItem(iteration + 18,skull);
+                iteration = iteration + 1;
+            }} else {
+                Yahoo.getlog().info("I WASNT FOUND "+ player.getDisplayName() );
             }
-            meta.setDisplayName(meta.getOwningPlayer().getName() + direction);
-            skull.setItemMeta(meta);
-            inventory.setItem(iteration + 18,skull);
-            iteration = iteration + 1;
+
         }
     }
     public ItemStack getSkull(Player player) {
@@ -230,13 +267,12 @@ class accept_menu implements InventoryHolder {
     public void set_items() {
         for (int iteration = 0; iteration < inventory.getSize(); iteration = iteration + 1) {
             if (iteration != inventory.getSize()) {
-                if (inventory.getItem(iteration) == null){
-                    ItemStack line = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE);
-                    ItemMeta linemeta = line.getItemMeta();
-                    linemeta.setDisplayName("");
-                    line.setItemMeta(linemeta);
-                inventory.setItem(iteration, ItemStack.of(Material.GRAY_STAINED_GLASS_PANE));
-            }}
+                ItemStack line = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE);
+                ItemMeta linemeta = line.getItemMeta();
+                linemeta.setDisplayName("");
+                line.setItemMeta(linemeta);
+                inventory.setItem(iteration, line);
+            }
         }
         for (int iteration = 0; iteration < 9; iteration = iteration + 1) {
             ItemStack line = ItemStack.of(Material.BLACK_STAINED_GLASS_PANE);
@@ -253,8 +289,28 @@ class accept_menu implements InventoryHolder {
         ItemMeta leftmeta = right.getItemMeta();
         leftmeta.setDisplayName("Back Menu");
         left.setItemMeta(leftmeta);
+        inventory.setItem(1,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2NiODgyMjVlZTRhYjM5ZjdjYmY1ODFmMjJjYmYwOGJkY2MzMzg4NGYxZmY3NDc2ODkzMTI4NDE1MTZjMzQ1In19fQ=="));
+        inventory.setItem(2,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2VkOWY0MzFhOTk3ZmNlMGQ4YmUxODQ0ZjYyMDkwYjE3ODNhYzU2OWM5ZDI3OTc1MjgzNDlkMzdjMjE1ZmNjIn19fQ=="));
+        inventory.setItem(3,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmY3MmNjZWI0YTU2NTQ3OGRlNWIwYjBlNzI3OTQ2ZTU0OTgzNGUzNmY2ZTBlYzhmN2RkN2Y2MzI3YjE1YSJ9fX0="));
+        inventory.setItem(4,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWZkYzRmMzIxYzc4ZDY3NDg0MTM1YWU0NjRhZjRmZDkyNWJkNTdkNDU5MzgzYTRmZTlkMmY2MGEzNDMxYTc5In19fQ=="));
+        inventory.setItem(5,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2VkOWY0MzFhOTk3ZmNlMGQ4YmUxODQ0ZjYyMDkwYjE3ODNhYzU2OWM5ZDI3OTc1MjgzNDlkMzdjMjE1ZmNjIn19fQ=="));
+        inventory.setItem(6,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWYyMmQ3Y2Q1M2Q1YmZlNjFlYWZiYzJmYjFhYzk0NDQzZWVjMjRmNDU1MjkyMTM5YWM5ZmJkYjgzZDBkMDkifX19"));
+        inventory.setItem(7,getCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmMyZmNiYzI0ZTczODJhYzExMmJiMmMwZDVlY2EyN2U5ZjQ4ZmZjYTVhMTU3ZTUwMjYxN2E5NmQ2MzZmNWMzIn19fQ=="));
         inventory.setItem(0,left);
         inventory.setItem(8,right);
+    }
+    public ItemStack getCustomSkull(String base64) {
+
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        if (base64.isEmpty()) return head;
+
+        SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+        PlayerProfile profile = skullMeta.getPlayerProfile();
+        profile = Bukkit.createProfile(UUID.randomUUID(),null);
+        profile.getProperties().add(new ProfileProperty("textures", base64));
+        skullMeta.setPlayerProfile(profile);
+        head.setItemMeta(skullMeta);
+        return head;
     }
 }
 class menu implements InventoryHolder {
