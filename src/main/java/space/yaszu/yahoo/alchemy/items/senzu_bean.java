@@ -28,7 +28,7 @@ public class senzu_bean implements Listener {
         Block eventblock = blockBreakEvent.getBlock();
         if (check_block.check_if_broke(blockBreakEvent, BlockType.POTATOES)) {
             int value = random.nextInt(1000);
-            if (value > 999) {
+            if (value > 998) {
                 eventblock.getDrops().add(bean());
                 blockBreakEvent.getPlayer().give(bean());
                 Yahoo.getlog().info("A SENZU BEAN HAS SPAWNED");

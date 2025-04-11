@@ -27,7 +27,7 @@ public class determination implements Listener {
             Player player = ((Player) damaged);
             if (player.getHealth() - event.getFinalDamage() < 0.5) {
                 int chance = random.nextInt(1001);
-                if (chance >= 999) {
+                if (chance >= 900) {
                     player.setHealth(20);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 4));
                     player.getWorld().playSound(player.getLocation(),Sound.ITEM_TOTEM_USE,1f,1f);
