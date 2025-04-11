@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import com.destroystokyo.paper.profile.*;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -51,13 +52,13 @@ public class space_warper implements Listener {
         return item;
     }
     @EventHandler
-    public static void check_action(PlayerSwapHandItemsEvent event)  {
+    public static void check_action(PlayerDropItemEvent event)  {
         Player player = event.getPlayer();
-        ItemStack offhand = event.getOffHandItem();
-        ItemStack mainhand = event.getMainHandItem();
-        if (!mainhand.equals(null)) {
-            if (mainhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
-                if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper") && player.getCooldown(warper()) == 0) {
+        ItemStack offhand = event.getItemDrop().getItemStack();
+        ItemStack mainhand = event.getPlayer().getInventory().getItemInMainHand();
+        if (!offhand.equals(null) && player.isSneaking()) {
+            if (offhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
+                if (offhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper") && player.getCooldown(warper()) == 0) {
                     menu instance = new menu();
                     player_inventory.putIfAbsent(player.getUniqueId(),instance);
                     player.openInventory(player_inventory.get(player.getUniqueId()).getInventory());
@@ -392,6 +393,22 @@ class menu implements InventoryHolder {
     }
 
     public void set_inventory(Player player) {
+        for (int x = 0; x <= 5; x = x + 1){
+            ItemStack empty = ItemStack.of(Material.COAL);
+            ItemMeta meta = empty.getItemMeta();
+            meta.setDisplayName("EMPTY");
+            empty.setItemMeta(meta);
+            if (x>=3) {
+                if (x+3 == 9) {
+                    //pass
+                } else {
+
+                        inventory.setItem(x + 3, empty);
+                    }
+            } else {
+                    inventory.setItem(x, empty);
+            }
+        }
         Collection onlineplayers = Bukkit.getOnlinePlayers();
         List<player_location> distance = new ArrayList<>();
         for (Object instance : onlineplayers) {
@@ -428,25 +445,7 @@ class menu implements InventoryHolder {
         }
         }
 
-        for (int x = 0; x <= 5; x = x + 1){
-            ItemStack empty = ItemStack.of(Material.COAL);
-            ItemMeta meta = empty.getItemMeta();
-            meta.setDisplayName("EMPTY");
-            empty.setItemMeta(meta);
-            if (x>=3) {
-                if (x+3 == 9) {
-                    //pass
-                } else {
-                if (inventory.getItem(x + 3) == null) {
 
-                    inventory.setItem(x + 3, empty);
-                }}
-            } else {
-                if (inventory.getItem(x) == null) {
-                    inventory.setItem(x, empty);
-                }
-            }
-        }
     }
     public ItemStack getSkull(Player player) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
