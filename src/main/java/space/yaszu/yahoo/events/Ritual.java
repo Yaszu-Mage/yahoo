@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.player_info.player_info_register;
@@ -64,22 +66,30 @@ public class Ritual implements Listener {
             if (!(inventory.getItem(11) != null && inventory.getItem(13) != null && inventory.getItem(15) != null && inventory.getItem(29) != null && inventory.getItem(33) != null)) {
                 //Pass
             } else {
+                Yahoo.getlog().info("GOT PAST HERE");
             RitualRecipe recipe_in = new RitualRecipe(inventory.getItem(11),inventory.getItem(13),inventory.getItem(15),inventory.getItem(29),inventory.getItem(33));
             String recipe_match = "";
             for (String key : RitualRecipeMap.keySet()) {
-                Yahoo.getlog().info(key);
                 Yahoo.getlog().info(RitualRecipeMap.get(key).Ingredient1.toString());
-                Yahoo.getlog().info(String.valueOf(recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType()));
+                Yahoo.getlog().info(String.valueOf(recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()));
                 if (recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()){
                    recipe_match = key;
                 }
             }
+            Yahoo.getlog().info(recipe_match + " balls");
             if (!recipe_match.isEmpty()) {
-                check_player(player.displayName().toString(),recipe_match.toLowerCase());
+                register(player,recipe_match.toLowerCase());
+                player.closeInventory();
             }
         }}
 
     }
+    public static void register(Player player, String tag) {
+        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+        String has_type = player.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        player.getPersistentDataContainer().set(key, PersistentDataType.STRING, tag);
+    }
+
     public static void check_player(String player, String tag){
         if (Bukkit.getPlayer(player) != null){
             Player play = Bukkit.getPlayer(player);

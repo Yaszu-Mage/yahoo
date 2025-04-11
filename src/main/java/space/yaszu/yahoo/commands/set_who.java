@@ -11,7 +11,7 @@ import space.yaszu.yahoo.player_info.player_info_register;
 public class set_who implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        check_player("Yaszu","porter");
+        check_player("Yaszu","star");
         check_player("1nZ4ne","glitch");
         check_player("GhostboyGamer", "flamer");
         check_player("OvaAlpha3", "demon");

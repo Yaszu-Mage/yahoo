@@ -148,6 +148,7 @@ public class item_register {
         ShapedRecipe cloak_recipe = new ShapedRecipe(keygen.get_key("invisibility_cloak"),cloak);
         cloak_recipe.shape("M M","MMM","MMM");
         cloak_recipe.setIngredient('M',magical_cloth);
+        Bukkit.addRecipe(cloak_recipe);
         ItemStack fast_boots = boots_of_swiftness.boots();
         ShapedRecipe fast_boots_recipe = new ShapedRecipe(keygen.get_key("fast_boots"),fast_boots);
         fast_boots_recipe.shape("MMM","MBM","MMM");

@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.porter;
+package space.yaszu.yahoo.star;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import net.kyori.adventure.text.Component;
@@ -61,7 +61,7 @@ public class star implements Listener {
             type = cont.get(key, PersistentDataType.STRING);
         }
         // Check if the player is sneaking while jumping
-        if (player.isSneaking() && type.equals("porter")) {
+        if (player.isSneaking() && type.equals("star")) {
             NamespacedKey fallkey = new NamespacedKey(Yahoo.get_plugin(),"nofall");
             cont.set(fallkey,PersistentDataType.BOOLEAN,true);
             Vector direction = player.getLocation().getDirection();

@@ -1,8 +1,11 @@
 package space.yaszu.yahoo.items;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
+import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.key;
 
 public class boots_of_swiftness implements Listener {
@@ -20,12 +24,26 @@ public class boots_of_swiftness implements Listener {
         ItemStack new_item = event.getNewItem();
         ItemStack old_item = event.getOldItem();
         Player player = event.getPlayer();
-        if (new_item.getItemMeta() == boots().getItemMeta()) {
-            player.setWalkSpeed(0.4f);
+
+        if (new_item.getPersistentDataContainer().get(keygen.get_key("boots_of_swiftness"),PersistentDataType.BOOLEAN) == null) {
+            if (old_item.getPersistentDataContainer().get(keygen.get_key("boots_of_swiftness"),PersistentDataType.BOOLEAN) == null) {
+                return;
+            } else {
+                if (old_item.getPersistentDataContainer().get(keygen.get_key("boots_of_swiftness"),PersistentDataType.BOOLEAN)) {
+
+                    Yahoo.getlog().info("walkspeed");
+                    player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(keygen.get_key("boots_of_swiftness"));
+                }
+            }
+        } else {
+            if (new_item.getPersistentDataContainer().get(keygen.get_key("boots_of_swiftness"),PersistentDataType.BOOLEAN)) {
+
+                Yahoo.getlog().info("walkspeed");
+                player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(new AttributeModifier(keygen.get_key("boots_of_swiftness"),0.4,AttributeModifier.Operation.ADD_NUMBER));
+            }
         }
-        if (old_item.getItemMeta() == boots().getItemMeta()) {
-            player.setWalkSpeed(0.2f);
-        }
+
+
     }
 
     public static ItemStack boots(){

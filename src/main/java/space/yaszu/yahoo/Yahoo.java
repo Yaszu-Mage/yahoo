@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
 import space.yaszu.yahoo.alchemy.items.blessing_of_life;
+import space.yaszu.yahoo.alchemy.items.invisibility_cloak;
 import space.yaszu.yahoo.alchemy.items.senzu_bean;
 import space.yaszu.yahoo.alchemy.items.space_warper;
 import space.yaszu.yahoo.alchemy.run_register;
@@ -28,7 +29,6 @@ import space.yaszu.yahoo.glitch.*;
 import space.yaszu.yahoo.items.boots_of_swiftness;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
-import space.yaszu.yahoo.porter.star;
 
 import java.util.List;
 import java.util.Random;
@@ -97,11 +97,12 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new swor(),this);
         getServer().getPluginManager().registerEvents(new fall_drop(),this);
         getServer().getPluginManager().registerEvents(new blessing_of_life(),this);
-        getServer().getPluginManager().registerEvents(new star(),this);
+        getServer().getPluginManager().registerEvents(new space.yaszu.yahoo.star.star(),this);
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
         getServer().getPluginManager().registerEvents(new space_warper(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);
         getServer().getPluginManager().registerEvents(new Ritual(),this);
+        getServer().getPluginManager().registerEvents(new invisibility_cloak(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
