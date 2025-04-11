@@ -115,8 +115,11 @@ public final class Yahoo extends JavaPlugin{
     public void createWorld(){
         WorldCreator c = new WorldCreator("Glitch");
         c.type(WorldType.AMPLIFIED);
+        c.generateStructures(false);
+
         c.biomeProvider(glitch_provide());
         c.generateStructures(true);
+        c.generatorSettings();
         world = c.createWorld();
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         world.setTime(236927);
@@ -140,7 +143,7 @@ public final class Yahoo extends JavaPlugin{
         BiomeProvider provide = new BiomeProvider() {
             @Override
             public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
-                return Biome.WARPED_FOREST;
+                return Biome.BIRCH_FOREST;
             }
 
             @Override

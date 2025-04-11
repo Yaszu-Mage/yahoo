@@ -57,11 +57,10 @@ public class space_warper implements Listener {
         ItemStack mainhand = event.getMainHandItem();
         if (!mainhand.equals(null)) {
             if (mainhand.getPersistentDataContainer().has(new key().get_key("itemid"))) {
-                if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper")) {
+                if (mainhand.getPersistentDataContainer().get(new key().get_key("itemid"),PersistentDataType.STRING).equals("space_warper") && player.getCooldown(warper()) == 0) {
                     menu instance = new menu();
                     player_inventory.putIfAbsent(player.getUniqueId(),instance);
                     player.openInventory(player_inventory.get(player.getUniqueId()).getInventory());
-                    player.setCooldown(space_warper.warper(),1200);
                     event.setCancelled(true);
                 }
             }
@@ -92,9 +91,9 @@ public class space_warper implements Listener {
                 display_name = display_name.replace(" [TO]","");
                 display_name = display_name.replace(" [HERE]", "");
                 Player offplayer = Bukkit.getPlayer(display_name);
+                player.setCooldown(space_warper.warper(),1200);
                 active_requests.remove(player.getUniqueId());
                 active_requests.remove(offplayer.getUniqueId());
-
                 player.closeInventory();
             }
         }
@@ -164,6 +163,7 @@ public class space_warper implements Listener {
                         player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);*/
                     }
                     inventory.close();
+                    player.setCooldown(space_warper.warper(),1200);
                 }
             } else {
                 if (clicked.getType().equals(Material.REDSTONE_BLOCK) || clicked.getType().equals(Material.EMERALD_BLOCK)) {
@@ -228,18 +228,18 @@ class accept_menu implements InventoryHolder {
             display_name = display_name.replace(" [TO]","");
             Player offplayer = Bukkit.getPlayer(display_name);
             space_warper.active_requests.remove(player.getUniqueId());
-            player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-            player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
-            player.teleport(offplayer.getLocation());
+            player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
+            offplayer.getPlayer().teleport(player.getLocation());
             player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
             player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
         } else if (meta.getDisplayName().contains(" [HERE]")) {
             display_name = display_name.replace(" [HERE]","");
             Player offplayer = Bukkit.getPlayer(display_name);
             space_warper.active_requests.remove(player.getUniqueId());
-            player.getWorld().playSound(offplayer.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-            player.getWorld().spawnParticle(Particle.PORTAL,offplayer.getLocation(),128);
-            offplayer.getPlayer().teleport(player.getLocation());
+            player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
+            player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
+            player.teleport(offplayer.getLocation());
             player.getWorld().playSound(player.getLocation(),Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
             player.getWorld().spawnParticle(Particle.PORTAL,player.getLocation(),128);
         }
