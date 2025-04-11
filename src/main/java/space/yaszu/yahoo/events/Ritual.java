@@ -5,23 +5,28 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import space.yaszu.yahoo.player_info.player_info_register;
 
 import java.awt.print.Book;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Ritual implements Listener {
     public static Map<UUID,Ritualmenu> Ritualmap = new HashMap<>();
-    public ItemStack science_book() {
+    public static Map<String, RitualRecipe> RitualRecipeMap = new HashMap<>();
+    public static ItemStack science_book() {
         ItemStack item = ItemStack.of(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) item.getItemMeta();
         meta.author(MiniMessage.miniMessage().deserialize("<color:#0e0087>Lesser Divinity</color>"));
@@ -32,9 +37,53 @@ public class Ritual implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-
+    public static void register_recipes() {
+        RitualRecipe Glitch = new RitualRecipe(ItemStack.of(Material.OBSIDIAN),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.OBSIDIAN),ItemStack.of(Material.END_CRYSTAL),ItemStack.of(Material.END_CRYSTAL));
+        RitualRecipe Star = new RitualRecipe(ItemStack.of(Material.RABBIT_FOOT),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.RABBIT_FOOT),ItemStack.of(Material.FEATHER),ItemStack.of(Material.DIAMOND));
+        RitualRecipe Flamer = new RitualRecipe(ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.NETHER_WART),ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.IRON_BARS),ItemStack.of(Material.IRON_BARS));
+        RitualRecipe Demon = new RitualRecipe(ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.IRON_BARS),ItemStack.of(Material.IRON_BARS));
+        RitualRecipeMap.put("Glitch",Glitch);
+        RitualRecipeMap.put("Star",Star);
+        RitualRecipeMap.put("Flamer",Flamer);
+        RitualRecipeMap.put("Demon",Demon);
+    }
     @EventHandler
-    public void onPlayerLecturnClick(PlayerInsertLecternBookEvent event) {
+    public static void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        register_recipes();
+        if (!(inventory.getHolder(false) instanceof Ritualmenu ritualmenu)) {
+            return;
+        }
+        Player player = (Player) event.getWhoClicked();
+        ritualmenu = Ritualmap.get(player.getUniqueId());
+
+        if (event.getCurrentItem() == null && (event.getClickedInventory().getHolder() instanceof Ritualmenu || event.getClickedInventory() == player.getInventory())) {return;}else {event.setCancelled(true);}
+        if (event.getCurrentItem().getType() == Material.REDSTONE_BLOCK) {
+            //CRAFT
+            if (!(inventory.getItem(11) != null && inventory.getItem(13) != null && inventory.getItem(15) != null && inventory.getItem(29) != null && inventory.getItem(33) != null)) {
+                //Pass
+            } else {
+            RitualRecipe recipe_in = new RitualRecipe(inventory.getItem(11),inventory.getItem(13),inventory.getItem(15),inventory.getItem(29),inventory.getItem(33));
+            String recipe_match = "";
+            for (String key : RitualRecipeMap.keySet()) {
+                if (RitualRecipeMap.get(key) == recipe_in) {
+                    recipe_match = "key";
+                }
+            }
+            if (!recipe_match.isEmpty()) {
+                check_player(player.displayName().toString(),recipe_match.toLowerCase());
+            }
+        }}
+
+    }
+    public static void check_player(String player, String tag){
+        if (Bukkit.getPlayer(player) != null){
+            Player play = Bukkit.getPlayer(player);
+            player_info_register.register(play, tag);
+        }
+    }
+    @EventHandler
+    public static void onPlayerLecturnClick(PlayerInsertLecternBookEvent event) {
         if (event.getBook().equals(science_book())) {
             if (Ritualmap.get(event.getPlayer().getUniqueId()) == null) {
                 Ritualmenu menu = new Ritualmenu();
@@ -42,9 +91,13 @@ public class Ritual implements Listener {
             }
             Ritualmap.get(event.getPlayer().getUniqueId()).set_items();
             event.getPlayer().openInventory(Ritualmap.get(event.getPlayer().getUniqueId()).getInventory());
+            event.setCancelled(true);
         }
     }
-}class Ritualmenu implements InventoryHolder {
+
+
+}
+class Ritualmenu implements InventoryHolder {
     private final Inventory inventory;
     public Ritualmenu () {
         this.inventory = Bukkit.createInventory(this,45,"Ritual");
@@ -53,7 +106,6 @@ public class Ritual implements Listener {
     public @NotNull Inventory getInventory() {
         return inventory;
     }
-
     public void set_items() {
         for (int x = 0; x < inventory.getSize(); x = x +1) {
             if (x == inventory.getSize()) {
@@ -81,5 +133,18 @@ public class Ritual implements Listener {
         inventory.setItem(29,ItemStack.of(Material.AIR));
         inventory.setItem(31,ItemStack.of(Material.REDSTONE_BLOCK));
         inventory.setItem(33,ItemStack.of(Material.AIR));
+    }
+} class RitualRecipe {
+    public ItemStack Ingredient1;
+    public ItemStack Ingredient2;
+    public ItemStack Ingredient3;
+    public ItemStack Ingredient4;
+    public ItemStack Ingredient5;
+    public RitualRecipe(ItemStack ingredient1,ItemStack ingredient2, ItemStack ingredient3, ItemStack ingredient4,ItemStack ingredient5) {
+        this.Ingredient1 = ingredient1;
+        this.Ingredient2 = ingredient2;
+        this.Ingredient3 = ingredient3;
+        this.Ingredient4 = ingredient4;
+        this.Ingredient5 = ingredient5;
     }
 }

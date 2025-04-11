@@ -19,7 +19,7 @@ public class set_who implements CommandExecutor {
         return true;
     }
 
-    public void check_player(String player, String tag){
+    public static void check_player(String player, String tag){
         if (Bukkit.getPlayer(player) != null){
             Player play = Bukkit.getPlayer(player);
             player_info_register.register(play, tag);

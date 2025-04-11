@@ -10,6 +10,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.alchemy.items.soul;
+import space.yaszu.yahoo.events.Ritual;
 import space.yaszu.yahoo.glitch.glitched_gem_item;
 import space.yaszu.yahoo.key;
 import java.util.*;
@@ -144,15 +146,20 @@ public class item_register {
         Bukkit.addRecipe(cloth_recipe);
         ItemStack cloak = invisibility_cloak.cloak();
         ShapedRecipe cloak_recipe = new ShapedRecipe(keygen.get_key("invisibility_cloak"),cloak);
-        cloak_recipe.shape("MMM","MCM","MMM");
+        cloak_recipe.shape("M M","MMM","MMM");
         cloak_recipe.setIngredient('M',magical_cloth);
-        cloth_recipe.setIngredient('C',Material.LEATHER_CHESTPLATE);
         ItemStack fast_boots = boots_of_swiftness.boots();
         ShapedRecipe fast_boots_recipe = new ShapedRecipe(keygen.get_key("fast_boots"),fast_boots);
         fast_boots_recipe.shape("MMM","MBM","MMM");
         fast_boots_recipe.setIngredient('M',magical_cloth);
         fast_boots_recipe.setIngredient('B',Material.LEATHER_BOOTS);
         Bukkit.addRecipe(fast_boots_recipe);
+        ItemStack sciencebook = Ritual.science_book();
+        ShapedRecipe science_recipe = new ShapedRecipe(keygen.get_key("science_book"),sciencebook);
+        science_recipe.shape("SB ");
+        science_recipe.setIngredient('S', soul.soul_item());
+        science_recipe.setIngredient('B', Material.BOOK);
+        Bukkit.addRecipe(science_recipe);
     }
 
 }

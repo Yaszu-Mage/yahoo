@@ -101,6 +101,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
         getServer().getPluginManager().registerEvents(new space_warper(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);
+        getServer().getPluginManager().registerEvents(new Ritual(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
