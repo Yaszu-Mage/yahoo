@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.player_info.player_info_register;
 
 import java.awt.print.Book;
@@ -57,7 +58,7 @@ public class Ritual implements Listener {
         Player player = (Player) event.getWhoClicked();
         ritualmenu = Ritualmap.get(player.getUniqueId());
 
-        if (event.getCurrentItem() == null && (event.getClickedInventory().getHolder() instanceof Ritualmenu || event.getClickedInventory() == player.getInventory())) {return;}else {event.setCancelled(true);}
+        if (event.getClickedInventory() == player.getInventory() && (event.getClickedInventory().getHolder() instanceof Ritualmenu || event.getClickedInventory() == player.getInventory()) || event.getCurrentItem() == null || (event.getInventory().getHolder() instanceof Ritualmenu && (event.getSlot() == 11 || event.getSlot() == 13 || event.getSlot() == 15 || event.getSlot() == 29 || event.getSlot() == 33))) {return;}else {event.setCancelled(true);}
         if (event.getCurrentItem().getType() == Material.REDSTONE_BLOCK) {
             //CRAFT
             if (!(inventory.getItem(11) != null && inventory.getItem(13) != null && inventory.getItem(15) != null && inventory.getItem(29) != null && inventory.getItem(33) != null)) {
@@ -66,8 +67,11 @@ public class Ritual implements Listener {
             RitualRecipe recipe_in = new RitualRecipe(inventory.getItem(11),inventory.getItem(13),inventory.getItem(15),inventory.getItem(29),inventory.getItem(33));
             String recipe_match = "";
             for (String key : RitualRecipeMap.keySet()) {
-                if (RitualRecipeMap.get(key) == recipe_in) {
-                    recipe_match = "key";
+                Yahoo.getlog().info(key);
+                Yahoo.getlog().info(RitualRecipeMap.get(key).Ingredient1.toString());
+                Yahoo.getlog().info(String.valueOf(recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType()));
+                if (recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()){
+                   recipe_match = key;
                 }
             }
             if (!recipe_match.isEmpty()) {
