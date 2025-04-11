@@ -25,6 +25,7 @@ import space.yaszu.yahoo.events.new_runnables.set_who;
 import space.yaszu.yahoo.flamer.jump;
 import space.yaszu.yahoo.flamer.snapv2;
 import space.yaszu.yahoo.glitch.*;
+import space.yaszu.yahoo.items.boots_of_swiftness;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
 import space.yaszu.yahoo.porter.star;
@@ -99,6 +100,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new star(),this);
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
         getServer().getPluginManager().registerEvents(new space_warper(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

@@ -1,6 +1,8 @@
 package space.yaszu.yahoo.alchemy.items;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,7 +18,7 @@ public class soul {
         ItemMeta essence_meta = essence.getItemMeta();
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"),"Yah_ID");
         essence_meta.getPersistentDataContainer().set(key, PersistentDataType.STRING,"Soul");
-        essence_meta.setDisplayName(ChatColor.RED + "Human-Like Soul");
+        essence_meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>d</dark_purple> <reset><shadow:#000000FF><b><color:#ff002b>Human Like Soul</color> <dark_purple><obf>d</dark_purple>"));
         essence.setItemMeta(essence_meta);
         return essence;
     }

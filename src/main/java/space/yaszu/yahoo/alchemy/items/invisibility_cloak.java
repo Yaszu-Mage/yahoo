@@ -13,7 +13,7 @@ import space.yaszu.yahoo.Yahoo;
 import java.util.Collection;
 
 public class invisibility_cloak implements Listener {
-    public ItemStack cloak() {
+    public static ItemStack cloak() {
         ItemStack item = ItemStack.of(Material.LEATHER_CHESTPLATE);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Invisibility Cloak");

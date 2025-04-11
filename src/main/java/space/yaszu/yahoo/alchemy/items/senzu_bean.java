@@ -1,6 +1,7 @@
 package space.yaszu.yahoo.alchemy.items;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -37,7 +38,6 @@ public class senzu_bean implements Listener {
     @EventHandler
     public void eat(PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
-        Yahoo.getlog().info("SOMEONE ATE SOMETHING");
         if (item.getItemMeta().equals(bean().getItemMeta())) {
             Player player = event.getPlayer();
             player.setHealth(player.getMaxHealth());
@@ -57,7 +57,7 @@ public class senzu_bean implements Listener {
     public ItemStack bean() {
         ItemStack bong = ItemStack.of(Material.TROPICAL_FISH);
         ItemMeta meta = bong.getItemMeta();
-        meta.displayName(Component.text("Senzu Bean"));
+        meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple>|</dark_purple> <color:#3cff00>Senzu Bean</color> <dark_purple>|</dark_purple>"));
         meta.getPersistentDataContainer().set(new key().get_key("item_id"), PersistentDataType.STRING,"senzu_bean");
         bong.setItemMeta(meta);
         return bong;

@@ -3,6 +3,7 @@ package space.yaszu.yahoo.alchemy.items;
 import com.google.j2objc.annotations.Property;
 import de.tr7zw.nbtapi.utils.GameprofileUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,9 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
@@ -27,6 +31,7 @@ import space.yaszu.yahoo.key;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.util.*;
 /*
   _______ _             _____                       __          __                        _     ____
@@ -47,7 +52,7 @@ public class space_warper implements Listener {
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(new key().get_key("itemid"), PersistentDataType.STRING,"space_warper");
-        meta.displayName(Component.text("Space Warper"));
+        meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple>|</dark_purple> <gradient:#ff55ff:#0dc6ff:#f79459>Space Warper</gradient> <dark_purple>|</dark_purple>"));
         item.setItemMeta(meta);
         return item;
     }
@@ -102,7 +107,6 @@ public class space_warper implements Listener {
     }
     @EventHandler
     public void ontparequest(TPARequestSendEvent event) {
-        Yahoo.getlog().info("EVENT HAS RAN");
         Collection online_players = Bukkit.getOnlinePlayers();
         for (Object player : online_players) {
             if (player instanceof Player) {
@@ -114,7 +118,6 @@ public class space_warper implements Listener {
                     menu = instace;
                 }
                 if (player.equals(event.getInfo().receiver)){
-                    Yahoo.getlog().info("FOUND PLAYER");
                     menu.add_request(event.getInfo().receiver, event.getInfo().direction);
                     Map<UUID, Boolean> map = new HashMap<>(); map.put(event.getInfo().receiver.getUniqueId(),event.getInfo().direction);
                     space_warper.active_requests.put(event.getInfo().sender.getUniqueId(),map);
@@ -205,6 +208,8 @@ public class space_warper implements Listener {
 class waypoint_menu implements InventoryHolder {
     private final Inventory inventory;
     private final Player player;
+    public key keygen = new key();
+    public Map<ItemStack,Location> map = new HashMap<>();
     public waypoint_menu(Player player) {
         this.inventory = Bukkit.createInventory(this,9,"Space Warper");
         this.player = player;
@@ -212,6 +217,19 @@ class waypoint_menu implements InventoryHolder {
     @Override
     public @NotNull Inventory getInventory() {
         return inventory;
+    }
+    public void set_items(){
+        ItemStack right = ItemStack.of(Material.IRON_BARS);
+        ItemMeta meta = right.getItemMeta();
+        meta.setDisplayName("Next Menu");
+        right.setItemMeta(meta);
+        ItemStack left = ItemStack.of(Material.IRON_BARS);
+        ItemMeta leftmeta = right.getItemMeta();
+        leftmeta.setDisplayName("Back Menu");
+        left.setItemMeta(leftmeta);
+        if (player.getPersistentDataContainer().get(keygen.get_key("waypoints"),PersistentDataType.LIST.strings()) == null) {
+
+        }
     }
 }
 class accept_menu implements InventoryHolder {
@@ -251,13 +269,11 @@ class accept_menu implements InventoryHolder {
     public void render_requests() {
         int iteration = 0;
         for (UUID uuid : space_warper.active_requests.keySet()) {
-            Yahoo.getlog().info("I have gone over " + uuid.toString());
             Map<UUID,Boolean> ls = space_warper.active_requests.get(uuid);
             Yahoo.getlog().info(Bukkit.getPlayer(uuid).getDisplayName());
             if (uuid == player.getUniqueId()) {
 
             for (UUID uuid2 : ls.keySet()) {
-                Yahoo.getlog().info("FOUND A PLAYER 2");
                 ItemStack skull = getSkull(Bukkit.getPlayer(uuid2));
                 SkullMeta meta = (SkullMeta) skull.getItemMeta();
                 String direction = "";
@@ -271,7 +287,6 @@ class accept_menu implements InventoryHolder {
                 inventory.setItem(iteration + 18,skull);
                 iteration = iteration + 1;
             }} else {
-                Yahoo.getlog().info("I WASNT FOUND "+ player.getDisplayName() );
             }
 
         }
