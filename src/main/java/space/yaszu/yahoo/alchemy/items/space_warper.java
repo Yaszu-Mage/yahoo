@@ -120,7 +120,7 @@ public class space_warper implements Listener {
                 if (player.equals(event.getInfo().receiver)){
                     menu.add_request(event.getInfo().receiver, event.getInfo().direction);
                     Map<UUID, Boolean> map = new HashMap<>(); map.put(event.getInfo().receiver.getUniqueId(),event.getInfo().direction);
-                    event.getInfo().receiver.sendMessage(MiniMessage.miniMessage().deserialize("<gold>! </gold><color:#ff55ff>You feel as if someone is calling to you</color><gold> !</gold>"));
+                    event.getInfo().sender.sendMessage(MiniMessage.miniMessage().deserialize("<gold>! </gold><color:#ff55ff>You feel as if someone is calling to you</color><gold> !</gold>"));
                     event.getInfo().receiver.playSound(event.getInfo().receiver.getLocation(),Sound.ENTITY_EXPERIENCE_ORB_PICKUP,1f,4f);
                     space_warper.active_requests.put(event.getInfo().sender.getUniqueId(),map);
                 }

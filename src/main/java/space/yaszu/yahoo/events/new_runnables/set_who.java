@@ -13,7 +13,7 @@ public class set_who implements Runnable {
         this.yahoo = yahoo;
     }
     public void run() {
-        check_player("Yaszu","porter");
+        check_player("Yaszu","star");
         check_player("1nZ4ne","glitch");
         check_player("GhostboyGamer", "flamer");
         check_player("OvaAlpha3", "demon");
