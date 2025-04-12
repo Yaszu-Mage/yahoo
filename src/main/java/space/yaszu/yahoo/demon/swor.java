@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -179,17 +180,18 @@ public class swor implements Listener {
                 // Play slashing sound effect
                 caster.getWorld().playSound(center, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.1f + random.nextFloat() * 0.2f);
 
-                // Damage players within the radius based on distance
-                for (Player target : Bukkit.getOnlinePlayers()) {
-                    if (!target.equals(caster) && target.getWorld().equals(caster.getWorld())) {
-                        double distance = target.getLocation().distance(center);
-                        if (distance <= maxRadius) {
-                            double damageFactor = (distance / maxRadius); // Closer = less damage
-                            double damage = maxDamage * (1.0 - damageFactor); // Scale damage down closer to center
-                            target.damage(damage, caster);
-                        }
+
+                for (Entity target : caster.getNearbyEntities(1.5,1.5,1.5)) {
+                    if (!target.equals(caster) && target.getWorld().equals(caster.getWorld()));
+                    double distance = target.getLocation().distance(center);
+                    if (distance <= maxRadius && target instanceof LivingEntity){
+                        double damageFactor = (distance / maxRadius);
+                        double damage = maxDamage * (1.0 - damageFactor);
+                        LivingEntity livingtarget = (LivingEntity) target;
+                        livingtarget.damage(damage,caster);
                     }
                 }
+                // Damage players within the radius based on distance
 
                 // Adjust tick interval: Faster slashes when closer to center
                 int fireRate = (int) (10 - (5 * (ticks / (double) duration))); // Starts at 10 ticks, goes to 5 ticks
