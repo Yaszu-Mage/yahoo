@@ -66,17 +66,13 @@ public class Ritual implements Listener {
             if (!(inventory.getItem(11) != null && inventory.getItem(13) != null && inventory.getItem(15) != null && inventory.getItem(29) != null && inventory.getItem(33) != null)) {
                 //Pass
             } else {
-                Yahoo.getlog().info("GOT PAST HERE");
             RitualRecipe recipe_in = new RitualRecipe(inventory.getItem(11),inventory.getItem(13),inventory.getItem(15),inventory.getItem(29),inventory.getItem(33));
             String recipe_match = "";
             for (String key : RitualRecipeMap.keySet()) {
-                Yahoo.getlog().info(RitualRecipeMap.get(key).Ingredient1.toString());
-                Yahoo.getlog().info(String.valueOf(recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()));
-                if (recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()){
+               if (recipe_in.Ingredient1.getType() == RitualRecipeMap.get(key).Ingredient1.getType() && recipe_in.Ingredient2.getType() == RitualRecipeMap.get(key).Ingredient2.getType() && recipe_in.Ingredient3.getType() == RitualRecipeMap.get(key).Ingredient3.getType() && recipe_in.Ingredient4.getType() == RitualRecipeMap.get(key).Ingredient4.getType() && recipe_in.Ingredient5.getType() == RitualRecipeMap.get(key).Ingredient5.getType()){
                    recipe_match = key;
                 }
             }
-            Yahoo.getlog().info(recipe_match + " balls");
             if (!recipe_match.isEmpty()) {
                 register(player,recipe_match.toLowerCase());
                 player.closeInventory();

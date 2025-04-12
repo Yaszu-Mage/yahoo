@@ -271,8 +271,7 @@ class accept_menu implements InventoryHolder {
     public void render_requests() {
         int iteration = 0;
         for (UUID uuid : space_warper.active_requests.keySet()) {
-            Map<UUID,Boolean> ls = space_warper.active_requests.get(uuid);
-            Yahoo.getlog().info(Bukkit.getPlayer(uuid).getDisplayName());
+            Map<UUID,Boolean> ls = space_warper.active_requests.get(uuid);;
             if (uuid == player.getUniqueId()) {
 
             for (UUID uuid2 : ls.keySet()) {
@@ -448,7 +447,6 @@ class menu implements InventoryHolder {
 
 
         for (int i = 0; i < size; i = i + 1) {
-            Yahoo.getlog().info(String.valueOf(i));
             ItemStack head = getSkull(distance.get(i).player);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setDisplayName(distance.get(i).player.getDisplayName());
