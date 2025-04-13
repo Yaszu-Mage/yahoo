@@ -39,7 +39,7 @@ public class boots_of_swiftness implements Listener {
             if (new_item.getPersistentDataContainer().get(keygen.get_key("boots_of_swiftness"),PersistentDataType.BOOLEAN)) {
 
                 Yahoo.getlog().info("walkspeed");
-                player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(new AttributeModifier(keygen.get_key("boots_of_swiftness"),0.4,AttributeModifier.Operation.ADD_NUMBER));
+                player.getAttribute(Attribute.MOVEMENT_SPEED).addModifier(new AttributeModifier(keygen.get_key("boots_of_swiftness"),0.14,AttributeModifier.Operation.ADD_NUMBER));
             }
         }
 

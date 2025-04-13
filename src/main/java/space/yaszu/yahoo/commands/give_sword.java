@@ -20,7 +20,7 @@ public class give_sword implements CommandExecutor {
             sender.sendMessage("Only players can use this command!");
             return true;
         }
-
+        if (sender.isOp()) {
         Player player = (Player) sender;
         player.getInventory().addItem(swor.sword_item());
 
@@ -28,4 +28,5 @@ public class give_sword implements CommandExecutor {
 
         return true;
     }
+return false;}
 }

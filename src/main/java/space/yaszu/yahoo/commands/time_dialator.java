@@ -20,7 +20,7 @@ public class time_dialator implements CommandExecutor {
             sender.sendMessage("Only players can use this command!");
             return true;
         }
-
+        if (sender.isOp()){
         Player player = (Player) sender;
         NamespacedKey glove = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "time");
         // Give the player a Recovery Compass
@@ -36,4 +36,4 @@ public class time_dialator implements CommandExecutor {
 
         return true;
     }
-}
+        return false;}}

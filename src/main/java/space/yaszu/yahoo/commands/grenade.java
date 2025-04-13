@@ -27,6 +27,7 @@ public class grenade implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (sender instanceof Player) {
+            if (sender.isOp()) {
             Player player = (Player) sender;
             ItemStack grenade = new ItemStack(Material.RECOVERY_COMPASS);
             ItemMeta meta = grenade.getItemMeta();
@@ -38,5 +39,5 @@ public class grenade implements CommandExecutor {
         } else {
             return false;
         }
-    }
-}
+    }return false;
+}}

@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.key;
 import space.yaszu.yahoo.player_info.player_info_register;
 
 import java.awt.print.Book;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class Ritual implements Listener {
     public static Map<UUID,Ritualmenu> Ritualmap = new HashMap<>();
     public static Map<String, RitualRecipe> RitualRecipeMap = new HashMap<>();
+    public static key keygen = new key();
     public static ItemStack science_book() {
         ItemStack item = ItemStack.of(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) item.getItemMeta();
@@ -45,10 +47,12 @@ public class Ritual implements Listener {
         RitualRecipe Star = new RitualRecipe(ItemStack.of(Material.RABBIT_FOOT),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.RABBIT_FOOT),ItemStack.of(Material.FEATHER),ItemStack.of(Material.DIAMOND));
         RitualRecipe Flamer = new RitualRecipe(ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.NETHER_WART),ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.IRON_BARS),ItemStack.of(Material.IRON_BARS));
         RitualRecipe Demon = new RitualRecipe(ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.BLAZE_POWDER),ItemStack.of(Material.IRON_BARS),ItemStack.of(Material.IRON_BARS));
+        RitualRecipe Eternal_Night = new RitualRecipe(ItemStack.of(Material.AMETHYST_SHARD),ItemStack.of(Material.NETHER_STAR),ItemStack.of(Material.AMETHYST_SHARD),ItemStack.of(Material.WITHER_SKELETON_SKULL),ItemStack.of(Material.WITHER_SKELETON_SKULL));
         RitualRecipeMap.put("Glitch",Glitch);
         RitualRecipeMap.put("Star",Star);
         RitualRecipeMap.put("Flamer",Flamer);
         RitualRecipeMap.put("Demon",Demon);
+        RitualRecipeMap.put("Eternal_Night",Eternal_Night);
     }
     @EventHandler
     public static void onInventoryClick(InventoryClickEvent event) {
@@ -74,8 +78,15 @@ public class Ritual implements Listener {
                 }
             }
             if (!recipe_match.isEmpty()) {
+                if (recipe_match.equals("Gltich") || recipe_match.equals("Flamer") || recipe_match.equals("Star") || recipe_match.equals("Demon")) {
                 register(player,recipe_match.toLowerCase());
                 player.closeInventory();
+                } else {
+                    if (recipe_match.equals("Eternal_Night")) {
+                        Bukkit.getWorld("world").getPersistentDataContainer().set(keygen.get_key("eternal_night"),PersistentDataType.BOOLEAN,true);
+                        register(player,recipe_match.toLowerCase());
+                    }
+                }
             }
         }}
 

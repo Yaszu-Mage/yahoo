@@ -10,10 +10,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.alchemy.alchemic_bag;
 import space.yaszu.yahoo.alchemy.events.drops;
-import space.yaszu.yahoo.alchemy.items.blessing_of_life;
-import space.yaszu.yahoo.alchemy.items.invisibility_cloak;
-import space.yaszu.yahoo.alchemy.items.senzu_bean;
-import space.yaszu.yahoo.alchemy.items.space_warper;
+import space.yaszu.yahoo.alchemy.items.*;
 import space.yaszu.yahoo.alchemy.run_register;
 import space.yaszu.yahoo.commands.*;
 import space.yaszu.yahoo.demon.hunger;
@@ -103,6 +100,7 @@ public final class Yahoo extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);
         getServer().getPluginManager().registerEvents(new Ritual(),this);
         getServer().getPluginManager().registerEvents(new invisibility_cloak(),this);
+        getServer().getPluginManager().registerEvents(new impish_armor(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

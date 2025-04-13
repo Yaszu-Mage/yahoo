@@ -20,3 +20,6 @@ commands:
       description: "set who"
   give_sword:
       description: "give_sword"
+permissions:
+  yahoo.commands:
+    description: Gives access to all Yaszu commands

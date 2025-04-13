@@ -28,6 +28,7 @@ public class reset_cooldowns implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (sender instanceof Player) {
+            if (sender.isOp()) {
             PersistentDataContainer player_date = ((Player) sender).getPersistentDataContainer();
             NamespacedKey time_cooldown = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "time_cooldown");
             NamespacedKey gun_cooldown = new NamespacedKey(Bukkit.getServer().getPluginManager().getPlugin("Yahoo"), "gun_cooldown");
@@ -43,4 +44,4 @@ public class reset_cooldowns implements CommandExecutor {
             return false;
         }
     }
-}
+return false;}}

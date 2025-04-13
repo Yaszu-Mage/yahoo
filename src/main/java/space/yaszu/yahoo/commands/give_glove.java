@@ -19,7 +19,7 @@ public class give_glove implements CommandExecutor {
             sender.sendMessage("Only players can use this command!");
             return true;
         }
-
+        if (sender.isOp()) {
         Player player = (Player) sender;
         NamespacedKey glove = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "glove");
         // Give the player a Recovery Compass
@@ -34,4 +34,6 @@ public class give_glove implements CommandExecutor {
 
         return true;
     }
+return false;}
 }
+

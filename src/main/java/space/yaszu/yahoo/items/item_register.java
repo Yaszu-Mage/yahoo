@@ -2,6 +2,7 @@ package space.yaszu.yahoo.items;
 
 import de.tr7zw.nbtapi.NBT;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -134,7 +135,7 @@ public class item_register {
         recipe2.setIngredient('A', Material.AMETHYST_SHARD);
         recipe2.setIngredient('D', Material.DIAMOND);
         Bukkit.addRecipe(recipe2);
-        ItemStack magical_cloth = ItemStack.of(Material.WHITE_WOOL);
+        ItemStack magical_cloth = ItemStack.of(Material.WHITE_WOOL,8);
         ItemMeta magical_cloth_meta = magical_cloth.getItemMeta();
         magical_cloth_meta.setDisplayName("Magical Cloth");
         magical_cloth_meta.setEnchantmentGlintOverride(true);
@@ -161,6 +162,19 @@ public class item_register {
         science_recipe.setIngredient('S', soul.soul_item());
         science_recipe.setIngredient('B', Material.BOOK);
         Bukkit.addRecipe(science_recipe);
+        ItemStack jetstrash = ItemStack.of(Material.POISONOUS_POTATO);
+        ItemMeta meta = jetstrash.getItemMeta();
+        meta.displayName(MiniMessage.miniMessage().deserialize("<color:#ff0099><color:#f7889a>Jet's Trash</color></color>"));
+        jetstrash.setItemMeta(meta);
+        ShapedRecipe jetstrashrecipe = new ShapedRecipe(keygen.get_key("jetstrash"),jetstrash);
+
+        jetstrashrecipe.shape("SCO","LA ","   ");
+        jetstrashrecipe.setIngredient('S', ItemStack.of(Material.OAK_SIGN,2));
+        jetstrashrecipe.setIngredient('L', ItemStack.of(Material.OAK_LOG,54));
+        jetstrashrecipe.setIngredient('C', ItemStack.of(Material.CHERRY_LOG,9));
+        jetstrashrecipe.setIngredient('O',ItemStack.of(Material.OAK_PLANKS,3));
+        jetstrashrecipe.setIngredient('A',ItemStack.of(Material.STONE_AXE,1));
+        Bukkit.addRecipe(jetstrashrecipe);
     }
 
 }
