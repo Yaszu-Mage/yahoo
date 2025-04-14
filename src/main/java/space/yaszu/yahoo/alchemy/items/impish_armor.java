@@ -19,6 +19,8 @@ import org.bukkit.potion.PotionEffectType;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.key;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static space.yaszu.yahoo.items.boots_of_swiftness.keygen;
@@ -30,42 +32,42 @@ public class impish_armor implements Listener {
         - Style Item
         - Make Func
      */
-    public key keygen = new key();
-    public ItemStack impish_helmet(){
+    public static key keygen = new key();
+    public static ItemStack impish_helmet(){
         ItemStack helmet = ItemStack.of(Material.DIAMOND_HELMET);
         ItemMeta meta = helmet.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Helmet</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.lore((List<? extends Component>) MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"));
+        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_helmet"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         helmet.setItemMeta(meta);
         return helmet;
     }
-    public ItemStack impish_chestplate(){
+    public static ItemStack impish_chestplate(){
         ItemStack chestplate = ItemStack.of(Material.DIAMOND_CHESTPLATE);
         ItemMeta meta = chestplate.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Chestplate</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.lore((List<? extends Component>) MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"));
+        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_chestplate"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         chestplate.setItemMeta(meta);
         return chestplate;
     }
-    public ItemStack impish_leggings() {
+    public static ItemStack impish_leggings() {
         ItemStack leggings = ItemStack.of(Material.DIAMOND_LEGGINGS);
         ItemMeta meta = leggings.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Leggings</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.lore((List<? extends Component>) MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"));
+        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_leggings"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         leggings.setItemMeta(meta);
         return leggings;
     }
-    public ItemStack impish_boots(){
+    public static ItemStack impish_boots(){
         ItemStack boots = ItemStack.of(Material.DIAMOND_BOOTS);
         ItemMeta meta = boots.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Lil Booties</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.lore((List<? extends Component>) MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"));
+        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_boots"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         boots.setItemMeta(meta);
@@ -99,32 +101,6 @@ public class impish_armor implements Listener {
 
     }
 
-    public void set_armor_attribute(ItemStack new_item, ItemStack old_item, String key, AttributeModifier modifier, Attribute attribute,Player player, PotionEffect potionEffect){
-        if (new_item.getPersistentDataContainer().get(keygen.get_key(key), PersistentDataType.BOOLEAN) == null) {
-            if (old_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN) == null) {
-                return;
-            } else {
-                if (old_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN)) {
-                    //Take off
-                    if (potionEffect != null) {
-                        player.removePotionEffect(potionEffect.getType());
-                    }
-                    if (attribute != null) {
-                        player.getAttribute(attribute).removeModifier(keygen.get_key(key));
-                    }
-                }
-            }
-        } else {
-            if (new_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN)) {
-                if (potionEffect != null) {
-                    player.addPotionEffect(potionEffect);
-                }
-                if (attribute != null) {
-                    player.getAttribute(attribute).addModifier(modifier);
-                }
-                //Put on
-            }
-        }
-    }
+    
     }
 

@@ -34,31 +34,39 @@ public class invisibility_cloak implements Listener {
         ItemStack new_item = event.getNewItem();
         ItemStack old_item = event.getOldItem();
         Player player = event.getPlayer();
+        set_armor_attribute(new_item,old_item,
+                "invisibility_cloak",
+                new AttributeModifier(keygen.get_key("invis_cloak"),1, AttributeModifier.Operation.ADD_NUMBER),
+                Attribute.TEMPT_RANGE,
+                player,
+                new PotionEffect(PotionEffectType.INVISIBILITY,PotionEffect.INFINITE_DURATION,20));
+    }
 
-        if (new_item.getPersistentDataContainer().get(keygen.get_key("invisibility_cloak"), PersistentDataType.BOOLEAN) == null) {
-            if (old_item.getPersistentDataContainer().get(keygen.get_key("invisibility_cloak"),PersistentDataType.BOOLEAN) == null) {
+    public void set_armor_attribute(ItemStack new_item, ItemStack old_item, String key, AttributeModifier modifier, Attribute attribute,Player player, PotionEffect potionEffect){
+        if (new_item.getPersistentDataContainer().get(keygen.get_key(key), PersistentDataType.BOOLEAN) == null) {
+            if (old_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN) == null) {
                 return;
             } else {
-                if (old_item.getPersistentDataContainer().get(keygen.get_key("invisibility_cloak"),PersistentDataType.BOOLEAN)) {
-
-                    for (Player player1: Bukkit.getOnlinePlayers()) {
-                        player1.showPlayer(Yahoo.get_plugin(),player);
+                if (old_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN)) {
+                    //Take off
+                    if (potionEffect != null) {
+                        player.removePotionEffect(potionEffect.getType());
                     }
-                    player.removePotionEffect(PotionEffectType.WEAKNESS);
-                    player.removePotionEffect(PotionEffectType.SLOWNESS);
+                    if (attribute != null) {
+                        player.getAttribute(attribute).removeModifier(keygen.get_key(key));
+                    }
                 }
             }
         } else {
-            if (new_item.getPersistentDataContainer().get(keygen.get_key("invisibility_cloak"),PersistentDataType.BOOLEAN)) {
-
-                Yahoo.getlog().info("walkspeed");
-                for (Player player2: Bukkit.getOnlinePlayers()) {
-                    player2.hidePlayer(Yahoo.get_plugin(),player);
-
+            if (new_item.getPersistentDataContainer().get(keygen.get_key(key),PersistentDataType.BOOLEAN)) {
+                if (potionEffect != null) {
+                    player.addPotionEffect(potionEffect);
                 }
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,PotionEffect.INFINITE_DURATION,3,false,false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,PotionEffect.INFINITE_DURATION,6,false,false));
+                if (attribute != null) {
+                    player.getAttribute(attribute).addModifier(modifier);
+                }
+                //Put on
             }
         }
-        }
+    }
 }

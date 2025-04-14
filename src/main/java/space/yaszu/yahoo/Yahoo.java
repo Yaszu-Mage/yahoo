@@ -101,6 +101,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new Ritual(),this);
         getServer().getPluginManager().registerEvents(new invisibility_cloak(),this);
         getServer().getPluginManager().registerEvents(new impish_armor(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new scythe(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

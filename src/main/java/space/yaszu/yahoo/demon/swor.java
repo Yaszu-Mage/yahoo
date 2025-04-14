@@ -29,11 +29,12 @@ public class swor implements Listener {
     private final HashMap<UUID, Long> cooldowns = new HashMap<>();
     private final HashMap<UUID, Long> piercecooldowns = new HashMap<>();// Cooldown storage
     private final long cooldownTime = 40000;
-    private final long piercecooldownTime = 40000;
+    private final long piercecooldownTime = 4000;
     NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"nofall");
     public static ItemStack sword_item() {
         ItemStack sword = ItemStack.of(Material.DIAMOND_SWORD);
         ItemMeta swordItemMeta = sword.getItemMeta();
+        swordItemMeta.setItemModel(NamespacedKey.minecraft("demonic_sword"));
         swordItemMeta.setDisplayName(ChatColor.RED + "Demonic Sword");
         PersistentDataContainer cont = swordItemMeta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"demonic_sword");
@@ -130,7 +131,7 @@ public class swor implements Listener {
             cooldowns.put(playerUUID, currentTime);
             ItemStack mainhand = player.getInventory().getItemInMainHand();
             if (mainhand.getType() != Material.AIR && mainhand.getItemMeta().equals(sword_item().getItemMeta())) {
-                createSlashCloud(player,5,40,4);
+                createSlashCloud(player,5,40,10);
             }
         }}
     }

@@ -11,13 +11,11 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.alchemy.items.soul;
+import space.yaszu.yahoo.alchemy.items.*;
 import space.yaszu.yahoo.events.Ritual;
 import space.yaszu.yahoo.glitch.glitched_gem_item;
 import space.yaszu.yahoo.key;
 import java.util.*;
-import space.yaszu.yahoo.alchemy.items.space_warper;
-import space.yaszu.yahoo.alchemy.items.invisibility_cloak;
 
 public class item_register {
     public void itemregister(String shapea, String shapeb, String shapec, String name, Collection<String> values, Dictionary<String, Material> dict, String tag) {
@@ -49,6 +47,7 @@ public class item_register {
         this.yahoo = yahoo;
     }
     public void register(){
+        Bukkit.resetRecipes();
         Collection<String> coke = new ArrayList<>();
         coke.add("M");
         coke.add("E");
@@ -175,6 +174,40 @@ public class item_register {
         jetstrashrecipe.setIngredient('O',ItemStack.of(Material.OAK_PLANKS,3));
         jetstrashrecipe.setIngredient('A',ItemStack.of(Material.STONE_AXE,1));
         Bukkit.addRecipe(jetstrashrecipe);
+        ItemStack scythe_weapon = scythe.scythe_item();
+        ShapedRecipe scythe_weapon_recipe = new ShapedRecipe(keygen.get_key("scythe"),scythe_weapon);
+        scythe_weapon_recipe.shape("DDD"," SD","S  ");
+        scythe_weapon_recipe.setIngredient('S', ItemStack.of(Material.STICK));
+        scythe_weapon_recipe.setIngredient('D', ItemStack.of(Material.DIAMOND));
+        Bukkit.addRecipe(scythe_weapon_recipe);
+        ItemStack impish_helmet = impish_armor.impish_helmet();
+        ItemStack impish_chestplate = impish_armor.impish_chestplate();
+        ItemStack impish_leggings = impish_armor.impish_leggings();
+        ItemStack impish_boots = impish_armor.impish_boots();
+        ShapedRecipe impish_helmet_recipe = new ShapedRecipe(keygen.get_key("impish_helmet"),impish_helmet);
+        ShapedRecipe impish_chestplate_recipe = new ShapedRecipe(keygen.get_key("impish_chestplate"),impish_chestplate);
+        ShapedRecipe impish_leggings_recipe = new ShapedRecipe(keygen.get_key("impish_leggings"),impish_leggings);
+        ShapedRecipe impish_boots_recipe = new ShapedRecipe(keygen.get_key("impish_boots"),impish_boots);
+        impish_helmet_recipe.shape("MBM","BDB","BDB");
+        impish_chestplate_recipe.shape("MBM","BDB","BDB");
+        impish_leggings_recipe.shape("MBM","BDB","BDB");
+        impish_boots_recipe.shape("MBM","BDB","BDB");
+        impish_helmet_recipe.setIngredient('B',Material.BLAZE_POWDER);
+        impish_chestplate_recipe.setIngredient('B',Material.BLAZE_POWDER);
+        impish_leggings_recipe.setIngredient('B',Material.BLAZE_POWDER);
+        impish_boots_recipe.setIngredient('B',Material.BLAZE_POWDER);
+        impish_helmet_recipe.setIngredient('M',Material.MAGMA_CREAM);
+        impish_chestplate_recipe.setIngredient('M',Material.MAGMA_CREAM);
+        impish_leggings_recipe.setIngredient('M',Material.MAGMA_CREAM);
+        impish_boots_recipe.setIngredient('M',Material.MAGMA_CREAM);
+        impish_helmet_recipe.setIngredient('D',Material.DIAMOND_HELMET);
+        impish_chestplate_recipe.setIngredient('D',Material.DIAMOND_CHESTPLATE);
+        impish_leggings_recipe.setIngredient('D',Material.DIAMOND_LEGGINGS);
+        impish_boots_recipe.setIngredient('D',Material.DIAMOND_BOOTS);
+        Bukkit.addRecipe(impish_helmet_recipe);
+        Bukkit.addRecipe(impish_chestplate_recipe);
+        Bukkit.addRecipe(impish_leggings_recipe);
+        Bukkit.addRecipe(impish_boots_recipe);
     }
 
 }
