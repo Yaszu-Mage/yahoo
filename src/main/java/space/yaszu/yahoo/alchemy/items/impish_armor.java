@@ -37,7 +37,7 @@ public class impish_armor implements Listener {
         ItemStack helmet = ItemStack.of(Material.DIAMOND_HELMET);
         ItemMeta meta = helmet.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Helmet</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
+         meta.setLore(Arrays.asList("A piece of armor whos design was created by the imps"));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_helmet"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         helmet.setItemMeta(meta);
@@ -47,7 +47,7 @@ public class impish_armor implements Listener {
         ItemStack chestplate = ItemStack.of(Material.DIAMOND_CHESTPLATE);
         ItemMeta meta = chestplate.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Chestplate</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
+        meta.setLore(Arrays.asList("A piece of armor whos design was created by the imps"));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_chestplate"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         chestplate.setItemMeta(meta);
@@ -57,7 +57,7 @@ public class impish_armor implements Listener {
         ItemStack leggings = ItemStack.of(Material.DIAMOND_LEGGINGS);
         ItemMeta meta = leggings.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Impish Leggings</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
+         meta.setLore(Arrays.asList("A piece of armor whos design was created by the imps"));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_leggings"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         leggings.setItemMeta(meta);
@@ -67,7 +67,7 @@ public class impish_armor implements Listener {
         ItemStack boots = ItemStack.of(Material.DIAMOND_BOOTS);
         ItemMeta meta = boots.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>Lil Booties</dark_red> <dark_purple><obf>|</dark_purple>"));
-        meta.setLore(Arrays.asList(String.valueOf(MiniMessage.miniMessage().deserialize("<dark_purple><obf>|</dark_purple> <dark_red>An piece of armor whos design was created by the imps</dark_red> <dark_purple><obf>|</dark_purple>"))));
+         meta.setLore(Arrays.asList("A piece of armor whos design was created by the imps"));
         meta.getPersistentDataContainer().set(keygen.get_key("impish_boots"), PersistentDataType.BOOLEAN,true);
         meta.getPersistentDataContainer().set(keygen.get_key("impish"),PersistentDataType.BOOLEAN,true);
         boots.setItemMeta(meta);
@@ -89,10 +89,11 @@ public class impish_armor implements Listener {
         boolean output = true;
         int armor_match = 0;
         for (ItemStack armor : player.getInventory().getArmorContents()){
+            if (armor != null) {
             if (armor.getPersistentDataContainer().has(keygen.get_key(key))) {
                 armor_match = armor_match + 1;
             }
-        }
+        }}
         if (armor_match == 4){
             return true;
         }else {
@@ -101,6 +102,6 @@ public class impish_armor implements Listener {
 
     }
 
-    
+
     }
 

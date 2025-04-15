@@ -188,10 +188,10 @@ public class item_register {
         ShapedRecipe impish_chestplate_recipe = new ShapedRecipe(keygen.get_key("impish_chestplate"),impish_chestplate);
         ShapedRecipe impish_leggings_recipe = new ShapedRecipe(keygen.get_key("impish_leggings"),impish_leggings);
         ShapedRecipe impish_boots_recipe = new ShapedRecipe(keygen.get_key("impish_boots"),impish_boots);
-        impish_helmet_recipe.shape("MBM","BDB","BDB");
-        impish_chestplate_recipe.shape("MBM","BDB","BDB");
-        impish_leggings_recipe.shape("MBM","BDB","BDB");
-        impish_boots_recipe.shape("MBM","BDB","BDB");
+        impish_helmet_recipe.shape("MBM","BDB","MBM");
+        impish_chestplate_recipe.shape("MBM","BDB","MBM");
+        impish_leggings_recipe.shape("MBM","BDB","MBM");
+        impish_boots_recipe.shape("MBM","BDB","MBM");
         impish_helmet_recipe.setIngredient('B',Material.BLAZE_POWDER);
         impish_chestplate_recipe.setIngredient('B',Material.BLAZE_POWDER);
         impish_leggings_recipe.setIngredient('B',Material.BLAZE_POWDER);
@@ -208,6 +208,12 @@ public class item_register {
         Bukkit.addRecipe(impish_chestplate_recipe);
         Bukkit.addRecipe(impish_leggings_recipe);
         Bukkit.addRecipe(impish_boots_recipe);
+        ItemStack glaive_weapon = glaive.glaive_item();
+        ShapedRecipe glaive_recipe = new ShapedRecipe(keygen.get_key("glaive"),glaive_weapon);
+        glaive_recipe.shape("  D"," S ","S  ");
+        glaive_recipe.setIngredient('S', ItemStack.of(Material.STICK));
+        glaive_recipe.setIngredient('D', ItemStack.of(Material.DIAMOND));
+        Bukkit.getServer().addRecipe(glaive_recipe);
     }
 
 }
