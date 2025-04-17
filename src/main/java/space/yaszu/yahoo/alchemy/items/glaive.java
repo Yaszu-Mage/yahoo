@@ -23,7 +23,6 @@ public class glaive implements Listener {
     public static ItemStack glaive_item(){
         ItemStack item = new ItemStack(Material.TRIDENT);
         ItemMeta meta = item.getItemMeta();
-        meta.getAttributeModifiers().get(Attribute.ATTACK_SPEED).add(new AttributeModifier(keygen.get_key("glaive"),1, AttributeModifier.Operation.ADD_NUMBER));
         meta.displayName(MiniMessage.miniMessage().deserialize("<obf>| <reset><dark_green>Glaive</dark_green> <obf>|"));
         meta.setLore(Collections.singletonList("A Recipe decended from forest guardians"));
         meta.getPersistentDataContainer().set(keygen.get_key("glaive"), PersistentDataType.BOOLEAN,true);

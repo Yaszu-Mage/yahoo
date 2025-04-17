@@ -2,6 +2,9 @@ package space.yaszu.yahoo;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
@@ -28,6 +31,11 @@ import space.yaszu.yahoo.items.boots_of_swiftness;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +43,7 @@ import java.util.Random;
 import static org.bukkit.Bukkit.getPluginManager;
 
 public final class Yahoo extends JavaPlugin{
+
     private static Yahoo instance;
     World world;
     @Override
@@ -50,8 +59,14 @@ public final class Yahoo extends JavaPlugin{
         getCommand("give_sword").setExecutor(new give_sword());
         createWorld();
         check_glitch();
+        saveResource("db.yml", /* replace */ false);
+        saveDefaultConfig();
+        getResource("db.yml");
         getLogger().info("Plugin has been enabled");
+
+
     }
+
 
 
 
@@ -107,6 +122,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new invisibility_cloak(),this);
         getServer().getPluginManager().registerEvents(new impish_armor(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new scythe(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new meth(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
