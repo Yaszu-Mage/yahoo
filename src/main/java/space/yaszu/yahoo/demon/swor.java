@@ -1,6 +1,5 @@
 package space.yaszu.yahoo.demon;
 
-import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -15,9 +14,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.eclipse.sisu.launch.Main;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.alchemy.items.soul;
+import space.yaszu.yahoo.key;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,8 @@ public class swor implements Listener {
     private final HashMap<UUID, Long> piercecooldowns = new HashMap<>();// Cooldown storage
     private final long cooldownTime = 40000;
     private final long piercecooldownTime = 4000;
-    NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"nofall");
+    public static key keygen = new key();
+    NamespacedKey nofall = new NamespacedKey(Yahoo.get_plugin(),"nofall");
     public static ItemStack sword_item() {
         ItemStack sword = ItemStack.of(Material.DIAMOND_SWORD);
         ItemMeta swordItemMeta = sword.getItemMeta();
@@ -49,6 +49,7 @@ public class swor implements Listener {
         long currentTime = System.currentTimeMillis();
         Player player = event.getPlayer();
         UUID playerUUID = event.getPlayer().getUniqueId();
+
         if (piercecooldowns.containsKey(playerUUID)) {
             long lastUsed = piercecooldowns.get(playerUUID);
             long timeLeft = piercecooldownTime - (currentTime - lastUsed);
@@ -61,10 +62,12 @@ public class swor implements Listener {
             }
         }
         String type = "";
+        String subtype = "";
         PersistentDataContainer cont = player.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
-        if (cont.has(key)) {
-            type = cont.get(key, PersistentDataType.STRING);
+        NamespacedKey type_key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+        if (cont.has(type_key)) {
+            type = cont.get(type_key, PersistentDataType.STRING);
+            subtype = cont.get(keygen.get_key("subtype"), PersistentDataType.STRING);
         }
         if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
         if (type.equals("demon") && event.getHand() == EquipmentSlot.HAND && player.getInventory().getItemInMainHand().getItemMeta().equals(sword_item().getItemMeta()) && player.isSneaking()) {
@@ -87,8 +90,12 @@ public class swor implements Listener {
             // Damage the first entity hit
             List<Entity> entities = player.getNearbyEntities(5, 2, 5);
             for (Entity entity : entities) {
-                if (entity instanceof Player && entity != player) {
-                    ((Player) entity).damage(6.0, player); // Deal 6 damage
+                if (entity instanceof LivingEntity && entity != player) {
+                    if (subtype.equals("fire")) {
+                        ((LivingEntity) entity).damage(5.5, player);
+                        ((LivingEntity) entity).setFireTicks(2400);
+                    }
+                     // Deal 6 damage
                     break; // Stop after hitting the first target
                 }
             }
@@ -120,11 +127,13 @@ public class swor implements Listener {
             }
         }
         String type = "";
+        String subtype = "";
         PersistentDataContainer cont = player.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
+        NamespacedKey typekey = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "Yah_Player_Type");
 
-        if (cont.has(key)) {
-            type = cont.get(key, PersistentDataType.STRING);
+        if (cont.has(typekey)) {
+            type = cont.get(typekey, PersistentDataType.STRING);
+            subtype = cont.get(keygen.get_key("subtype"),PersistentDataType.STRING);
         }
         if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
         if (type.equals("demon") && event.getHand() == EquipmentSlot.OFF_HAND && !player.isSneaking()) {
@@ -176,6 +185,13 @@ public class swor implements Listener {
                     double z = radius * Math.sin(angle);
                     Location critLoc = center.clone().add(x, 1.5, z);
                     caster.getWorld().spawnParticle(Particle.CRIT, critLoc, 2);
+                    if (caster.getPersistentDataContainer().has(keygen.get_key("subtype"))) {
+                        if (caster.getPersistentDataContainer().get(keygen.get_key("subtype"), PersistentDataType.STRING).equals("fire")) {
+                            caster.getWorld().spawnParticle(Particle.FLAME,critLoc,1);
+                            caster.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,critLoc,1);
+                        }
+                    }
+
                 }
 
                 // Play slashing sound effect
@@ -189,7 +205,15 @@ public class swor implements Listener {
                         double damageFactor = (distance / maxRadius);
                         double damage = maxDamage * (1.0 - damageFactor);
                         LivingEntity livingtarget = (LivingEntity) target;
-                        livingtarget.damage(damage,caster);
+                        if (caster.getPersistentDataContainer().has(keygen.get_key("subtype"))) {
+                            if (caster.getPersistentDataContainer().get(keygen.get_key("subtype"), PersistentDataType.STRING).equals("fire")) {
+                                livingtarget.damage(damage - 1,caster);
+                                livingtarget.setFireTicks(2400);
+                            } else {
+                                livingtarget.damage(damage,caster);
+                            }
+                        }
+
                     }
                 }
                 // Damage players within the radius based on distance

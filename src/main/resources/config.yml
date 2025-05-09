@@ -1,0 +1,24 @@
+database:
+  host: "localhost"
+  user: "jerry"
+  password: "i_love_chicken_nuggets"
+enabled_items:
+  scythe: true
+  glaive: true
+  senzu_bean: true
+  blessing_of_life: true
+  cherry_coke: true
+  impish_armor: true
+  home_pearl: true
+  invisibility_cloak: true
+  meth: true
+  soul: true
+  space_warper: true
+  alchemic_bag: true
+enabled_powersets:
+  glitch: true
+  star: true
+  demon: true
+    - sub-types:
+        fire: true
+  flamer: true
