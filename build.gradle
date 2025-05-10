@@ -24,7 +24,6 @@ repositories {
 
 dependencies {
     implementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.14.1")
     implementation 'org.xerial:sqlite-jdbc:3.30.1'
 }
 

@@ -48,6 +48,9 @@ public final class Yahoo extends JavaPlugin{
     World world;
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
+        saveResource("db.yml", /* replace */ false);
         enable_listeners();
         register_items();
         schedule_zane();
@@ -59,7 +62,7 @@ public final class Yahoo extends JavaPlugin{
         getCommand("give_sword").setExecutor(new give_sword());
         createWorld();
         check_glitch();
-        saveResource("db.yml", /* replace */ false);
+
         saveDefaultConfig();
         getResource("db.yml");
         getLogger().info("Plugin has been enabled");
@@ -123,6 +126,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new impish_armor(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new scythe(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new meth(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new backpack(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);

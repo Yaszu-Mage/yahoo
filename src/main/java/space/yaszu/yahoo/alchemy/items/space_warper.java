@@ -1,7 +1,6 @@
 package space.yaszu.yahoo.alchemy.items;
 
 import com.google.j2objc.annotations.Property;
-import de.tr7zw.nbtapi.utils.GameprofileUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;

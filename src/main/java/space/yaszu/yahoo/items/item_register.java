@@ -1,6 +1,5 @@
 package space.yaszu.yahoo.items;
 
-import de.tr7zw.nbtapi.NBT;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -18,6 +17,7 @@ import space.yaszu.yahoo.key;
 import java.util.*;
 
 public class item_register {
+    public static key keygen = new key();
     public void itemregister(String shapea, String shapeb, String shapec, String name, Collection<String> values, Dictionary<String, Material> dict, String tag) {
         NamespacedKey key = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), name);
         ItemStack item = ItemStack.of(Material.RECOVERY_COMPASS);
@@ -33,12 +33,8 @@ public class item_register {
             char value = s.charAt(0);
             recipe.setIngredient(value,dict.get(s));
         }
-        NBT.modify(item, nbt -> {
-            nbt.setString("Yah_ID", tag);
-        });
-        NBT.get(item, nbt ->{
-            Bukkit.getPluginManager().getPlugin("Yahoo").getLogger().info("Tag " + nbt.getString("Yah_ID"));
-        });
+        item.getItemMeta().getPersistentDataContainer().set(keygen.get_key("Yah_ID"),PersistentDataType.STRING,tag);
+        Yahoo.getlog().info("Added " + tag);
         Bukkit.getPluginManager().getPlugin("Yahoo").getLogger().info("Registered " + name);
         Bukkit.getServer().addRecipe(recipe);
     }
@@ -47,6 +43,10 @@ public class item_register {
         this.yahoo = yahoo;
     }
     public void register(){
+        Yahoo.getlog().info(
+                "ADDING ITEMS" +
+                        "________________________"
+        );
         Bukkit.resetRecipes();
         Collection<String> coke = new ArrayList<>();
         coke.add("M");
@@ -235,6 +235,13 @@ public class item_register {
         meth_recipe.setIngredient('G',Material.DIAMOND);
         meth_recipe.setIngredient('B',Material.GLASS_BOTTLE);
         Bukkit.addRecipe(meth_recipe);
+        ItemStack backpack_item = backpack.backpack_item();
+        ShapedRecipe backpack_recipe = new ShapedRecipe(keygen.get_key("backpack"),backpack_item);
+        backpack_recipe.shape("S  ","LCL","LLL");
+        backpack_recipe.setIngredient('S',Material.STRING);
+        backpack_recipe.setIngredient('L',Material.LEATHER);
+        backpack_recipe.setIngredient('C',Material.CHEST);
+        Bukkit.addRecipe(backpack_recipe);
     }
 
 }

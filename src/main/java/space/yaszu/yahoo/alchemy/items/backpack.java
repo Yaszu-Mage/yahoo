@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.key;
 
-import java.io.File;
+import java.io.*;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,9 +29,8 @@ import java.util.UUID;
 public class backpack implements Listener {
 
     public static key keygen = new key();
-    public Yahoo yahoo = Yahoo.getInstance();
     public Map<UUID, main_inventory> inventoryMap = new HashMap<>();
-    public File dbfile = new File(yahoo.getDataFolder(),"db.yml");
+    public File dbfile = new File(Bukkit.getPluginManager().getPlugin("Yahoo").getDataFolder(),"db.yml");
     public YamlConfiguration db = YamlConfiguration.loadConfiguration(dbfile);
 
     public static ItemStack backpack_item() {
@@ -37,22 +38,27 @@ public class backpack implements Listener {
         ItemMeta meta = back.getItemMeta();
         meta.displayName(MiniMessage.miniMessage().deserialize("<obf>| <reset><white>Backpack</white> <obf>|"));
         meta.getPersistentDataContainer().set(keygen.get_key("backpack"), PersistentDataType.BOOLEAN,true);
+        back.setItemMeta(meta);
         return back;
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) throws IOException, ClassNotFoundException {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         if (item != null) {
             if (item.getPersistentDataContainer().has(keygen.get_key("backpack"))) {
-                if (db.get(player.getUniqueId().toString()) != null) {
+                main_inventory holder = new main_inventory();
+                if (db.get("backpack/" + player.getUniqueId().toString()) != null) {
 
+                    String inventory = (String) db.get("backpack/" + player.getUniqueId().toString());
+                    holder.getInventory().setContents(deserializeInventory(inventory));
                 } else {
                     db.set(player.getUniqueId().toString(),true);
-                    main_inventory holder = new main_inventory();
-                    db.set("backpack/" + player.getUniqueId(),holder);
+                    db.set("backpack/" + player.getUniqueId(),serializeInventory(holder.getInventory().getContents()));
+
                 }
+                player.openInventory(holder.getInventory());
             }
         }
     }
@@ -70,14 +76,35 @@ public class backpack implements Listener {
         }
 
     }
+    public static main_inventory inventory(){
+        return new main_inventory();
+    }
+
+    public static ItemStack[] deserializeInventory(String base64String) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(base64String));
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        return (ItemStack[]) ois.readObject();
+    }
+
+    public static String serializeInventory(ItemStack[] inventory) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(inventory);
+        oos.flush();
+        oos.close();
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
 }
 class main_inventory implements InventoryHolder {
-    public Inventory inventory;
-    public int size = 9;
+    public static Inventory inventory;
+    public static int size = 9;
     @Override
     public @NotNull Inventory getInventory() {
         inventory = Bukkit.createInventory(this, size, "Backpack");
         return inventory;
     }
 
+    public static void add_item(ItemStack item, int spot){
+        inventory.setItem(spot,item);
+    }
 }
