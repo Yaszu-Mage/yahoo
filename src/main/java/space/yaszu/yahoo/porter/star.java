@@ -1,8 +1,10 @@
-package space.yaszu.yahoo.star;
+package space.yaszu.yahoo.porter;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,6 +28,7 @@ import space.yaszu.yahoo.events.new_runnables.unfreeze;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class star implements Listener {
@@ -153,6 +156,29 @@ public class star implements Listener {
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("Yahoo"),
                     new unfreeze(Yahoo.getInstance(), player), 600);
         }
+    }
+    public void gamble(Player star){
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (player.getLocation().distance(star.getLocation()) < 10) {
+                Component component = MiniMessage.miniMessage().deserialize("<shadow:#000000FF><b><color:#a600ff>Time to Gamble!</color> <reset> [");
+                component = component.append(star.name());
+                component = component.append(MiniMessage.miniMessage().deserialize("]"));
+                send_action_bar(player, component);
+            }
+        });
+        int value = random.nextInt(1,4);
+        switch (value) {
+            case 0:
+            case 2:
+            case 3:
+            case 4:
+        }
+    }
+
+    public void send_action_bar(Player player, Component component) {
+        player.sendActionBar(component);
     }
 
     }

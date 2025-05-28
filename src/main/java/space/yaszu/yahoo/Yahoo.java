@@ -117,7 +117,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new swor(),this);
         getServer().getPluginManager().registerEvents(new fall_drop(),this);
         getServer().getPluginManager().registerEvents(new blessing_of_life(),this);
-        getServer().getPluginManager().registerEvents(new space.yaszu.yahoo.star.star(),this);
+        getServer().getPluginManager().registerEvents(new space.yaszu.yahoo.porter.star(),this);
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
         getServer().getPluginManager().registerEvents(new space_warper(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);

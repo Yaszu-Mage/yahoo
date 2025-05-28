@@ -16,11 +16,13 @@ public class set_who implements CommandExecutor {
     public static key keygen = new key();
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+
         check_player("Yaszu","star", "origin");
         check_player("1nZ4ne","glitch", "origin");
         check_player("GhostboyGamer", "flamer", "origin");
         check_player("OvaAlpha3", "demon", "origin");
         check_player("Jetbiopen", "demon", "fire");
+
         return true;
     }
 

@@ -40,4 +40,5 @@ public class grenade implements CommandExecutor {
             return false;
         }
     }return false;
-}}
+}
+}
