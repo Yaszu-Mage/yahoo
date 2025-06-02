@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -48,21 +50,22 @@ public class backpack implements Listener {
         ItemStack item = event.getItem();
         if (item != null) {
             if (item.getPersistentDataContainer().has(keygen.get_key("backpack"))) {
-                main_inventory holder = new main_inventory();
-                if (db.get("backpack/" + player.getUniqueId().toString()) != null) {
 
-                    String inventory = (String) db.get("backpack/" + player.getUniqueId().toString());
-                    holder.getInventory().setContents(deserializeInventory(inventory));
-                } else {
-                    db.set(player.getUniqueId().toString(),true);
-                    db.set("backpack/" + player.getUniqueId(),serializeInventory(holder.getInventory().getContents()));
-
-                }
-                player.openInventory(holder.getInventory());
             }
         }
     }
 
+    @EventHandler
+    public void onplayerleave(PlayerQuitEvent event) {
+
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getInventory().getHolder(false) instanceof main_inventory main_inventory) {
+
+        }
+    }
     @EventHandler
     public void onItemChange(InventoryClickEvent event) {
         Player player;
@@ -80,20 +83,7 @@ public class backpack implements Listener {
         return new main_inventory();
     }
 
-    public static ItemStack[] deserializeInventory(String base64String) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.getDecoder().decode(base64String));
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        return (ItemStack[]) ois.readObject();
-    }
 
-    public static String serializeInventory(ItemStack[] inventory) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(inventory);
-        oos.flush();
-        oos.close();
-        return Base64.getEncoder().encodeToString(baos.toByteArray());
-    }
 }
 class main_inventory implements InventoryHolder {
     public static Inventory inventory;
@@ -103,6 +93,15 @@ class main_inventory implements InventoryHolder {
         inventory = Bukkit.createInventory(this, size, "Backpack");
         return inventory;
     }
+
+    public String serialize(){
+        return Base64.getEncoder().encodeToString(inventory.getContents().toString().getBytes());
+    }
+    public Inventory deserialize(String data){
+
+        
+    }
+
 
     public static void add_item(ItemStack item, int spot){
         inventory.setItem(spot,item);

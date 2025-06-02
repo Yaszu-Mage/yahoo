@@ -5,11 +5,13 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +20,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -30,6 +38,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.events.new_runnables.unfreeze;
 import space.yaszu.yahoo.key;
@@ -116,13 +125,19 @@ public class star implements Listener {
     private final HashMap<UUID, Long> dialcooldowns = new HashMap<>(); // Cooldown storage
     private final long dialationcooldownTime = 600000;
     @EventHandler
+    public void watch(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        PersistentDataContainer data = player.getPersistentDataContainer();
+    }
+
+    @EventHandler
     public void time(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         PersistentDataContainer data = player.getPersistentDataContainer();
         UUID playerUUID = player.getUniqueId();
 
         long currentTime = System.currentTimeMillis();
-        if (player == null) return;
+        if (player == null) {return;}
 
         ItemStack off = player.getInventory().getItemInOffHand();
         NamespacedKey glove = new NamespacedKey(Bukkit.getPluginManager().getPlugin("Yahoo"), "time");
@@ -162,6 +177,18 @@ public class star implements Listener {
                     new unfreeze(Yahoo.getInstance(), player), 600);
         }
     }
+
+    @EventHandler
+    public void onitemswap(InventoryMoveItemEvent event) {
+        PersistentDataContainer data = event.getItem().getItemMeta().getPersistentDataContainer();
+        if (data.has(keygen.get_key("astral"))){if (data.get(keygen.get_key("astral"), PersistentDataType.BOOLEAN)) {
+                if (event.getItem().getPersistentDataContainer().has(keygen.get_key("astral"), PersistentDataType.STRING)) {
+                    event.setCancelled(true);
+            }
+            }
+        }
+    }
+
     public void gamble(Player star, ItemStack watch){
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
@@ -172,22 +199,50 @@ public class star implements Listener {
         send_to_nearby_players(star.getLocation(),component,10);
         int value = random.nextInt(1,4);
         switch (value) {
-            case 0:
+            case 1:
                 //Archer
+                star.getPersistentDataContainer().set(keygen.get_key("astral"),PersistentDataType.BOOLEAN,true);
                 component = MiniMessage.miniMessage().deserialize("");
                 send_to_nearby_players(star.getLocation(),component,10);
                 ItemMeta changer_meta = watch.getItemMeta();
                 watch.setAmount(0);
                 star.getInventory().setItemInMainHand(archer_bow());
                 Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(),new Runnable() {@Override public void run() {star.getInventory().setItemInMainHand(original_item);}},5020);
-
+                break;
             case 2:
+                //Ace
+                star.getPersistentDataContainer().set(keygen.get_key("astral"),PersistentDataType.BOOLEAN,true);
+                component = MiniMessage.miniMessage().deserialize("");
+                send_to_nearby_players(star.getLocation(),component,10);
+                ItemMeta changer_meta_2 = watch.getItemMeta();
+                watch.setAmount(0);
+                star.getInventory().setItemInMainHand(deck_of_cards());
+                Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(),new Runnable() {@Override public void run() {star.getInventory().setItemInMainHand(original_item);}},5020);
+
             case 3:
+                //
             case 4:
+                //
         }
     }
     public key keygen = new key();
+    public enum suit_type {
+        hearts,
+        diamonds,
+        clubs,
+        spades,
+        none,
+    }
 
+    //1,2,3,4,5,6,7,8,9,10,jack,queen,king,ace
+    //hearts, diamonds, clubs, spades
+    public void draw(Player player){
+        deck deck = new deck();
+        if (player.getPersistentDataContainer().has(keygen.get_key("deck"), PersistentDataType.STRING)) {
+            deck.deserialize(player.getPersistentDataContainer().get(keygen.get_key("deck"), PersistentDataType.STRING));
+        }
+
+    }
 
 
     @EventHandler
@@ -315,7 +370,158 @@ public class star implements Listener {
 
         }
     }
-    public ItemStack archer_bow(){ItemStack bow = new ItemStack(Material.BOW);ItemMeta bow_meta = bow.getItemMeta();bow_meta.displayName(MiniMessage.miniMessage().deserialize("<gradient:#55ffff:#ff8af5:#aa00aa>Soul Archer's Bow"));bow_meta.getPersistentDataContainer().set(keygen.get_key("soul_bow"), PersistentDataType.BOOLEAN, true);bow.setItemMeta(bow_meta);return bow;}
+    public ItemStack deck_of_cards(){ItemStack deck = new ItemStack(Material.RECOVERY_COMPASS);ItemMeta meta = deck.getItemMeta();meta.displayName(MiniMessage.miniMessage().deserialize("<gradient:#ffaa00:#ffff55:#aa00aa>Deck of Cards"));meta.getPersistentDataContainer().set(keygen.get_key("deckocards"),PersistentDataType.BOOLEAN,true);meta.getPersistentDataContainer().set(keygen.get_key("astra"),PersistentDataType.BOOLEAN,true);deck.setItemMeta(meta);return deck;}
+    public ItemStack archer_bow(){ItemStack bow = new ItemStack(Material.BOW);ItemMeta bow_meta = bow.getItemMeta();bow_meta.displayName(MiniMessage.miniMessage().deserialize("<gradient:#55ffff:#ff8af5:#aa00aa>Soul Archer's Bow"));bow_meta.getPersistentDataContainer().set(keygen.get_key("soul_bow"), PersistentDataType.BOOLEAN, true);bow_meta.getPersistentDataContainer().set(keygen.get_key("astra"),PersistentDataType.BOOLEAN,true);bow.setItemMeta(bow_meta);return bow;}
     public void send_action_bar(Player player, Component component) {player.sendActionBar(component);}
     public void send_to_nearby_players(Location origin, Component component, int distance) {Bukkit.getOnlinePlayers().forEach(player -> {if (player.getLocation().distance(origin) < distance) {send_action_bar(player, component);}});}
+}
+class card {
+    public int number;
+    public star.suit_type suit;
+    public card(int number, star.suit_type suit) {
+        if (number > 14) {
+            Yahoo.getlog().info("INVALID CARD");
+            this.number = 13;
+        } else {
+            this.number = number;
+        }
+        this.suit = suit;
+    }
+    public card string_as_card(String input){
+        String[] suit_check = input.split("_of_");
+        int number = 0;
+        star.suit_type suit = star.suit_type.none;
+        try {
+            number = Integer.parseInt(suit_check[0]);
+        } catch (NumberFormatException e) {
+            switch (suit_check[0]) {
+                case "jack":
+                    number = 11;
+                case "king":
+                    number = 12;
+                case "queen":
+                    number = 13;
+                case "ace":
+                    number = 14;
+            }
+        }
+        switch (suit_check[1]) {
+            case "clubs":
+                suit = star.suit_type.clubs;
+            case "hearts":
+                suit = star.suit_type.hearts;
+            case "spades":
+                suit = star.suit_type.spades;
+            case "diamonds":
+                suit = star.suit_type.diamonds;
+        }
+        return new card(number,suit);
+
+
+    }
+    public String card_as_string(){
+        String output = "";
+        if (number > 10) {
+            switch (number) {
+                case 11:
+                    output = output + "jack_of_";
+                case 12:
+                    output = output + "queen_of_";
+                case 13:
+                    output = output + "king_of_";
+                case 14:
+                    output = output + "ace_of_";
+            }
+        } else {
+            output = output + String.valueOf(number) + "_of_";
+        }
+        switch (suit) {
+            case star.suit_type.clubs:
+                output = output + "clubs";
+            case hearts:
+                output = output + "hearts";
+            case diamonds:
+                output = output + "diamonds";
+            case spades:
+                output = output + "spades";
+
+        }
+        return output;
+    }
+}
+class card_inventory implements InventoryHolder {
+    public Inventory inventory;
+    public key keygen = new key();
+    public deck deck = new deck();
+    @Override
+    public @NotNull Inventory getInventory() {
+        inventory = Bukkit.createInventory(this,5,MiniMessage.miniMessage().deserialize("<gradient:#ffaa00:#ffff55:#aa00aa>Your Hand"));
+        return inventory;
+    }
+    public Inventory set_inventory(ArrayList<card> hand,Player player) {
+        if (player.getPersistentDataContainer().has(keygen.get_key("deck"),PersistentDataType.STRING)) {
+            deck.deserialize(player.getPersistentDataContainer().get(keygen.get_key("deck"),PersistentDataType.STRING));
+        }
+        for (card card : hand) {
+            inventory.addItem(card_item(card));
+        }
+        return inventory;
+    }
+    public ItemStack card_item(card card) {
+        ItemStack card_item_instance = ItemStack.of(Material.RECOVERY_COMPASS);
+        ItemMeta meta = card_item_instance.getItemMeta();
+        meta.setDisplayName(card.card_as_string().replace("_", " "));
+        meta.setItemModel(NamespacedKey.minecraft(card.card_as_string()));
+        card_item_instance.setItemMeta(meta);
+        return card_item_instance;
+    }
+}
+class deck {
+    public ArrayList<card> cards;
+
+    public ArrayList<card> draw() {
+        ArrayList<card> hand = new ArrayList<>();
+        hand.add(cards.get(0));hand.add(cards.get(1));hand.add(cards.get(2));hand.add(cards.get(3));hand.add(cards.get(4));
+        return hand;
+    }
+
+    public deck() {
+        cards = new ArrayList<>();
+        for (int iteration = 0; iteration < 14; iteration = iteration + 1) {
+            cards.add(new card(iteration, star.suit_type.clubs));
+        }
+        for (int iteration = 0; iteration < 14; iteration = iteration + 1) {
+            cards.add(new card(iteration, star.suit_type.hearts));
+        }
+        for (int iteration = 0; iteration < 14; iteration = iteration + 1) {
+            cards.add(new card(iteration, star.suit_type.spades));
+        }for (int iteration = 0; iteration < 14; iteration = iteration + 1) {
+            cards.add(new card(iteration, star.suit_type.diamonds));
+        }
+        Collections.shuffle(cards);
+    }
+    public String serialize() {
+        String output = "";
+        for (int iteration = 0; iteration < cards.size(); iteration = iteration + 1) {
+            output = output + Base64.getEncoder().encodeToString(cards.get(iteration).card_as_string().getBytes()) + "|";
+        }
+        output = output + Base64.getEncoder().encodeToString(String.valueOf(cards.size()).getBytes());
+        return output;
+    }
+
+    public void Shuffle(){
+        Collections.shuffle(cards);
+    }
+
+
+    public void deserialize(String input) {
+        String output = "";
+        String decoded = Base64.getDecoder().decode(input).toString();
+        String[] cards_decoded = decoded.split("|");
+        this.cards = new ArrayList<card>();
+        String iterator = decoded.substring(Math.max(decoded.length() - 2, 0));
+        for (int iteration = 0; iteration < Integer.parseInt(iterator); iteration = iteration + 1) {
+            cards.add(new card(iteration, star.suit_type.clubs).string_as_card(cards_decoded[iteration]));
+        }
+    }
 }
