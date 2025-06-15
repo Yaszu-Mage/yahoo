@@ -1,9 +1,7 @@
 package space.yaszu.yahoo;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import space.yaszu.yahoo.alchemy.items.backpack;
 
 import java.io.*;
 import java.sql.*;

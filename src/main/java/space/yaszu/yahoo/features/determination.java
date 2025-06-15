@@ -1,21 +1,16 @@
-package space.yaszu.yahoo.events;
+package space.yaszu.yahoo.features;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.GameRule;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.List;
 import java.util.Random;
 
 public class determination implements Listener {

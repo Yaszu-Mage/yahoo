@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.alchemy.items;
+package space.yaszu.yahoo.items;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;

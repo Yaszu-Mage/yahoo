@@ -10,7 +10,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.alchemy.items.*;
 import space.yaszu.yahoo.events.Ritual;
 import space.yaszu.yahoo.movesets.glitch.glitched_gem_item;
 import space.yaszu.yahoo.util.key;
@@ -214,7 +213,7 @@ public class item_register {
         glaive_recipe.setIngredient('S', ItemStack.of(Material.STICK));
         glaive_recipe.setIngredient('D', ItemStack.of(Material.DIAMOND));
         Bukkit.getServer().addRecipe(glaive_recipe);
-        ItemStack cherry_coke = space.yaszu.yahoo.alchemy.items.cherry_coke.item();
+        ItemStack cherry_coke = space.yaszu.yahoo.items.cherry_coke.item();
         ShapedRecipe cherry_coke_recipe = new ShapedRecipe(keygen.get_key("cherry_coke"),cherry_coke);
         cherry_coke_recipe.shape("SGS","GBG","SGS");
         cherry_coke_recipe.setIngredient('S',Material.SUGAR);
@@ -222,10 +221,10 @@ public class item_register {
         cherry_coke_recipe.setIngredient('B',Material.GLASS_BOTTLE);
         Bukkit.addRecipe(cherry_coke_recipe);
         //you dont neccesarily have to do that I have no clue why it did it there, try just using meth.item()
-        ItemStack leaper_item = space.yaszu.yahoo.alchemy.items.leaper.item(); // :D
+        ItemStack leaper_item = space.yaszu.yahoo.items.leaper.item(); // :D
         //Java is a little finnicky and isn't always the same so if it doesn't say error then yaya!
         //BTW if you ever want to test, ask and and I can build it then the server ip is play.yaszu.xyz:30000
-        ItemStack meth_item = space.yaszu.yahoo.alchemy.items.meth.item();
+        ItemStack meth_item = space.yaszu.yahoo.items.meth.item();
         ShapedRecipe meth_recipe = new ShapedRecipe(keygen.get_key("meth"),meth_item);
         meth_recipe.shape(
                 "GGG",

@@ -1,11 +1,9 @@
-package space.yaszu.yahoo.alchemy.items;
+package space.yaszu.yahoo.items;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,8 +13,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import space.yaszu.yahoo.Yahoo;
-
-import java.util.Collection;
 
 import static space.yaszu.yahoo.items.boots_of_swiftness.keygen;
 

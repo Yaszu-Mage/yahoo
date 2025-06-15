@@ -1,8 +1,7 @@
-package space.yaszu.yahoo.alchemy;
+package space.yaszu.yahoo.items;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -15,10 +14,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.checker.units.qual.N;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.alchemy.items.home_pearl;
-import space.yaszu.yahoo.alchemy.items.soul;
 
 import java.util.HashMap;
 import java.util.UUID;

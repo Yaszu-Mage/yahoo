@@ -15,7 +15,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.alchemy.items.soul;
+import space.yaszu.yahoo.items.soul;
 import space.yaszu.yahoo.util.key;
 
 import java.util.HashMap;

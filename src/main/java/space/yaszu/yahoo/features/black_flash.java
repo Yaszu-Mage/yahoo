@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.events;
+package space.yaszu.yahoo.features;
 
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;

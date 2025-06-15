@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.alchemy.items;
+package space.yaszu.yahoo.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

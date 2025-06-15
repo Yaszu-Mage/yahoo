@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import space.yaszu.yahoo.alchemy.items.home_pearl;
+import space.yaszu.yahoo.items.home_pearl;
 public class run_register {
     public static void register(){
         ItemStack homepearl = home_pearl.home_pearl_item();

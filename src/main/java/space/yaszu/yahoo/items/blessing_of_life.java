@@ -1,16 +1,12 @@
-package space.yaszu.yahoo.alchemy.items;
+package space.yaszu.yahoo.items;
 
-import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;

@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.events;
+package space.yaszu.yahoo.features;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;

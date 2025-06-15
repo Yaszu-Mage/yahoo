@@ -1,18 +1,16 @@
 package space.yaszu.yahoo.alchemy.events;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import space.yaszu.yahoo.alchemy.items.soul;
+import space.yaszu.yahoo.items.soul;
 
 import java.util.Random;
 
