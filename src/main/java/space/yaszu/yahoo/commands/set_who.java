@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import space.yaszu.yahoo.key;
-import space.yaszu.yahoo.player_info.player_info_register;
+import space.yaszu.yahoo.util.key;
+import space.yaszu.yahoo.util.player_info_register;
 
 public class set_who implements CommandExecutor {
 

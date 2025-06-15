@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.flamer;
+package space.yaszu.yahoo.movesets.flamer;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;

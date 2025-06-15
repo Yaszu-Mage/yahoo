@@ -1,16 +1,13 @@
 package space.yaszu.yahoo.events.new_runnables;
 
-import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.World;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
 public class night implements Runnable {
     public void run() {

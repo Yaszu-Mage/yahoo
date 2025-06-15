@@ -1,6 +1,5 @@
 package space.yaszu.yahoo.alchemy.items;
 
-import com.google.common.collect.Multimap;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
@@ -16,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;

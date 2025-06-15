@@ -1,7 +1,6 @@
 package space.yaszu.yahoo.items;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import net.kyori.adventure.key.Key;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -10,11 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
 public class boots_of_swiftness implements Listener {
     public static key keygen = new key();

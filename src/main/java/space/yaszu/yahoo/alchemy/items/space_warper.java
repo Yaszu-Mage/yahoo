@@ -1,7 +1,5 @@
 package space.yaszu.yahoo.alchemy.items;
 
-import com.google.j2objc.annotations.Property;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
@@ -14,23 +12,15 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import com.destroystokyo.paper.profile.*;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataAdapterContext;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
 import java.util.*;
 /*
   _______ _             _____                       __          __                        _     ____
@@ -55,6 +45,7 @@ public class space_warper implements Listener {
         item.setItemMeta(meta);
         return item;
     }
+
     @EventHandler
     public static void check_action(PlayerDropItemEvent event)  {
         Player player = event.getPlayer();
@@ -512,6 +503,7 @@ class TPARequestSendEvent extends Event {
     public void setInfo(Player_Info info){
         this.info = info;
     }
+
 }
 class Player_Info {
     public Player sender;

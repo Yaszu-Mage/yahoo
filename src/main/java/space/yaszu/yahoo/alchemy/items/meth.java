@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
 public class meth implements Listener {
     //this needs to be in its own file

@@ -1,6 +1,7 @@
-package space.yaszu.yahoo;
+package space.yaszu.yahoo.util;
 
 import org.bukkit.NamespacedKey;
+import space.yaszu.yahoo.Yahoo;
 
 public class key {
     public NamespacedKey get_key(String value){

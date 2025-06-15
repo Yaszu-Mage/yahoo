@@ -1,11 +1,9 @@
 package space.yaszu.yahoo.alchemy.items;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,10 +11,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.Yahoo;
+import space.yaszu.yahoo.util.key;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 public class glaive implements Listener {
     public static key keygen = new key();
@@ -30,19 +29,31 @@ public class glaive implements Listener {
         return item;
     }
     @EventHandler
-    public void onItemInteract(PlayerInteractEvent event){
-        Player player = event.getPlayer();
-        if (player.getInventory().getItemInMainHand().getPersistentDataContainer().has(keygen.get_key("glaive")) && player.isSneaking()){
-
-        }
-    }
-    @EventHandler
     public void onItemThrow(PlayerInteractEvent event){
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         if (player.isSneaking() && item != null){
             if (item .getPersistentDataContainer().has(keygen.get_key("glaive")) && player.isSneaking()){
                 //Block here
+                Collection players = Bukkit.getOnlinePlayers();
+                for (Object player_instance : players) {
+                    if (player_instance instanceof Player){
+                        if (((Player) player_instance).getLocation().distance(player.getLocation()) <= 5 && player_instance != player){
+                            Location newloc = ((Player) player_instance).getLocation();
+                            newloc.setY(newloc.getY() + 2);
+                            ((Player) player_instance).teleport(newloc);
+                            ((Player) player_instance).setVelocity(((Player) player_instance).getVelocity().setX(0).setZ(0).setY(1028));
+                            ((Player) player_instance).damage(4, player);
+                        }
+                    }
+                }
+                player.setInvisible(true);
+
+                Bukkit.getScheduler().runTaskLater(Yahoo.get_plugin(),new Runnable() {
+                    public void run() {
+                        player.setInvisible(false);
+                    }
+                },100);
                 event.setCancelled(true);
             }
         }

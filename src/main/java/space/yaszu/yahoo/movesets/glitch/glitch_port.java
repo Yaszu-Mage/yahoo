@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.glitch;
+package space.yaszu.yahoo.movesets.glitch;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;

@@ -12,8 +12,8 @@ import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.alchemy.items.*;
 import space.yaszu.yahoo.events.Ritual;
-import space.yaszu.yahoo.glitch.glitched_gem_item;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.movesets.glitch.glitched_gem_item;
+import space.yaszu.yahoo.util.key;
 import java.util.*;
 
 public class item_register {

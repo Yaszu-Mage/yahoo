@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 //Otherwise great job!
 // Check item_register, and try and register your items :D
 // thank you (:

@@ -1,19 +1,17 @@
-package space.yaszu.yahoo.demon;
+package space.yaszu.yahoo.movesets.demon;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static space.yaszu.yahoo.Yahoo.get_plugin;
-
-public class hunger_runnables implements Runnable {
-    @EventHandler
-    public void run() {
+public class hunger implements Listener {
+    public void hungy(PlayerRespawnEvent event){
         for (Player p : Bukkit.getOnlinePlayers()){
             String type = "";
             PersistentDataContainer cont = p.getPersistentDataContainer();
@@ -25,6 +23,5 @@ public class hunger_runnables implements Runnable {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,60000,255,true,false));
             }
         }
-        Bukkit.getScheduler().runTaskLater(get_plugin(),new hunger_runnables(),600);
     }
 }

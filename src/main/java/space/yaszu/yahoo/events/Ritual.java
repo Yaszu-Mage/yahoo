@@ -1,7 +1,6 @@
 package space.yaszu.yahoo.events;
 
 import io.papermc.paper.event.player.PlayerInsertLecternBookEvent;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,14 +16,11 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.key;
-import space.yaszu.yahoo.player_info.player_info_register;
+import space.yaszu.yahoo.util.key;
+import space.yaszu.yahoo.util.player_info_register;
 
-import java.awt.print.Book;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Ritual implements Listener {

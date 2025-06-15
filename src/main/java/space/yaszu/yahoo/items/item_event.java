@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.flamer.gun_off;
+import space.yaszu.yahoo.movesets.flamer.gun_off;
 
 import static org.bukkit.Bukkit.createProfile;
 

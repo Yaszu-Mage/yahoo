@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.flamer;
+package space.yaszu.yahoo.movesets.flamer;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

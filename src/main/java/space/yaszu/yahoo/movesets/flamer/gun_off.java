@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.flamer;
+package space.yaszu.yahoo.movesets.flamer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

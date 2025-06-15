@@ -1,6 +1,5 @@
 package space.yaszu.yahoo.alchemy.items;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
 import java.util.Random;
 

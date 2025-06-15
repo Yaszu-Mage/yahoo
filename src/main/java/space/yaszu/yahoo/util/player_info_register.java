@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.player_info;
+package space.yaszu.yahoo.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

@@ -2,10 +2,6 @@ package space.yaszu.yahoo;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.WorldInfo;
 import org.bukkit.plugin.Plugin;
@@ -17,26 +13,20 @@ import space.yaszu.yahoo.alchemy.events.drops;
 import space.yaszu.yahoo.alchemy.items.*;
 import space.yaszu.yahoo.alchemy.run_register;
 import space.yaszu.yahoo.commands.*;
-import space.yaszu.yahoo.demon.hunger;
-import space.yaszu.yahoo.demon.hunger_runnables;
-import space.yaszu.yahoo.demon.swor;
+import space.yaszu.yahoo.movesets.demon.hunger;
+import space.yaszu.yahoo.movesets.demon.hunger_runnables;
+import space.yaszu.yahoo.movesets.demon.swor;
 import space.yaszu.yahoo.events.*;
 import space.yaszu.yahoo.events.new_runnables.insanity;
 import space.yaszu.yahoo.events.new_runnables.teleport;
 import space.yaszu.yahoo.events.new_runnables.set_who;
-import space.yaszu.yahoo.flamer.jump;
-import space.yaszu.yahoo.flamer.snapv2;
-import space.yaszu.yahoo.glitch.*;
+import space.yaszu.yahoo.movesets.flamer.jump;
+import space.yaszu.yahoo.movesets.flamer.snapv2;
+import space.yaszu.yahoo.movesets.glitch.*;
 import space.yaszu.yahoo.items.boots_of_swiftness;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
 
@@ -48,9 +38,6 @@ public final class Yahoo extends JavaPlugin{
     World world;
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-
-        saveResource("db.yml", /* replace */ false);
         enable_listeners();
         register_items();
         schedule_zane();
@@ -62,7 +49,7 @@ public final class Yahoo extends JavaPlugin{
         getCommand("give_sword").setExecutor(new give_sword());
         createWorld();
         check_glitch();
-
+        saveResource("db.yml", /* replace */ false);
         saveDefaultConfig();
         getResource("db.yml");
         getLogger().info("Plugin has been enabled");
@@ -117,7 +104,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new swor(),this);
         getServer().getPluginManager().registerEvents(new fall_drop(),this);
         getServer().getPluginManager().registerEvents(new blessing_of_life(),this);
-        getServer().getPluginManager().registerEvents(new space.yaszu.yahoo.porter.star(),this);
+        getServer().getPluginManager().registerEvents(new space.yaszu.yahoo.movesets.porter.star(),this);
         getServer().getPluginManager().registerEvents(new senzu_bean(),this);
         getServer().getPluginManager().registerEvents(new space_warper(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new boots_of_swiftness(),this);
@@ -126,7 +113,7 @@ public final class Yahoo extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new impish_armor(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new scythe(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new meth(),this);
-        Bukkit.getServer().getPluginManager().registerEvents(new backpack(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new glaive(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
@@ -172,6 +159,7 @@ public final class Yahoo extends JavaPlugin{
             @Override
             public @NotNull Biome getBiome(@NotNull WorldInfo worldInfo, int x, int y, int z) {
                 return Biome.BIRCH_FOREST;
+                
             }
 
             @Override

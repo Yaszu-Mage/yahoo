@@ -1,4 +1,9 @@
 database:
+  hostname:
+  username:
+  password:
+  database:
+database:
   host: "localhost"
   user: "jerry"
   password: "i_love_chicken_nuggets"

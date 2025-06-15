@@ -1,4 +1,4 @@
-package space.yaszu.yahoo.demon;
+package space.yaszu.yahoo.movesets.demon;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.alchemy.items.soul;
-import space.yaszu.yahoo.key;
+import space.yaszu.yahoo.util.key;
 
 import java.util.HashMap;
 import java.util.List;
