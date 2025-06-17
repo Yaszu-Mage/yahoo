@@ -42,18 +42,4 @@ public class fall_drop implements Listener {
     //The characters or something
     //Sillies
     //Alrighty
-    @EventHandler
-    public void fall(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-
-            Player player = (Player) event.getEntity();
-            if (event.getDamageSource().getDamageType() == DamageType.FALL) {
-                NamespacedKey key = new NamespacedKey(Yahoo.get_plugin(),"nofall");
-                PersistentDataContainer cont = player.getPersistentDataContainer();
-                if (cont.has(key)) {
-                    event.setCancelled(true);
-                }
-            }
-        }
-    }
 }

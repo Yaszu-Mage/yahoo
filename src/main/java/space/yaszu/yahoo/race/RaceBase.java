@@ -15,6 +15,7 @@ public interface RaceBase extends Listener {
     //We use this to define race easier
     @NotNull
     public ArrayList<AttributeHolder> attributes();
+    @NotNull
     public Sound sound();
 
 }

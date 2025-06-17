@@ -29,6 +29,7 @@ import space.yaszu.yahoo.movesets.glitch.*;
 import space.yaszu.yahoo.items.boots_of_swiftness;
 import space.yaszu.yahoo.items.item_event;
 import space.yaszu.yahoo.items.item_register;
+import space.yaszu.yahoo.race.RaceEnforcer;
 
 import java.util.List;
 import java.util.Random;
@@ -117,6 +118,7 @@ public final class Yahoo extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(new scythe(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new meth(),this);
         Bukkit.getServer().getPluginManager().registerEvents(new glaive(),this);
+        Bukkit.getServer().getPluginManager().registerEvents(new RaceEnforcer(),this);
     }
     public void register_items() {
         item_register register = new item_register(this);
