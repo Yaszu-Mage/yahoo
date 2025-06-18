@@ -4,6 +4,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import space.yaszu.yahoo.race.RaceBase;
 import space.yaszu.yahoo.race.Race_Selection;
@@ -17,9 +18,13 @@ public class Player implements RaceBase{
         return new ArrayList<AttributeHolder>();
     }
 
-    @Override
-    public Sound sound() {
+    public static Sound sound() {
         return Sound.BLOCK_CRAFTER_CRAFT;
+    }
+
+    @Override
+    public @NotNull ArrayList<PotionEffect> potionEffects() {
+        return null;
     }
 
 }

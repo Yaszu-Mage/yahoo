@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yaszu.yahoo.Yahoo;
 import space.yaszu.yahoo.util.key;
-public class sunlight {
+public class sunlight implements Listener {
     public key key = new key();
     @EventHandler
     public void suncheck(PlayerMoveEvent event) {
@@ -69,7 +70,7 @@ public class sunlight {
         baseitem.setItemMeta(meta);
         return baseitem;
     }
-
+    @EventHandler
     public void onLivingSetTarget(EntityTargetLivingEntityEvent event) {
         if (event.getTarget() instanceof Player) {
             if (event.getEntity().getType() == EntityType.ZOMBIE || event.getEntity().getType() == EntityType.SKELETON || event.getEntity().getType() == EntityType.WITHER_SKELETON || event.getEntity().getType() == EntityType.HUSK || event.getEntity().getType() == EntityType.DROWNED || event.getEntity().getType() == EntityType.STRAY || event.getEntity().getType() == EntityType.BOGGED || event.getEntity().getType() == EntityType.ZOMBIFIED_PIGLIN || event.getEntity().getType() == EntityType.ZOGLIN || event.getEntity().getType() ==EntityType.WITHER) {
